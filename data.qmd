@@ -11,3 +11,31 @@ The last two datasets are sourced from [`BaseballR`](https://billpetti.github.io
 A description of the issues/problems with the data will be provided in the missing value analysis section below.
 
 ## Missing value analysis
+
+```{r}
+library(tidyverse)
+
+chadwick_data <- read_csv("chadwick_data.csv")
+
+chadwick_data_uniform <- chadwick_data %>%
+  mutate(across(everything(), as.character))
+
+missing_chadwick <- chadwick_data_uniform %>%
+  mutate(row_id = row_number()) %>%
+  pivot_longer(-row_id, names_to = "variable", values_to = "value") %>%
+  mutate(missing = is.na(value))
+
+ggplot(missing_chadwick, aes(x = variable, y = row_id, fill = missing)) +
+  geom_tile() +
+  scale_fill_manual(values = c("FALSE" = "white", "TRUE" = "red"), name = "Missing") +
+  theme_minimal() +
+  labs(
+    title = "Heatmap of Missing Values in Chadwick Data",
+    x = "Variables",
+    y = "Rows"
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    axis.text.y = element_blank()
+  )
+```
