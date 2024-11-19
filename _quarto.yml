@@ -6,9 +6,9 @@ execute:
   echo: true
 
 book:
-  title: "Data Driven Examination of baseball Performance Metrics"
+  title: "Exploratory Data Analysis and Visualization of Trends and Biases in MLB Draft Decisions"
   author:
-    - Alan Wong (agw2252)
+    - Alan Wong (ajw2252)
     - Srishaan Iyengar (si2465)
   repo-url: https://github.com/Srishaan/Baseball
   date: today
