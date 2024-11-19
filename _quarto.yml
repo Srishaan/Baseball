@@ -6,11 +6,11 @@ execute:
   echo: true
 
 book:
-  title: "YOUR PROJECT TITLE"
+  title: "Data Driven Examination of baseball Performance Metrics"
   author:
-    - AUTHOR1 (UNI1)
-    - AUTHOR2 (UNI2)
-  repo-url: https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME
+    - Alan Wong (agw2252)
+    - Srishaan Iyengar (si2465)
+  repo-url: https://github.com/Srishaan/Baseball
   date: today
   page-footer:
     right: |
