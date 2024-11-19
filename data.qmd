@@ -2,7 +2,7 @@
 
 ## Description
 
-For this project, four key data sources will be utilized. 
+For this project, there are four key data sources that will be utilized. 
 
 The first two datasets are obtained using the [`pybaseball`](https://github.com/jldbc/pybaseball) package, a Python library (last updated on September 8, 2023 with updates every 1-2 months on average) that is provides access to various reputable baseball sources such as [FanGraphs](https://www.fangraphs.com/) and [Baseball Reference](https://www.baseball-reference.com/). By utilizing `pybaseball`'s implemented `batting_stats()` and `pitching_stats()` functions, we get the batting data and pitching statistics for MLB players, saved as "batting_stats.csv" and "pitching_stats.csv", respectively. The batting statistics dataset has dimensions of 10,665 × 319, and the pitching statistics dataset has the dimensions of 6,423 × 392.
 
