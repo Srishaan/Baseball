@@ -236,7 +236,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>batting_na_count <span class="ot">=</span> <span class="fu">colSums</span>(<span class="fu">is.na</span>(batting_stats)) <span class="sc">|&gt;</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>(<span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(batting_na_count, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>batting_na_count[batting_na_count <span class="sc">==</span> <span class="dv">10665</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>  FT% (sc)   UN% (sc)   vFT (sc)  FT-X (sc)  FT-Z (sc)   wFT (sc) wFT/C (sc) 
@@ -246,11 +246,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(batting_na_count, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>batting_na_count[batting_na_count <span class="sc">==</span> <span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>    WAR     Spd     BsR     Def     wSB Age Rng     Off      Lg  Events   L-WAR 
-      0       0       0       0       0       0       0       0       0       0 </code></pre>
+<pre><code>   IDfg    Name    Team     Age       G      AB      PA       H      1B      2B 
+      0       0       0       0       0       0       0       0       0       0 
+     3B      HR       R     RBI      BB     IBB      SO     HBP      SF      SH 
+      0       0       0       0       0       0       0       0       0       0 
+    GDP      SB      CS     AVG     BB%      K%    BB/K     OBP     SLG     OPS 
+      0       0       0       0       0       0       0       0       0       0 
+    ISO   BABIP    wOBA    wRAA     wRC     Bat     Rep     Pos     RAR     WAR 
+      0       0       0       0       0       0       0       0       0       0 
+    Spd     BsR     Def     wSB Age Rng     Off      Lg  Events   L-WAR 
+      0       0       0       0       0       0       0       0       0 </code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
@@ -285,23 +293,33 @@ e.g.:
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>pitching_na_count <span class="ot">=</span> <span class="fu">colSums</span>(<span class="fu">is.na</span>(pitching_stats)) <span class="sc">|&gt;</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>(<span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pitching_na_count, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>pitching_na_count[pitching_na_count <span class="sc">==</span> <span class="dv">6423</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code> FT% (sc)  FO% (sc)  UN% (sc)  vFT (sc)  vFO (sc) FT-X (sc) FO-X (sc) FT-Z (sc) 
-     6423      6423      6423      6423      6423      6423      6423      6423 
-FO-Z (sc)  wFT (sc) 
-     6423      6423 </code></pre>
+<pre><code>  FT% (sc)   FO% (sc)   UN% (sc)   vFT (sc)   vFO (sc)  FT-X (sc)  FO-X (sc) 
+      6423       6423       6423       6423       6423       6423       6423 
+ FT-Z (sc)  FO-Z (sc)   wFT (sc)   wFO (sc) wFT/C (sc) wFO/C (sc)       xERA 
+      6423       6423       6423       6423       6423       6423       6423 
+   Stf+ FO    Loc+ FO    Pit+ FO 
+      6423       6423       6423 </code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(pitching_na_count, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>pitching_na_count[pitching_na_count <span class="sc">==</span> <span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>      K%      BB%      E-F  RA9-WAR BIP-Wins LOB-Wins FDP-Wins  Age Rng 
+<pre><code>    IDfg     Name     Team      Age        W        L      ERA      WAR 
        0        0        0        0        0        0        0        0 
-   K-BB%   Events 
-       0        0 </code></pre>
+       G       GS       CG      ShO       SV       IP      TBF        H 
+       0        0        0        0        0        0        0        0 
+       R       ER       HR       BB      IBB      HBP       WP       BK 
+       0        0        0        0        0        0        0        0 
+      SO      K/9     BB/9     K/BB      H/9     HR/9      AVG     WHIP 
+       0        0        0        0        0        0        0        0 
+   BABIP     LOB%      FIP      RAR     ERA-     FIP-       K%      BB% 
+       0        0        0        0        0        0        0        0 
+     E-F  RA9-WAR BIP-Wins LOB-Wins FDP-Wins  Age Rng    K-BB%   Events 
+       0        0        0        0        0        0        0        0 </code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
