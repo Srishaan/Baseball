@@ -8,7 +8,7 @@ The first two datasets are obtained using the [`pybaseball`](https://github.com/
 
 The last two datasets are sourced from [`BaseballR`](https://billpetti.github.io/baseballr/) package, an R library (last updated on January 16, 2024 with updates every 2-3 months on average) designed for accessing and analyzing baseball data from other reputable sources such as Statcast (an analytics system used by the MLB to track baseball data) and [Baseball Savant](https://baseballsavant.mlb.com/). Using the `BaseballR` package, we retrieve baseball draft data for each year from 1965 to 2023, which includes details about player drafts such as team, round, and selection year, saved as "draft_df.csv". Additionally, we run the `chadwick_player_lu()` function from `BaseballR` to get a database of player biographical and career information from the Chadwick Baseball Bureau, which we save as "chadwick_data.csv". The draft dataset has dimensions of 67903 x 84 and the Chadwick player dataset has dimensions of 512843 x 40.
 
-A description of the issues/problems with the data will be provided in the missing value analysis section below.
+The main issues/problems with the data is that there are missing values present, and an in-depth analysis about this will be provided in the missing value analysis section below.
 
 ## Missing value analysis
 
