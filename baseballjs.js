@@ -1,4 +1,3 @@
-// add your JavaScript/D3 to this file
 // Sample data (replace with your actual dataset)
 const data = [
   { player: "Player A", home_runs: 30 },
