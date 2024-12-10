@@ -48,15 +48,5 @@
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Conclusion</span>"
     ]
-  },
-  {
-    "objectID": "d3graph.html",
-    "href": "d3graph.html",
-    "title": "4  D3 Baseball Graph",
-    "section": "",
-    "text": "4.1 Interactive D3.js Baseball Graph",
-    "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>D3 Baseball Graph</span>"
-    ]
   }
 ]
