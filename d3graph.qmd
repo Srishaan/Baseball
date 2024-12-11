@@ -1,13 +1,30 @@
-# Interactive graph
+---
+title: "D3 Baseball Graph"
+format: html
+---
 
 <style>
   * {
     font-family: sans-serif;
   }
-</style> 
 
-<div id="plot">
-</div>
+  .bar {
+    fill: steelblue;
+    transition: fill 0.3s;
+  }
+
+  .bar:hover {
+    fill: orange;
+  }
+
+  .axis text {
+    font-size: 12px;
+  }
+</style>
+
+## Interactive D3.js Baseball Graph
+
+<div id="plot"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script src="scripts/myscript.js"></script>
