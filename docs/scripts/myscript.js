@@ -1,3 +1,4 @@
+// add your JavaScript/D3 to this file
 // Sample data (replace with your actual dataset)
 const data = [
   { player: "Player A", home_runs: 30 },
@@ -7,16 +8,15 @@ const data = [
 ];
 
 // Set up SVG dimensions and margins
-const margin = { top: 50, right: 30, bottom: 70, left: 70 };
-const width = 800 - margin.left - margin.right;
-const height = 500 - margin.top - margin.bottom;
+const margin = { top: 20, right: 30, bottom: 40, left: 50 };
+const width = 600 - margin.left - margin.right;
+const height = 400 - margin.top - margin.bottom;
 
 // Create SVG container
 const svg = d3.select("#plot")
   .append("svg")
-  .attr("width", "100%")
-  .attr("height", "100%")
-  .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
   .append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
@@ -37,34 +37,14 @@ svg.append("g")
   .attr("transform", `translate(0, ${height})`)
   .call(d3.axisBottom(x))
   .selectAll("text")
-  .attr("transform", "rotate(-45)")
-  .style("text-anchor", "end")
-  .style("font-size", "12px");
+  .style("text-anchor", "middle");
 
 // Append y-axis to the SVG
 svg.append("g")
-  .call(d3.axisLeft(y))
-  .selectAll("text")
-  .style("font-size", "12px");
+  .call(d3.axisLeft(y));
 
-// Add axis titles
-svg.append("text")
-  .attr("x", width / 2)
-  .attr("y", height + 50)
-  .attr("text-anchor", "middle")
-  .style("font-size", "16px")
-  .text("Players");
-
-svg.append("text")
-  .attr("x", -height / 2)
-  .attr("y", -50)
-  .attr("text-anchor", "middle")
-  .attr("transform", "rotate(-90)")
-  .style("font-size", "16px")
-  .text("Home Runs");
-
-// Draw bars with gradients and rounded corners
-const bar = svg.selectAll(".bar")
+// Draw bars
+svg.selectAll(".bar")
   .data(data)
   .enter()
   .append("rect")
@@ -72,50 +52,7 @@ const bar = svg.selectAll(".bar")
   .attr("x", d => x(d.player))
   .attr("y", d => y(d.home_runs))
   .attr("width", x.bandwidth())
-  .attr("height", d => height - y(d.home_runs))
-  .attr("rx", 5) // Rounded corners
-  .attr("fill", "url(#gradient)");
-
-// Add tooltip div (hidden by default)
-const tooltip = d3.select("#plot")
-  .append("div")
-  .style("opacity", 0)
-  .attr("class", "tooltip")
-  .style("position", "absolute")
-  .style("background-color", "white")
-  .style("border", "1px solid #ddd")
-  .style("padding", "8px")
-  .style("border-radius", "5px")
-  .style("box-shadow", "0px 0px 5px rgba(0, 0, 0, 0.2)");
-
-// Tooltip events
-bar.on("mouseover", function (event, d) {
-  tooltip.transition().duration(200).style("opacity", 1);
-  tooltip.html(`<strong>${d.player}</strong><br>Home Runs: ${d.home_runs}`)
-    .style("left", (event.pageX + 10) + "px")
-    .style("top", (event.pageY - 28) + "px");
-})
-  .on("mouseout", function () {
-    tooltip.transition().duration(200).style("opacity", 0);
-  });
-
-// Add gradient
-svg.append("defs")
-  .append("linearGradient")
-  .attr("id", "gradient")
-  .attr("x1", "0%")
-  .attr("y1", "0%")
-  .attr("x2", "0%")
-  .attr("y2", "100%")
-  .selectAll("stop")
-  .data([
-    { offset: "0%", color: "#0073e6" },
-    { offset: "100%", color: "#80c1ff" }
-  ])
-  .enter()
-  .append("stop")
-  .attr("offset", d => d.offset)
-  .attr("stop-color", d => d.color);
+  .attr("height", d => height - y(d.home_runs));
 
 // Add labels above bars
 svg.selectAll(".label")
@@ -125,6 +62,4 @@ svg.selectAll(".label")
   .attr("x", d => x(d.player) + x.bandwidth() / 2)
   .attr("y", d => y(d.home_runs) - 5)
   .attr("text-anchor", "middle")
-  .style("font-size", "12px")
-  .style("fill", "black")
   .text(d => d.home_runs);
