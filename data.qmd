@@ -350,7 +350,7 @@ ggplot(missing_draft_info, aes(x = variable, y = row_id, fill = missing)) +
   )
 ```
 
-```{r}
+```{r, warning=FALSE}
 batting <- fread('batting_stats.csv')
 pitching <- fread('pitching_stats.csv')
 
@@ -465,13 +465,26 @@ pitch_stats <-
 #                                person_primary_position_abbreviation,
 #                                person_bat_side_code, person_pitch_hand_code,
 #                                mlb_played_first, mlb_played_last, high_school
-#                                ), 'bat_subset.csv')
-
+#                                ), 'bat_stats_subset.csv')
 # write_csv(pitch_stats |> select(fg_playerID, person_id, person_full_name, fWAR, pick_round,
 #                                pick_number, year, person_birth_state_province,
 #                                person_height, person_weight, home_state,
 #                                person_primary_position_abbreviation,
 #                                person_bat_side_code, person_pitch_hand_code,
 #                                mlb_played_first, mlb_played_last, high_school
-#                                ), 'pitch_subset.csv')
+#                                ), 'pitch_stats_subset.csv')
+# write_csv(bat_draft |> select(fg_playerID, person_id, person_full_name, fWAR, pick_round,
+#                                pick_number, year, person_birth_state_province,
+#                                person_height, person_weight, home_state,
+#                                person_primary_position_abbreviation,
+#                                person_bat_side_code, person_pitch_hand_code,
+#                                mlb_played_first, mlb_played_last, high_school, birth_year
+#                                ), 'bat_draft_subset.csv')
+# write_csv(pitch_draft |> select(fg_playerID, person_id, person_full_name, fWAR, pick_round,
+#                                pick_number, year, person_birth_state_province,
+#                                person_height, person_weight, home_state,
+#                                person_primary_position_abbreviation,
+#                                person_bat_side_code, person_pitch_hand_code,
+#                                mlb_played_first, mlb_played_last, high_school, birth_year
+#                                ), 'pitch_draft_subset.csv')
 ```

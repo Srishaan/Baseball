@@ -753,91 +753,82 @@ e.g.:
 <span id="cb32-58"><a href="#cb32-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="fu">which.min</span>(pick_round)) <span class="sc">|&gt;</span> <span class="co"># choose the lower round (the better pick)</span></span>
 <span id="cb32-59"><a href="#cb32-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
 <span id="cb32-60"><a href="#cb32-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(person_id, <span class="at">.keep_all =</span> T) <span class="sc">|&gt;</span></span>
-<span id="cb32-61"><a href="#cb32-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(fWAR))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: There were 2 warnings in `mutate()`.
-The first warning was:
-ℹ In argument: `pick_round = ifelse(is.na(as.numeric(pick_round)), 1000,
-  as.numeric(pick_round))`.
-Caused by warning in `ifelse()`:
-! NAs introduced by coercion
-ℹ Run `dplyr::last_dplyr_warnings()` to see the 1 remaining warning.</code></pre>
-</div>
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Removes players who do not have a person_birth_state_province</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>bat_stats <span class="ot">&lt;-</span></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  bat_stats <span class="sc">|&gt;</span> </span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(home_state)</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Select those with abbreviations with 2 letters</span></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>bat_stats <span class="ot">&lt;-</span> </span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  bat_stats <span class="sc">|&gt;</span> </span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(home_state <span class="sc">%in%</span> <span class="fu">tolower</span>(state.abb))</span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Full Draft information for pitcher's</span></span>
-<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>pitch_draft <span class="ot">&lt;-</span> </span>
-<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>  pitching <span class="sc">|&gt;</span> </span>
-<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(draft_info, <span class="at">by =</span> <span class="st">"fg_playerID"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(person_primary_position_name <span class="sc">==</span> <span class="st">"Pitcher"</span>)</span>
-<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(pitching)</span>
-<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Career Stats for each pitcher from the draft information</span></span>
-<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>pitch_stats <span class="ot">&lt;-</span> </span>
-<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>  pitch_draft <span class="sc">|&gt;</span> </span>
-<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># For picks whose rounds are none numerical we will designate them with a 1000</span></span>
-<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># to ensure it's clear that it was a supplemental draft round</span></span>
-<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pick_round =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(<span class="fu">as.numeric</span>(pick_round)), <span class="dv">1000</span>, </span>
-<span id="cb34-25"><a href="#cb34-25" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">as.numeric</span>(pick_round))) <span class="sc">|&gt;</span> </span>
-<span id="cb34-26"><a href="#cb34-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(person_id) <span class="sc">|&gt;</span> </span>
-<span id="cb34-27"><a href="#cb34-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="fu">which.min</span>(pick_round)) <span class="sc">|&gt;</span> <span class="co"># choose the lower round (the better pick)</span></span>
-<span id="cb34-28"><a href="#cb34-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb34-29"><a href="#cb34-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(person_id, <span class="at">.keep_all =</span> T) <span class="sc">|&gt;</span> </span>
-<span id="cb34-30"><a href="#cb34-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(fWAR))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: There were 2 warnings in `mutate()`.
-The first warning was:
-ℹ In argument: `pick_round = ifelse(is.na(as.numeric(pick_round)), 1000,
-  as.numeric(pick_round))`.
-Caused by warning in `ifelse()`:
-! NAs introduced by coercion
-ℹ Run `dplyr::last_dplyr_warnings()` to see the 1 remaining warning.</code></pre>
-</div>
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Removes players who do not have a person_birth_state_province</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>pitch_stats <span class="ot">&lt;-</span></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  pitch_stats <span class="sc">|&gt;</span> </span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(home_state)</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Select only those with abbreviations with 2 letters</span></span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>pitch_stats <span class="ot">&lt;-</span> </span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>  pitch_stats <span class="sc">|&gt;</span>  </span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove abbreviations </span></span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(home_state <span class="sc">%in%</span> <span class="fu">tolower</span>(state.abb))</span>
-<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(bat_draft, 'batters_full_draft.csv')</span></span>
-<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(bat_stats, 'batters_draft_stats.csv')</span></span>
-<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(pitch_draft, 'pitchers_full_draft.csv')</span></span>
-<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(pitch_stats, 'pitchers_draft_stats.csv')</span></span>
-<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(bat_stats |&gt; select(fg_playerID, person_id, person_full_name, fWAR, pick_round,</span></span>
-<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a><span class="co">#                                pick_number, year, person_birth_state_province,</span></span>
-<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_height, person_weight, home_state,</span></span>
-<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_primary_position_abbreviation,</span></span>
-<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_bat_side_code, person_pitch_hand_code,</span></span>
-<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a><span class="co">#                                mlb_played_first, mlb_played_last, high_school</span></span>
-<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a><span class="co">#                                ), 'bat_subset.csv')</span></span>
-<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(pitch_stats |&gt; select(fg_playerID, person_id, person_full_name, fWAR, pick_round,</span></span>
-<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a><span class="co">#                                pick_number, year, person_birth_state_province,</span></span>
-<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_height, person_weight, home_state,</span></span>
-<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_primary_position_abbreviation,</span></span>
-<span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_bat_side_code, person_pitch_hand_code,</span></span>
-<span id="cb36-29"><a href="#cb36-29" aria-hidden="true" tabindex="-1"></a><span class="co">#                                mlb_played_first, mlb_played_last, high_school</span></span>
-<span id="cb36-30"><a href="#cb36-30" aria-hidden="true" tabindex="-1"></a><span class="co">#                                ), 'pitch_subset.csv')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb32-61"><a href="#cb32-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(fWAR))</span>
+<span id="cb32-62"><a href="#cb32-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-63"><a href="#cb32-63" aria-hidden="true" tabindex="-1"></a><span class="co"># Removes players who do not have a person_birth_state_province</span></span>
+<span id="cb32-64"><a href="#cb32-64" aria-hidden="true" tabindex="-1"></a>bat_stats <span class="ot">&lt;-</span></span>
+<span id="cb32-65"><a href="#cb32-65" aria-hidden="true" tabindex="-1"></a>  bat_stats <span class="sc">|&gt;</span> </span>
+<span id="cb32-66"><a href="#cb32-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(home_state)</span>
+<span id="cb32-67"><a href="#cb32-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-68"><a href="#cb32-68" aria-hidden="true" tabindex="-1"></a><span class="co"># Select those with abbreviations with 2 letters</span></span>
+<span id="cb32-69"><a href="#cb32-69" aria-hidden="true" tabindex="-1"></a>bat_stats <span class="ot">&lt;-</span> </span>
+<span id="cb32-70"><a href="#cb32-70" aria-hidden="true" tabindex="-1"></a>  bat_stats <span class="sc">|&gt;</span> </span>
+<span id="cb32-71"><a href="#cb32-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(home_state <span class="sc">%in%</span> <span class="fu">tolower</span>(state.abb))</span>
+<span id="cb32-72"><a href="#cb32-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-73"><a href="#cb32-73" aria-hidden="true" tabindex="-1"></a><span class="co"># Full Draft information for pitcher's</span></span>
+<span id="cb32-74"><a href="#cb32-74" aria-hidden="true" tabindex="-1"></a>pitch_draft <span class="ot">&lt;-</span> </span>
+<span id="cb32-75"><a href="#cb32-75" aria-hidden="true" tabindex="-1"></a>  pitching <span class="sc">|&gt;</span> </span>
+<span id="cb32-76"><a href="#cb32-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(draft_info, <span class="at">by =</span> <span class="st">"fg_playerID"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb32-77"><a href="#cb32-77" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(person_primary_position_name <span class="sc">==</span> <span class="st">"Pitcher"</span>)</span>
+<span id="cb32-78"><a href="#cb32-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-79"><a href="#cb32-79" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(pitching)</span>
+<span id="cb32-80"><a href="#cb32-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-81"><a href="#cb32-81" aria-hidden="true" tabindex="-1"></a><span class="co"># Career Stats for each pitcher from the draft information</span></span>
+<span id="cb32-82"><a href="#cb32-82" aria-hidden="true" tabindex="-1"></a>pitch_stats <span class="ot">&lt;-</span> </span>
+<span id="cb32-83"><a href="#cb32-83" aria-hidden="true" tabindex="-1"></a>  pitch_draft <span class="sc">|&gt;</span> </span>
+<span id="cb32-84"><a href="#cb32-84" aria-hidden="true" tabindex="-1"></a>  <span class="co"># For picks whose rounds are none numerical we will designate them with a 1000</span></span>
+<span id="cb32-85"><a href="#cb32-85" aria-hidden="true" tabindex="-1"></a>  <span class="co"># to ensure it's clear that it was a supplemental draft round</span></span>
+<span id="cb32-86"><a href="#cb32-86" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pick_round =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(<span class="fu">as.numeric</span>(pick_round)), <span class="dv">1000</span>, </span>
+<span id="cb32-87"><a href="#cb32-87" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">as.numeric</span>(pick_round))) <span class="sc">|&gt;</span> </span>
+<span id="cb32-88"><a href="#cb32-88" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(person_id) <span class="sc">|&gt;</span> </span>
+<span id="cb32-89"><a href="#cb32-89" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="fu">which.min</span>(pick_round)) <span class="sc">|&gt;</span> <span class="co"># choose the lower round (the better pick)</span></span>
+<span id="cb32-90"><a href="#cb32-90" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb32-91"><a href="#cb32-91" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(person_id, <span class="at">.keep_all =</span> T) <span class="sc">|&gt;</span> </span>
+<span id="cb32-92"><a href="#cb32-92" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(fWAR))</span>
+<span id="cb32-93"><a href="#cb32-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-94"><a href="#cb32-94" aria-hidden="true" tabindex="-1"></a><span class="co"># Removes players who do not have a person_birth_state_province</span></span>
+<span id="cb32-95"><a href="#cb32-95" aria-hidden="true" tabindex="-1"></a>pitch_stats <span class="ot">&lt;-</span></span>
+<span id="cb32-96"><a href="#cb32-96" aria-hidden="true" tabindex="-1"></a>  pitch_stats <span class="sc">|&gt;</span> </span>
+<span id="cb32-97"><a href="#cb32-97" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(home_state)</span>
+<span id="cb32-98"><a href="#cb32-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-99"><a href="#cb32-99" aria-hidden="true" tabindex="-1"></a><span class="co"># Select only those with abbreviations with 2 letters</span></span>
+<span id="cb32-100"><a href="#cb32-100" aria-hidden="true" tabindex="-1"></a>pitch_stats <span class="ot">&lt;-</span> </span>
+<span id="cb32-101"><a href="#cb32-101" aria-hidden="true" tabindex="-1"></a>  pitch_stats <span class="sc">|&gt;</span>  </span>
+<span id="cb32-102"><a href="#cb32-102" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove abbreviations </span></span>
+<span id="cb32-103"><a href="#cb32-103" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(home_state <span class="sc">%in%</span> <span class="fu">tolower</span>(state.abb))</span>
+<span id="cb32-104"><a href="#cb32-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-105"><a href="#cb32-105" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(bat_draft, 'batters_full_draft.csv')</span></span>
+<span id="cb32-106"><a href="#cb32-106" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(bat_stats, 'batters_draft_stats.csv')</span></span>
+<span id="cb32-107"><a href="#cb32-107" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(pitch_draft, 'pitchers_full_draft.csv')</span></span>
+<span id="cb32-108"><a href="#cb32-108" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(pitch_stats, 'pitchers_draft_stats.csv')</span></span>
+<span id="cb32-109"><a href="#cb32-109" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(bat_stats |&gt; select(fg_playerID, person_id, person_full_name, fWAR, pick_round,</span></span>
+<span id="cb32-110"><a href="#cb32-110" aria-hidden="true" tabindex="-1"></a><span class="co">#                                pick_number, year, person_birth_state_province,</span></span>
+<span id="cb32-111"><a href="#cb32-111" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_height, person_weight, home_state,</span></span>
+<span id="cb32-112"><a href="#cb32-112" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_primary_position_abbreviation,</span></span>
+<span id="cb32-113"><a href="#cb32-113" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_bat_side_code, person_pitch_hand_code,</span></span>
+<span id="cb32-114"><a href="#cb32-114" aria-hidden="true" tabindex="-1"></a><span class="co">#                                mlb_played_first, mlb_played_last, high_school</span></span>
+<span id="cb32-115"><a href="#cb32-115" aria-hidden="true" tabindex="-1"></a><span class="co">#                                ), 'bat_stats_subset.csv')</span></span>
+<span id="cb32-116"><a href="#cb32-116" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(pitch_stats |&gt; select(fg_playerID, person_id, person_full_name, fWAR, pick_round,</span></span>
+<span id="cb32-117"><a href="#cb32-117" aria-hidden="true" tabindex="-1"></a><span class="co">#                                pick_number, year, person_birth_state_province,</span></span>
+<span id="cb32-118"><a href="#cb32-118" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_height, person_weight, home_state,</span></span>
+<span id="cb32-119"><a href="#cb32-119" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_primary_position_abbreviation,</span></span>
+<span id="cb32-120"><a href="#cb32-120" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_bat_side_code, person_pitch_hand_code,</span></span>
+<span id="cb32-121"><a href="#cb32-121" aria-hidden="true" tabindex="-1"></a><span class="co">#                                mlb_played_first, mlb_played_last, high_school</span></span>
+<span id="cb32-122"><a href="#cb32-122" aria-hidden="true" tabindex="-1"></a><span class="co">#                                ), 'pitch_stats_subset.csv')</span></span>
+<span id="cb32-123"><a href="#cb32-123" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(bat_draft |&gt; select(fg_playerID, person_id, person_full_name, fWAR, pick_round,</span></span>
+<span id="cb32-124"><a href="#cb32-124" aria-hidden="true" tabindex="-1"></a><span class="co">#                                pick_number, year, person_birth_state_province,</span></span>
+<span id="cb32-125"><a href="#cb32-125" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_height, person_weight, home_state,</span></span>
+<span id="cb32-126"><a href="#cb32-126" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_primary_position_abbreviation,</span></span>
+<span id="cb32-127"><a href="#cb32-127" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_bat_side_code, person_pitch_hand_code,</span></span>
+<span id="cb32-128"><a href="#cb32-128" aria-hidden="true" tabindex="-1"></a><span class="co">#                                mlb_played_first, mlb_played_last, high_school, birth_year</span></span>
+<span id="cb32-129"><a href="#cb32-129" aria-hidden="true" tabindex="-1"></a><span class="co">#                                ), 'bat_draft_subset.csv')</span></span>
+<span id="cb32-130"><a href="#cb32-130" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(pitch_draft |&gt; select(fg_playerID, person_id, person_full_name, fWAR, pick_round,</span></span>
+<span id="cb32-131"><a href="#cb32-131" aria-hidden="true" tabindex="-1"></a><span class="co">#                                pick_number, year, person_birth_state_province,</span></span>
+<span id="cb32-132"><a href="#cb32-132" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_height, person_weight, home_state,</span></span>
+<span id="cb32-133"><a href="#cb32-133" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_primary_position_abbreviation,</span></span>
+<span id="cb32-134"><a href="#cb32-134" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_bat_side_code, person_pitch_hand_code,</span></span>
+<span id="cb32-135"><a href="#cb32-135" aria-hidden="true" tabindex="-1"></a><span class="co">#                                mlb_played_first, mlb_played_last, high_school, birth_year</span></span>
+<span id="cb32-136"><a href="#cb32-136" aria-hidden="true" tabindex="-1"></a><span class="co">#                                ), 'pitch_draft_subset.csv')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 

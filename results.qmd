@@ -80,15 +80,15 @@ Through using histograms, we determined the number of years between a player's f
 #| fig-height: 6
 library(gridExtra)
 
-bat_draft_df <- fread('bat_subset.csv')
-pitch_draft_df <- fread('pitch_subset.csv')
+bat_stats_df <- fread('bat_stats_subset.csv')
+pitch_stats_df <- fread('pitch_stats_subset.csv')
 
 # Created a new variable for each dataset that gives number of years it took 
 # player to play their first MLB game
-bat_draft_df$DifferenceYearsDraftFGPlayed <- bat_draft_df$mlb_played_first - bat_draft_df$year
-pitch_draft_df$DifferenceYearsDraftFGPlayed <- pitch_draft_df$mlb_played_first - pitch_draft_df$year
+bat_stats_df$DifferenceYearsDraftFGPlayed <- bat_stats_df$mlb_played_first - bat_stats_df$year
+pitch_stats_df$DifferenceYearsDraftFGPlayed <- pitch_stats_df$mlb_played_first - pitch_stats_df$year
 
-plot1 <- ggplot(bat_draft_df, aes(x = DifferenceYearsDraftFGPlayed)) +
+plot1 <- ggplot(bat_stats_df, aes(x = DifferenceYearsDraftFGPlayed)) +
   geom_histogram(binwidth = 0.5, fill = "skyblue", color = "black", alpha = 0.8) +
   labs(title = "Years for Batting Draftee to Play First MLB Game", 
        x = "# of Years", y = "Frequency") +
@@ -99,7 +99,7 @@ plot1 <- ggplot(bat_draft_df, aes(x = DifferenceYearsDraftFGPlayed)) +
         legend.title = element_text(size = 10, face = "bold"),
         legend.text = element_text(size = 10))
 
-plot2 <- ggplot(pitch_draft_df, aes(x = DifferenceYearsDraftFGPlayed)) +
+plot2 <- ggplot(pitch_stats_df, aes(x = DifferenceYearsDraftFGPlayed)) +
   geom_histogram(binwidth = 0.5, fill = "orange", color = "black", alpha = 0.8) +
   labs(title = "Years for Pitching Draftee to Play First MLB Game", 
        x = "# of Years", y = "Frequency") + 
@@ -121,18 +121,18 @@ Additionally, we looked into the correlation between height and weight for both 
 #| fig-width: 12
 #| fig-height: 7
 #| 
-plot1 <- ggplot(bat_draft_df, aes(x = person_weight, y=person_height)) +
+plot1 <- ggplot(bat_stats_df, aes(x = person_weight, y=person_height)) +
   geom_point(fill="skyblue", shape=21, size=2, alpha = 0.8) +
-  geom_hline(yintercept = mean(bat_draft_df$person_height,na.rm=T), 
+  geom_hline(yintercept = mean(bat_stats_df$person_height,na.rm=T), 
              color = "red", linetype = "dashed", alpha = 0.8) + 
-  geom_vline(xintercept = mean(bat_draft_df$person_weight,na.rm=T), 
+  geom_vline(xintercept = mean(bat_stats_df$person_weight,na.rm=T), 
              color = "blue", linetype = "dashed", alpha = 0.8) +
-  geom_text(aes(x = mean(bat_draft_df$person_weight,na.rm=T) + 1, 
-                y = mean(bat_draft_df$person_height,na.rm=T), 
+  geom_text(aes(x = mean(bat_stats_df$person_weight,na.rm=T) + 1, 
+                y = mean(bat_stats_df$person_height,na.rm=T), 
                 label = paste("Mean Weight")), 
             color = "blue", hjust = 0, vjust = -15, alpha = 0.8) +  
-  geom_text(aes(x = mean(bat_draft_df$person_weight,na.rm=T), 
-                y = mean(bat_draft_df$person_height,na.rm=T) - 1, 
+  geom_text(aes(x = mean(bat_stats_df$person_weight,na.rm=T), 
+                y = mean(bat_stats_df$person_height,na.rm=T) - 1, 
                 label = paste("Mean Height")), 
             color = "red", hjust = -3, vjust = 0, alpha = 0.8) +  
   geom_smooth(method = "lm", se = FALSE, color = "black", alpha = 0.8) +
@@ -145,18 +145,18 @@ plot1 <- ggplot(bat_draft_df, aes(x = person_weight, y=person_height)) +
         legend.title = element_text(size = 10, face = "bold"),
         legend.text = element_text(size = 10))
 
-plot2 <- ggplot(pitch_draft_df, aes(x = person_weight, y=person_height)) +
+plot2 <- ggplot(pitch_stats_df, aes(x = person_weight, y=person_height)) +
   geom_point(fill="orange", shape=21, size=2, alpha = 0.8) +
-  geom_hline(yintercept = mean(pitch_draft_df$person_height,na.rm=T), 
+  geom_hline(yintercept = mean(pitch_stats_df$person_height,na.rm=T), 
              color = "red", linetype = "dashed", alpha = 0.8) + 
-  geom_vline(xintercept = mean(pitch_draft_df$person_weight,na.rm=T), 
+  geom_vline(xintercept = mean(pitch_stats_df$person_weight,na.rm=T), 
              color = "blue", linetype = "dashed", alpha = 0.8) +
-  geom_text(aes(x = mean(pitch_draft_df$person_weight,na.rm=T) + 1, 
-                y = mean(pitch_draft_df$person_height,na.rm=T), 
+  geom_text(aes(x = mean(pitch_stats_df$person_weight,na.rm=T) + 1, 
+                y = mean(pitch_stats_df$person_height,na.rm=T), 
                 label = paste("Mean Weight")), 
             color = "blue", hjust = 0, vjust = -16, alpha = 0.8) +  
-  geom_text(aes(x = mean(pitch_draft_df$person_weight,na.rm=T), 
-                y = mean(pitch_draft_df$person_height,na.rm=T) - 1, 
+  geom_text(aes(x = mean(pitch_stats_df$person_weight,na.rm=T), 
+                y = mean(pitch_stats_df$person_height,na.rm=T) - 1, 
                 label = paste("Mean Height")), 
             color = "red", hjust = -2.8, vjust = 0, alpha = 0.8) +  
   geom_smooth(method = "lm", se = FALSE, color = "black", alpha = 0.8) +
@@ -184,17 +184,17 @@ library(corrplot)
 
 par(mfrow=c(1,2))
 
-bat_draft_df1 <- bat_draft_df |>
+bat_stats_df1 <- bat_stats_df |>
   mutate(pick_round=as.numeric(pick_round)) |>
   drop_na()
-correlation_matrix <- cor(bat_draft_df1[, c(4,5,7,9,10)]) 
+correlation_matrix <- cor(bat_stats_df1[, c(4,5,7,9,10)]) 
 corrplot(correlation_matrix, method = "color")
 title("Correlation Plot (Batting)",line = 3,adj=0)
 
-pitch_draft_df1 <- pitch_draft_df |>
+pitch_stats_df1 <- pitch_stats_df |>
   mutate(pick_round=as.numeric(pick_round)) |>
   drop_na()
-correlation_matrix <- cor(pitch_draft_df1[, c(4,5,7,9,10)]) 
+correlation_matrix <- cor(pitch_stats_df1[, c(4,5,7,9,10)]) 
 corrplot(correlation_matrix, method = "color")
 title("Correlation Plot (Pitching)",line = 3,adj=0)
 ```
@@ -236,16 +236,16 @@ state_map <- data.frame(
 
 # Convert abbreviations to full state names
 state_freq_df <- data.frame(region = tolower(names(state_freq)),
-                            frequency = as.numeric(state_freq)) %>%
-  left_join(state_map, by = c("region" = "abbrev")) %>%
-  mutate(region = ifelse(is.na(full), region, full)) %>%
+                            frequency = as.numeric(state_freq)) |>
+  left_join(state_map, by = c("region" = "abbrev")) |>
+  mutate(region = ifelse(is.na(full), region, full)) |>
   filter(!(region %in% c("hawaii", "alaska"))) 
 
 # U.S. map data
 states <- map_data("state")
 
 map.df <- 
-  merge(states, state_freq_df, by = "region", all.x = TRUE) %>%
+  merge(states, state_freq_df, by = "region", all.x = TRUE) |>
   arrange(order)
 
 map.df$frequency[is.na(map.df$frequency)] <- 0
@@ -271,7 +271,7 @@ We create the following scatterplot to investigate the relationship between a pl
 #| fig-width: 10
 #| fig-height: 6
  
-players <- bind_rows(bat_draft_df, pitch_draft_df) |>
+players <- bind_rows(bat_stats_df, pitch_stats_df) |>
   arrange(desc(fWAR)) |> 
   distinct(person_id, .keep_all = T)
 
@@ -364,31 +364,14 @@ We can see from the barplot that the 1965, 1985, and 2002 draft classes are high
 #| fig-width: 10
 #| fig-height: 6
 
-bat_draft <- 
-  fread('batters_full_draft.csv') |>
-  select(fg_playerID, person_id, person_full_name, fWAR, pick_round,
-         pick_number, year, person_birth_state_province,
-         person_height, person_weight, home_state,
-         person_primary_position_abbreviation,
-         person_bat_side_code, person_pitch_hand_code,
-         mlb_played_first, mlb_played_last, high_school,
-         birth_year)
-
-pitch_draft <- 
-  fread('pitchers_full_draft.csv') |>
-  select(fg_playerID, person_id, person_full_name, fWAR, pick_round,
-         pick_number, year, person_birth_state_province,
-         person_height, person_weight, home_state,
-         person_primary_position_abbreviation,
-         person_bat_side_code, person_pitch_hand_code,
-         mlb_played_first, mlb_played_last, high_school, birth_year
-         )
+bat_draft_df <- fread('bat_draft_subset.csv')
+pitch_draft_df <- fread('pitch_draft_subset.csv')
 
 players <- 
-  bind_rows(pitch_draft, bat_draft) |>
+  bind_rows(pitch_draft_df, bat_draft_df) |>
   mutate(pick_round = as.numeric(pick_round)) |>
   filter(pick_round %in% c(1:100)) |>
-  group_by(person_id) %>% 
+  group_by(person_id) |> 
   # Choose the player's most recent draft year (if drafted more than once)
   dplyr::slice(which.max(year)) |>
   ungroup() |>
