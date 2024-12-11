@@ -271,7 +271,8 @@ ggplot(players, aes(x = time_played, y=fWAR)) +
         legend.title = element_text(size = 10, face = "bold"),
         legend.text = element_text(size = 10))
 ```
-
+## How often do Player Draftees make the MLB?
+The majority of players miss the major leagues, and only 13.06% of draftees actually get the chance to play, according to the pie chart showing whether or not they eventually made it to the MLB. We shall pay particular attention to the players who qualified for the Major Leagues.
 ```{r}
 draft_info <- fread('draft_data.csv') %>% 
   mutate(mlb_played_first = year(person_mlb_debut_date),
@@ -322,7 +323,8 @@ pie_chart <-
 
 pie_chart
 ```
-
+## Best Draft Class Through all the MLB Years
+We can see from the barplot that the 1965, 1985, and 2002 draft classes are highly successful with each garnering over 900 total fWAR across the draft class. 1965 includes the likes of Johnny Bench, Nolan Ryan, and Tom Seaver. Meanwhile 1985 includes Barry Bonds, John Smoltz, and Randy Johnson. 2002 includes Zack Greinke, Prince Fielder, and Cole Hamels. The thing these drafts share in common is that they have an abundance of talent, both in terms of Hall of Famers and depth
 ```{r draftclassfWAR, fig.cap="Best Draft Classes by fWAR"}
 bat_draft <- 
   fread('batters_full_draft.csv') %>%
@@ -400,7 +402,8 @@ draft_class_fwar <-
   geom_text(aes(label = total_fWAR, vjust = -0.5))
 draft_class_fwar
 ```
-
+## Most Successful Positions
+We can observe that outfielders (CF or LF), first basemen (1B), and third basemen (3B) have frequently been the most successful positions. This can be explained by the high level fielding positions of outfield and third base, as well as the game-changing power hitting of first basemen.
 ```{r positionfWAR, fig.cap="Best Draft Classes by Year and Position"}
 total_fwar_by_pos_and_year <- 
   players %>% 

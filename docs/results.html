@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.555">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Exploratory Data Analysis and Visualization of Trends and Biases in MLB Draft Decisions - 3&nbsp; Results</title>
+<title>3&nbsp; Results – Exploratory Data Analysis and Visualization of Trends and Biases in MLB Draft Decisions</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -112,13 +112,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./results.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Results</span></a></li></ol></nav>
-        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
-      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
@@ -189,6 +189,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#correlation-heatmap" id="toc-correlation-heatmap" class="nav-link" data-scroll-target="#correlation-heatmap"><span class="header-section-number">3.4</span> Correlation Heatmap</a></li>
   <li><a href="#state-frequency-map" id="toc-state-frequency-map" class="nav-link" data-scroll-target="#state-frequency-map"><span class="header-section-number">3.5</span> State Frequency Map</a></li>
   <li><a href="#relationship-between-time-played-in-mlb-vs-war" id="toc-relationship-between-time-played-in-mlb-vs-war" class="nav-link" data-scroll-target="#relationship-between-time-played-in-mlb-vs-war"><span class="header-section-number">3.6</span> Relationship between Time Played in MLB VS WAR</a></li>
+  <li><a href="#how-often-do-player-draftees-make-the-mlb" id="toc-how-often-do-player-draftees-make-the-mlb" class="nav-link" data-scroll-target="#how-often-do-player-draftees-make-the-mlb"><span class="header-section-number">3.7</span> How often do Player Draftees make the MLB?</a></li>
+  <li><a href="#best-draft-class-through-all-the-mlb-years" id="toc-best-draft-class-through-all-the-mlb-years" class="nav-link" data-scroll-target="#best-draft-class-through-all-the-mlb-years"><span class="header-section-number">3.8</span> Best Draft Class Through all the MLB Years</a></li>
+  <li><a href="#most-successful-positions" id="toc-most-successful-positions" class="nav-link" data-scroll-target="#most-successful-positions"><span class="header-section-number">3.9</span> Most Successful Positions</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/Srishaan/Baseball/edit/main/results.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/Srishaan/Baseball/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -611,6 +614,10 @@ Attaching package: 'maps'</code></pre>
 </div>
 </div>
 </div>
+</section>
+<section id="how-often-do-player-draftees-make-the-mlb" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="how-often-do-player-draftees-make-the-mlb"><span class="header-section-number">3.7</span> How often do Player Draftees make the MLB?</h2>
+<p>The majority of players miss the major leagues, and only 13.06% of draftees actually get the chance to play, according to the pie chart showing whether or not they eventually made it to the MLB. We shall pay particular attention to the players who qualified for the Major Leagues.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -679,6 +686,10 @@ Caused by warning:
 </div>
 </div>
 </div>
+</section>
+<section id="best-draft-class-through-all-the-mlb-years" class="level2" data-number="3.8">
+<h2 data-number="3.8" class="anchored" data-anchor-id="best-draft-class-through-all-the-mlb-years"><span class="header-section-number">3.8</span> Best Draft Class Through all the MLB Years</h2>
+<p>We can see from the barplot that the 1965, 1985, and 2002 draft classes are highly successful with each garnering over 900 total fWAR across the draft class. 1965 includes the likes of Johnny Bench, Nolan Ryan, and Tom Seaver. Meanwhile 1985 includes Barry Bonds, John Smoltz, and Randy Johnson. 2002 includes Zack Greinke, Prince Fielder, and Cole Hamels. The thing these drafts share in common is that they have an abundance of talent, both in terms of Hall of Famers and depth</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -775,6 +786,10 @@ Caused by warning:
 </div>
 </div>
 </div>
+</section>
+<section id="most-successful-positions" class="level2" data-number="3.9">
+<h2 data-number="3.9" class="anchored" data-anchor-id="most-successful-positions"><span class="header-section-number">3.9</span> Most Successful Positions</h2>
+<p>We can observe that outfielders (CF or LF), first basemen (1B), and third basemen (3B) have frequently been the most successful positions. This can be explained by the high level fielding positions of outfield and third base, as well as the game-changing power hitting of first basemen.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -871,18 +886,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -914,7 +918,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp('/' + window.location.host + '/');
@@ -922,7 +948,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {
