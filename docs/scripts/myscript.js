@@ -7,7 +7,7 @@ const data = [
 ];
 
 // Set up SVG dimensions and margins
-const margin = { top: 20, right: 30, bottom: 70, left: 60 };
+const margin = { top: 20, right: 30, bottom: 70, left: 60 }; // Combining the margin change
 const width = 600 - margin.left - margin.right;
 const height = 400 - margin.top - margin.bottom;
 
@@ -97,8 +97,6 @@ svg.selectAll(".label")
   .attr("x", d => x(d.player) + x.bandwidth() / 2)
   .attr("y", d => y(d.home_runs) - 5)
   .attr("text-anchor", "middle")
-  .style("font-size", "12px")
-  .style("fill", "black")
   .text(d => d.home_runs);
 
 // Add a pie chart
