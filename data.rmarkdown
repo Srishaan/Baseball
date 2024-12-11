@@ -1,0 +1,358 @@
+# Data
+
+## Description
+
+For this project, there are four key data sources that will be utilized. 
+
+The first two datasets are obtained using the [`pybaseball`](https://github.com/jldbc/pybaseball) package, a Python library (last updated on September 8, 2023 with updates every 1-2 months on average) that is provides access to various reputable baseball sources such as [FanGraphs](https://www.fangraphs.com/) and [Baseball Reference](https://www.baseball-reference.com/). By utilizing `pybaseball`'s implemented `batting_stats()` and `pitching_stats()` functions, we get the batting data and pitching statistics for MLB players, saved as "batting_stats.csv" and "pitching_stats.csv", respectively. The batting statistics dataset has dimensions of 10,665 × 319, and the pitching statistics dataset has the dimensions of 6,423 × 392.
+
+The last two datasets are sourced from [`BaseballR`](https://billpetti.github.io/baseballr/) package, an R library (last updated on January 16, 2024 with updates every 2-3 months on average) designed for accessing and analyzing baseball data from other reputable sources such as Statcast (an analytics system used by the MLB to track baseball data) and [Baseball Savant](https://baseballsavant.mlb.com/). Using the `BaseballR` package, we retrieve baseball draft data for each year from 1965 to 2023, which includes details about player drafts such as team, round, and selection year, saved as "draft_df.csv". Additionally, we run the `chadwick_player_lu()` function from `BaseballR` to get a database of player biographical and career information from the Chadwick Baseball Bureau, which we save as "chadwick_data.csv". The draft dataset has dimensions of 67903 x 84 and the Chadwick player dataset has dimensions of 512843 x 40.
+
+The main issues/problems with the data is that there are missing values present, and an in-depth analysis about this will be provided in the missing value analysis section below.
+
+## Missing value analysis
+
+Within our data, we see a plethora of missing values from each of our data sets.
+
+
+
+```{r}
+#| message: false
+library(tidyverse)
+library(baseballr)
+library(ggplot2)
+```
+
+
+Within our batting statistics dataset, there are a large amount of missing values, where even some variables have the same amount of missing values as there are rows in the dataset. For variables that have this situation, it is due to that feature not being applicable for batters. For example, a variable tracking a specific pitch type (like `UN%` or `FT%`) will not have data since the data primarily focuses on batting. There are some variables that contain some missing variables, which may be due to data collection gaps or data source limitation. Other common statistics though, such as `AB` (At Bats), `H` (Hits), and `RBI` (Runs Batted In), are core metrics in baseball datasets and are therefore recorded in our dataset without missing values. Due to the large nature of this dataset where there are over 319 variables, a summary of missing values is included instead of a heatmap visually showing the missing values of each variable at each column. A count of how many columns contain missing values and how many do not is also shown for greater clarification on the significant amount of missing variables.
+
+
+```{r}
+batting_stats <- read_csv("batting_stats.csv", show_col_types = FALSE)
+
+batting_na_count = colSums(is.na(batting_stats)) |>
+  sort(decreasing = TRUE)
+batting_na_count[batting_na_count == 10665]
+batting_na_count[batting_na_count == 0]
+
+columns_with_na_batting <- sum(colSums(is.na(batting_stats)) > 0)
+columns_without_na_batting <- sum(colSums(is.na(batting_stats)) == 0)
+cat("Batting Columns with NA values:", columns_with_na_batting, "\n")
+cat("Batting Columns without NA values:", columns_without_na_batting, "\n")
+```
+
+
+Within our pitching statistics dataset, there are also a large amount of missing values, though there are not as many variables nor observations as that of the batting dataset. Again, some variables contain have the same amount of missing values as there are rows in the dataset. For variables that have this situation, it is due to that feature not being applicable for pitchers. For example, a variable tracking advanced metrics such as `Stf+ FO` (Stuff+ for Four-Seam Fastballs) or `Loc+ FO` (Location+ for Four-Seam Fastballs) will not have data since these variables require specific conditions or a sufficient sample size of pitches to calculate, making them inapplicable to all pitchers. There are some variables that contain some missing values, which may be due to data collection gaps or data source limitations. Other common statistics, such as `W` (Wins), `L` (Losses), and `ERA` (Earned Run Average), are core metrics in baseball datasets and are therefore recorded in our dataset without missing values. Due to the large nature of this dataset where there are over 392 variables, a summary of missing values is included instead of a heatmap visually showing the missing values of each variable at each column. A count of how many columns contain missing values and how many do not is also shown for greater clarification on the significant amount of missing variables.
+
+
+```{r}
+pitching_stats <- read_csv("pitching_stats.csv", show_col_types = FALSE)
+
+pitching_na_count = colSums(is.na(pitching_stats)) |>
+  sort(decreasing = TRUE)
+pitching_na_count[pitching_na_count == 6423]
+pitching_na_count[pitching_na_count == 0]
+
+columns_with_na_pitching <- sum(colSums(is.na(pitching_stats)) > 0)
+columns_without_na_pitching <- sum(colSums(is.na(pitching_stats)) == 0)
+cat("Pitching Columns with NA values:", columns_with_na_pitching, "\n")
+cat("Pitching Columns without NA values:", columns_without_na_pitching, "\n")
+```
+
+
+Missing values are also present within the Chadwick data, which contains the biographical and career information of people associated with the MLB. Some columns are seen to be entirely misisng given that they are shown as solid red bars, which suggests that these variables are either not relevant to the dataset's context or represent data that was not collected. Other columns have a mix of missing and non-missing values, which means that these variables may suffer from data collection gaps or were conditionally applicable, such as metrics that may applicable to baseball managers or metrics that were unavailable for certain time periods. Lastly, columns with no missing values as seen with white bars represent essential metrics such as a person's name and position in the MLB. These metrics are recorded across the Chadwick dataset which shows that despite it having missing data present, its key metrics still are reliably available for analysis.
+
+
+```{r, warning = FALSE}
+chadwick_data <- read_csv("chadwick_data.csv", show_col_types = FALSE)
+
+chadwick_data_uniform <- chadwick_data |>
+  mutate(across(everything(), as.character))
+
+missing_chadwick <- chadwick_data_uniform |>
+  mutate(row_id = row_number()) |>
+  pivot_longer(-row_id, names_to = "variable", values_to = "value") |>
+  mutate(missing = is.na(value))
+
+ggplot(missing_chadwick, aes(x = variable, y = row_id, fill = missing)) +
+  geom_tile() +
+  scale_fill_manual(values = c("FALSE" = "white", "TRUE" = "red"), name = "Missing") +
+  theme_minimal() +
+  labs(
+    title = "Heatmap of Missing Values in Chadwick Data",
+    x = "Variables",
+    y = "Rows"
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    axis.text.y = element_blank()
+  )
+```
+
+
+Lastly, missing values were also present within the draft data containing the team, round, and selection year of a player. To visualize the missing values in this dataset, I selected the top 20 variables with the most missing values and the top 20 with the least missing values. This was done due to there being a large amount of variables present in the dataset, though it was not as extensive as those in the batting and pitching datasets. Some columns are seen to be entirely misisng given that they are shown as solid red bars, which suggests that they might not be applicable to the dataset's context, such as fields related to specific player demographics or draft-related outcomes that were not recorded. Other columns have a mix of missing and non-missing values, which means that these variables may suffer from data collection gaps or were attributes relevant only to certain players, teams, or draft rounds. Lastly, columns with no missing values as seen with white bars represent essential metrics such as a player's name, their draft pick numbers, or other key metrics that are consistently recorded. These metrics are recorded throughout the draft dataset, which still demonstrates that while missing data is also present in this dataset, the key metrics in this dataset also still remain reliably available for analysis.
+
+
+```{r, warning = FALSE}
+draft_data <- read_csv("draft_data.csv", show_col_types = FALSE)
+
+top_missing_vars_draft <- draft_data |>
+  summarise(across(everything(), ~ sum(is.na(.)))) |>
+  pivot_longer(everything(), names_to = "variable", values_to = "missing_count") |>
+  arrange(desc(missing_count)) |>
+  slice(1:20) |>
+  pull(variable)
+
+least_missing_vars_draft<- draft_data |>
+  summarise(across(everything(), ~ sum(is.na(.)))) |>
+  pivot_longer(everything(), names_to = "variable", values_to = "missing_count") |>
+  arrange(missing_count) |>
+  slice(1:20) |>
+  pull(variable)
+
+draft_subset <- draft_data |>
+  select(all_of(c(top_missing_vars_draft, least_missing_vars_draft)))
+
+draft_data_uniform <- draft_subset |>
+  mutate(across(everything(), as.character))
+
+missing_draft <- draft_data_uniform |>
+  mutate(row_id = row_number()) |>
+  pivot_longer(-row_id, names_to = "variable", values_to = "value") |>
+  mutate(missing = is.na(value))
+
+ggplot(missing_draft, aes(x = variable, y = row_id, fill = missing)) +
+  geom_tile() +
+  scale_fill_manual(values = c("FALSE" = "white", "TRUE" = "red"), name = "Missing") +
+  theme_minimal() +
+  labs(
+    title = "Heatmap of Missing Values in Draft Data",
+    x = "Variables",
+    y = "Rows"
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    axis.text.y = element_blank()
+  )
+```
+
+```{r, warning = FALSE}
+#| message: false
+library(data.table)
+library(datasets) # for state abbreviations
+
+draft_info <- fread('draft_data.csv')
+
+draft_info <-
+  draft_info |> 
+  # Add year columns to match up with Chadwick
+  mutate(mlb_played_first = year(person_mlb_debut_date),
+         high_school = ifelse(str_detect(school_name, "\\sHS") == TRUE, "Yes", 
+                              "No"),
+         person_height = str_replace_all(person_height, "\"$", "")) |> 
+  replace_na(list(home_state = "None", mlb_played_first = 0)) |> 
+  mutate(mlb_played_last = ifelse(mlb_played_first == 0, 0, 
+                           year(person_last_played_date))) |> 
+  replace_na(list(mlb_played_last = 2023)) |> 
+  # Remove variables of no interest
+  select(-person_link, -c(person_use_name:person_gender),
+         -c(person_name_slug:person_init_last_name), 
+         -c(person_name_matrilineal:home_city), -c(home_country, school_state),
+         -c(person_xref_ids:person_death_country), -person_name_title, -team_id,
+         -person_name_suffix, -c(team_link:team_spring_league_abbreviation), 
+         -headshot_link, home_state)
+
+chadwick <- fread('chadwick_data.csv')
+
+# Update Chadwick for players who were drafted after
+chadwick <- 
+  chadwick |> 
+  select(-c(pro_managed_first:mlb_umpired_last), -name_suffix, 
+         -name_matrilineal, -key_person, -key_uuid, -key_retro, 
+         -key_bbref_minors, -c(key_npb:key_wikidata), -key_bbref) |> 
+  # Add variables to match up with Draft info
+  mutate(person_birth_date = 
+          str_c(birth_year, birth_month, birth_day, 
+                 sep="-"),
+         person_full_fml_name = 
+           str_c(name_given, name_last, sep = " "),
+         person_full_name = 
+           str_c(name_first, name_last, sep = " ")) |> 
+  rename(person_id = key_mlbam,
+         fg_playerID = key_fangraphs) |> 
+  arrange(mlb_played_first) |> 
+  drop_na(person_id) # Remove players we don't have an identifier for
+
+# missing height is formatted as 0' 0" (0 feet 0 inches tall)
+missing_height <- draft_info$person_height[57]
+
+draft_info <- 
+  draft_info |> 
+  # add the chadwick player info, particularly the `fg_playerID`
+  inner_join(chadwick |> 
+               select(-person_full_name, -person_birth_date, -person_full_fml_name,
+                      -mlb_played_first, -mlb_played_last), 
+             by = "person_id") |> 
+  # Remove unnecessary variables
+  select(-person_first_name, -person_last_name, -person_primary_number, 
+         -person_current_age, -c(person_name_first_last:person_strike_zone_bottom),
+         person_primary_position_code, person_primary_position_type, 
+         person_bat_side_description, person_pitch_hand_description, -name_last,
+         -name_first) |> 
+  filter(person_height != missing_height)
+rm(chadwick)
+
+# Get the indices for the elements which contain a state abbreviation
+draft_index <- which(str_detect(draft_info$school_name, pattern = "\\((.*?)\\)"))
+
+# List with all the match results for the pattern "(letters)"
+draft_list <- str_match_all(draft_info$school_name, pattern = "\\((.*?)\\)")
+
+# Extracts the text within the "()", and stores it as a vector
+draft_states <- unlist(lapply(draft_list, function(x) {x[, 2]}))
+rm(draft_list) # Remove the list form of the home states
+
+# Removes any results where there was an NA result generated
+draft_states <- draft_states[!is.na(draft_states)]
+
+# Get the index for the draft_stats which contain the pattern ", "
+comma_index <- which(str_detect(draft_states, ",\\s"))
+
+# Extracts the states with the pattern ", " from `draft_states`
+comma_states <- draft_states[comma_index]
+
+# Determines if there are any incorrect patterns
+wrong <- comma_states[which(!str_detect(comma_states, ", ([:alpha:]+)"))]
+
+# Replaces the pattern within the `comma_states` manually
+comma_states[which(!str_detect(comma_states, ", ([:alpha:]+)"))] <- ", FL"
+
+# Extract the letters which follow the ", " pattern into a vector
+comma_states <- 
+  str_match_all(comma_states, ", ([:alpha:]+)") |> 
+  lapply(function(x) {x[, 2]})
+
+# There was an error, so it was detecting Louis and MO
+comma_states[[2525]] <- comma_states[[2525]][2]
+# Unlist it into a single vector
+comma_states <- comma_states |> unlist()
+
+# Replace the comma states with the correct abbreviations
+draft_states[comma_index] <- comma_states
+
+# Create a new variable home_state
+draft_info <- draft_info |> mutate(home_state = person_birth_state_province)
+
+# Store all the draft_states to the new `draft_state` variable within `draft_info`
+draft_info$home_state[draft_index] <- draft_states
+rm(draft_index, draft_states, wrong)
+
+# Wrong abbreviations indices
+wrong_index <- which(nchar(draft_info$home_state) > 2)
+
+# Find the wrong abbreviations
+wrong_abbrev <- draft_info$home_state[wrong_index]
+
+state_data <- data.frame(state_name = state.name, state_abb = state.abb)
+
+state_names_wrong <- 
+  data.frame(state_name = wrong_abbrev[which(tolower(wrong_abbrev) %in% tolower(state.name))]) |> 
+  inner_join(state_data, by = "state_name")
+
+# Fix the wrong abbreviations
+wrong_abbrev[which(tolower(wrong_abbrev) %in% tolower(state.name))] <- state_names_wrong$state_abb
+
+# For those players who didn't go to high school
+no_hs <- draft_info |> 
+  slice(wrong_index) |> 
+  filter(high_school == "No")
+
+# Improperly formatted states
+wrong_states <- 
+  wrong_abbrev[which(!(tolower(wrong_abbrev) %in% tolower(no_hs$home_state)))]
+
+# Find the unique improperly formatted states
+wrong <- unique(wrong_states) |> sort()
+
+correct_states <- c("FL", "AL", "ALB", "AZ", "AZ", "AR", "GA", "MD", "MI", "AL", 
+                    "CA", "CA", "CA", "CA", "Canada", "Canada", "IL", 
+                    "Christian Brothers", "OH", "OH", "Coahuila", "CO", "CT", "CA", "CA",
+                    "DE", "CO", "FL", "FL", "FL", "FL", "FL", "CA", "HI", "Holland", "FL",
+                    "HI", "TX", "IA", "IL", "IL", "IL", "IL", "IN", "IN", "IA",
+                    "KS", "CA", "LA", "IA", "MA", "FL", "FL", "MI", "MI",
+                    "MI", "MN", "MS", "CA", "NC", "NE", "NJ", "NJ", "NY",
+                    "NY", "OH", "OK", "OK", "OK", "OR", "PA", "PA", "PA", "PA", 
+                    "PA", "CA", "PA", "PA", "QUE", "QUE", "S. Australia", 
+                    "TX", "CA", "CA", "SASK", "St Thomas", "CA", "TN", "TX", 
+                    "Trabuco Hills", "Trinity International", "TX", "TX", 
+                    "US Virgin Islands", "Ven", "WA", "OH", "WV", "Zacatecas")
+
+# Corrected abbreviations
+corrections <- data.frame(wrong = wrong, correct = correct_states)
+
+# Correct the wrong_states abbreviations with the correct ones, unless not in U.S.A.
+wrong_states <- ifelse(wrong_states %in% corrections$wrong, corrections$correct, wrong_states)
+
+# Update wrong_abbrev object with corrected abbreviations
+wrong_abbrev[which(!(tolower(wrong_abbrev) %in% tolower(no_hs$home_state)))] <- wrong_states
+
+# Correct leftover wrong_abbrev
+correct_abbrev <- ifelse(wrong_abbrev %in% corrections$wrong, corrections$correct, wrong_abbrev)
+
+# Add the correct_abbrev to the draft_info
+draft_info$home_state[wrong_index] <- correct_abbrev
+draft_info$home_state <- tolower(draft_info$home_state) 
+
+# Create a list with all drafted player height
+height_list <- str_match_all(draft_info$person_height, "\\d+")
+
+# Convert the first element from feet to inches
+height_ft <- as.integer(unlist(lapply(height_list, function(x) {x[1]}))) * 12
+height_in <- as.integer(unlist(lapply(height_list, function(x) {x[2]}))) + as.integer(height_ft)
+rm(height_list, height_ft) # Remove the height_list
+
+# Convert the person_height variable to inches
+draft_info$person_height <- height_in
+
+rm(comma_index, comma_states, correct_abbrev, correct_states, height_in,
+   missing_height, wrong, wrong_abbrev, wrong_index, wrong_states, state_data,
+   state_names_wrong, no_hs, corrections)
+
+# write_csv(draft_info, 'clean_draft.csv')
+```
+
+```{r}
+cleaned_draft_na_count <- colSums(is.na(draft_info)) |>
+  sort(decreasing = TRUE) 
+cleaned_draft_na_count[cleaned_draft_na_count > 30000]
+cleaned_draft_na_count[cleaned_draft_na_count == 0][0:10]
+
+columns_with_na_draft <- sum(colSums(is.na(draft_info)) > 0)
+columns_without_na_draft <- sum(colSums(is.na(draft_info)) == 0)
+cat("Cleaned Draft Data Columns with NA values:", columns_with_na_draft)
+cat("Cleaned Draft Data Columns without NA values:", columns_without_na_draft)
+```
+
+```{r}
+draft_info_uniform <- draft_info |>
+  mutate(across(everything(), as.character))
+
+missing_draft_info <- draft_info_uniform |>
+  mutate(row_id = row_number()) |> 
+  pivot_longer(-row_id, names_to = "variable", values_to = "value") |> 
+  mutate(missing = is.na(value)) 
+
+ggplot(missing_draft_info, aes(x = variable, y = row_id, fill = missing)) +
+  geom_tile() +
+  scale_fill_manual(values = c("FALSE" = "white", "TRUE" = "red"), name = "Missing") +
+  theme_minimal() +
+  labs(
+    title = "Heatmap of Missing Values in Cleaned Draft Data",
+    x = "Variables",
+    y = "Rows"
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    axis.text.y = element_blank()
+  )
+```

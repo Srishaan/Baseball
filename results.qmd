@@ -1,1 +1,65 @@
 # Results
+
+```{r barplot, fig.align='center', fig.cap="Percentage of Players by Round and School Level", warning=FALSE, error = TRUE}
+#| message: false
+library(tidyverse)
+library(data.table)
+
+draft_info <- fread('clean_draft.csv')
+draft_info <- 
+  draft_info %>% 
+  mutate(mlb_years = ifelse(mlb_played_first == 0 & mlb_played_last == 0, 0,
+                            (mlb_played_last - mlb_played_first) + 1 ) )
+
+# Create a dataframe with state naming data
+state_data <- data.frame(names = state.name, abbreviation = tolower(state.abb))
+
+draft_info <- 
+  draft_info  
+  left_join(state_data, by = c("home_state" = "abbreviation")) |>
+  select(-home_state) |>
+  rename(home_state = names) |> 
+  drop_na(home_state)
+
+players_per_round <- 
+  draft_info |> 
+  filter(as.integer(pick_round) %in% c(1:10)) |> 
+  drop_na(high_school) |> 
+  group_by(pick_round) |> 
+  summarise(drafted_players = n()) |> 
+  ungroup() |> 
+  mutate(pick_round = factor(pick_round, levels = c(1:10))) |> 
+  arrange(pick_round)
+
+# Subset the data to only players drafted in the first 10 rounds
+first_10 <- 
+  draft_info |> 
+  filter(as.integer(pick_round) %in% c(1:10)) |> 
+  drop_na(high_school) |> 
+  group_by(pick_round, high_school) |> 
+  summarise(num_players = n()) |> 
+  arrange(desc(num_players)) |> 
+  ungroup() |> 
+  inner_join(players_per_round, by = "pick_round") |> 
+  mutate(pick_round = factor(pick_round, levels = c(1:10)),
+         high_school = as.factor(ifelse(high_school == "Yes", "High School", 
+                                        "College") ),
+         percent = round(num_players / drafted_players * 100, 2)  )|> 
+  arrange(pick_round)
+
+hs_by_round_plot <-
+  ggplot(first_10, aes(x = pick_round, y = percent, fill = high_school)) +
+  geom_bar(stat = "identity", position = "stack") +
+  labs(y = "Percent of Draftees", x = "Draft Round", 
+       title = "Percent of Draftees by Pick and Round",
+       fill = "School Level") +
+  theme_minimal() +
+  geom_text(aes(label = paste(percent, "%", sep = "")), 
+                position = position_stack(vjust = 0.5), size = 4) +
+  theme(plot.title = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12, face = "bold"),
+        axis.text = element_text(size = 10),
+        legend.title = element_text(size = 10, face = "bold"),
+        legend.text = element_text(size = 10))
+hs_by_round_plot
+```
