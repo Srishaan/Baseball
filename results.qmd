@@ -172,3 +172,62 @@ corrplot(correlation_matrix, method = "color")
 title("Correlation Plot (Pitching)",line = 3,adj=0)
 #title(sub = "Plot 6: Correlation Plot of Pitchers", line=4.5)
 ```
+
+```{r statemap,fig.height=3, fig.width=6.5, fig.align='center', fig.cap = "Frequency Heatmap of Players per State"}
+library(ggplot2)
+library(dplyr)
+library(maps)
+
+# State frequency data
+state_freq <- table(draft_info$home_state)
+
+# State mapping (abbreviations to full names)
+state_map <- data.frame(
+  abbrev = c("al", "ak", "az", "ar", "ca", "co", "ct", "de", "fl", "ga", 
+             "hi", "id", "il", "in", "ia", "ks", "ky", "la", "me", "md", 
+             "ma", "mi", "mn", "ms", "mo", "mt", "ne", "nv", "nh", "nj", 
+             "nm", "ny", "nc", "nd", "oh", "ok", "or", "pa", "ri", "sc", 
+             "sd", "tn", "tx", "ut", "vt", "va", "wa", "wv", "wi", "wy"),
+  full = c("alabama", "alaska", "arizona", "arkansas", "california", "colorado", 
+           "connecticut", "delaware", "florida", "georgia", "hawaii", "idaho", 
+           "illinois", "indiana", "iowa", "kansas", "kentucky", "louisiana", 
+           "maine", "maryland", "massachusetts", "michigan", "minnesota", 
+           "mississippi", "missouri", "montana", "nebraska", "nevada", 
+           "new hampshire", "new jersey", "new mexico", "new york", 
+           "north carolina", "north dakota", "ohio", "oklahoma", "oregon", 
+           "pennsylvania", "rhode island", "south carolina", "south dakota", 
+           "tennessee", "texas", "utah", "vermont", "virginia", "washington", 
+           "west virginia", "wisconsin", "wyoming")
+)
+
+# Convert abbreviations to full state names
+state_freq_df <- data.frame(region = tolower(names(state_freq)),
+                            frequency = as.numeric(state_freq)) %>%
+  left_join(state_map, by = c("region" = "abbrev")) %>%
+  mutate(region = ifelse(is.na(full), region, full)) %>%
+  filter(!(region %in% c("hawaii", "alaska"))) # Exclude HI and AK
+
+# U.S. map data
+states <- map_data("state")
+
+# Merge data
+map.df <- 
+  merge(states, state_freq_df, by = "region", all.x = TRUE) %>%
+  arrange(order)
+
+# Replace NA frequencies with 0
+map.df$frequency[is.na(map.df$frequency)] <- 0
+
+# Plot
+home_heat_map <- 
+  ggplot(map.df, aes(x = long, y = lat, group = group)) +
+  geom_polygon(aes(fill = frequency)) +
+  geom_path(color = "black", size = 0.1) +
+  scale_fill_gradient(low = "white", high = "darkred", name = "Players Drafted") +
+  labs(title = "Heat Map of Drafted Players") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 12, face = "bold"),
+        legend.title = element_text(size = 10, face = "bold"),
+        legend.text = element_text(size = 10))
+home_heat_map
+```
