@@ -187,6 +187,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#how-long-to-play-first-mlb-game" id="toc-how-long-to-play-first-mlb-game" class="nav-link" data-scroll-target="#how-long-to-play-first-mlb-game"><span class="header-section-number">3.2</span> How Long to Play First MLB Game</a></li>
   <li><a href="#weight-vs-height" id="toc-weight-vs-height" class="nav-link" data-scroll-target="#weight-vs-height"><span class="header-section-number">3.3</span> Weight vs Height</a></li>
   <li><a href="#correlation-heatmap" id="toc-correlation-heatmap" class="nav-link" data-scroll-target="#correlation-heatmap"><span class="header-section-number">3.4</span> Correlation Heatmap</a></li>
+  <li><a href="#state-frequency-map" id="toc-state-frequency-map" class="nav-link" data-scroll-target="#state-frequency-map"><span class="header-section-number">3.5</span> State Frequency Map</a></li>
+  <li><a href="#relationship-between-time-played-in-mlb-vs-war" id="toc-relationship-between-time-played-in-mlb-vs-war" class="nav-link" data-scroll-target="#relationship-between-time-played-in-mlb-vs-war"><span class="header-section-number">3.6</span> Relationship between Time Played in MLB VS WAR</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/Srishaan/Baseball/edit/main/results.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/Srishaan/Baseball/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -466,6 +468,10 @@ Attaching package: 'gridExtra'</code></pre>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#title(sub = "Plot 6: Correlation Plot of Pitchers", line=4.5)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+</section>
+<section id="state-frequency-map" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="state-frequency-map"><span class="header-section-number">3.5</span> State Frequency Map</h2>
+<p>We create a frequency heatmap to examine which state generates the most number of draftees:The majority of athletes selected come originally from California, with Texas and Florida being the other two main home states, according to our state map. We can blame this tendency on the weather since, in contrast to the East, Midwest, and Northwest, these states often have warmer temperatures and little to no snow, allowing people to play baseball year-round and giving youth leagues more seasonal flexibility. Additionally, these states have sizable populations, which may help to explain why the majority of draftees come from them.</p>
 <div class="cell" data-layout-align="center">
 <details class="code-fold">
 <summary>Code</summary>
@@ -550,6 +556,10 @@ Attaching package: 'maps'</code></pre>
 </div>
 </div>
 </div>
+</section>
+<section id="relationship-between-time-played-in-mlb-vs-war" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="relationship-between-time-played-in-mlb-vs-war"><span class="header-section-number">3.6</span> Relationship between Time Played in MLB VS WAR</h2>
+<p>We create the following scatterplot to investigate the relationship between a player’s career length and WAR: The duration of a player’s career does not always translate into a high WAR, as seen by the comparison of each player’s total MLB time played and WAR. There does appear to be an upward trend, though, which makes logical given that we anticipate a player to win more the longer they play.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>

@@ -176,7 +176,8 @@ corrplot(correlation_matrix, method = "color")
 title("Correlation Plot (Pitching)",line = 3,adj=0)
 #title(sub = "Plot 6: Correlation Plot of Pitchers", line=4.5)
 ```
-
+## State Frequency Map
+We create a frequency heatmap to examine which state generates the most number of draftees:The majority of athletes selected come originally from California, with Texas and Florida being the other two main home states, according to our state map. We can blame this tendency on the weather since, in contrast to the East, Midwest, and Northwest, these states often have warmer temperatures and little to no snow, allowing people to play baseball year-round and giving youth leagues more seasonal flexibility. Additionally, these states have sizable populations, which may help to explain why the majority of draftees come from them.
 ```{r statemap,fig.height=3, fig.width=6.5, fig.align='center', fig.cap = "Frequency Heatmap of Players per State"}
 library(ggplot2)
 library(dplyr)
@@ -232,7 +233,8 @@ home_heat_map <-
         legend.text = element_text(size = 10))
 home_heat_map
 ```
-
+##  Relationship between Time Played in MLB VS WAR
+We create the following scatterplot to investigate the relationship between a player's career length and WAR: The duration of a player's career does not always translate into a high WAR, as seen by the comparison of each player's total MLB time played and WAR. There does appear to be an upward trend, though, which makes logical given that we anticipate a player to win more the longer they play.
 ```{r mlbwar, fig.cap = "Relationship between Time Played in MLB vs. WAR", fig.height=3}
 players <- bind_rows(bat_draft_df, pitch_draft_df) |>
   arrange(desc(fWAR)) |> 
