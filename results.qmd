@@ -149,4 +149,26 @@ plot2 <- ggplot(pitch_draft_df, aes(x = person_weight, y=person_height)) +
 
 grid.arrange(plot1, plot2, nrow = 1)
 ```
+
+
+```{r correlation,fig.align='center', fig.cap = "Correlation Plots for Pitching and Batting", fig.height=3.5, warning=FALSE}
+library(corrplot)
+
+par(mfrow=c(1,2))
+# >| full_join(pitch_draft_df)
+bat_draft_df1 <- bat_draft_df %>%
+  mutate(pick_round=as.numeric(pick_round)) %>% 
+  drop_na()
+correlation_matrix <- cor(bat_draft_df1[, c(4,5,7,9,10)]) 
+corrplot(correlation_matrix, method = "color")
+title("Correlation Plot (Batting)",line = 3,adj=0)
+#title(sub = "Plot 5: Correlation Plot of Batters", line=4.5)
+
+pitch_draft_df1 <- pitch_draft_df %>%
+  mutate(pick_round=as.numeric(pick_round)) %>% 
+  drop_na()
+correlation_matrix <- cor(pitch_draft_df1[, c(4,5,7,9,10)]) 
+corrplot(correlation_matrix, method = "color")
+title("Correlation Plot (Pitching)",line = 3,adj=0)
+#title(sub = "Plot 6: Correlation Plot of Pitchers", line=4.5)
 ```
