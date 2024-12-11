@@ -63,3 +63,38 @@ hs_by_round_plot <-
         legend.text = element_text(size = 10))
 hs_by_round_plot
 ```
+
+```{r histograms, fig.cap = "Histograms of Years before First MLB Game"}
+library(gridExtra)
+
+bat_draft_df <- fread('bat_subset.csv')
+pitch_draft_df <- fread('pitch_subset.csv')
+
+#Created a new variable for each dataset that gives the number of years it took for a player 
+#to play their first MLB game
+bat_draft_df$DifferenceYearsDraftFGPlayed <- bat_draft_df$mlb_played_first - bat_draft_df$year
+pitch_draft_df$DifferenceYearsDraftFGPlayed <- pitch_draft_df$mlb_played_first - pitch_draft_df$year
+plot1 <- ggplot(bat_draft_df, aes(x = DifferenceYearsDraftFGPlayed)) +
+  geom_histogram(binwidth = 0.5, fill = "skyblue", color = "black", alpha = 0.8) +
+  labs(title = "Years for Batting Draftee to Play First MLB Game", 
+       x = "# of Years", y = "Frequency") +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12, face = "bold"),
+        axis.text = element_text(size = 10),
+        legend.title = element_text(size = 10, face = "bold"),
+        legend.text = element_text(size = 10))
+
+plot2 <- ggplot(pitch_draft_df, aes(x = DifferenceYearsDraftFGPlayed)) +
+  geom_histogram(binwidth = 0.5, fill = "orange", color = "black", alpha = 0.8) +
+  labs(title = "Years for Pitching Draftee to Play First MLB Game", 
+       x = "# of Years", y = "Frequency") + 
+  theme_minimal() +
+  theme(plot.title = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12, face = "bold"),
+        axis.text = element_text(size = 10),
+        legend.title = element_text(size = 10, face = "bold"),
+        legend.text = element_text(size = 10))
+grid.arrange(plot1, plot2, nrow = 1)
+```
+```

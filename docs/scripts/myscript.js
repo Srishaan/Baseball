@@ -7,7 +7,7 @@ const data = [
 ];
 
 // Set up SVG dimensions and margins
-const margin = { top: 20, right: 30, bottom: 70, left: 60 }; // Combining the margin change
+const margin = { top: 20, right: 30, bottom: 70, left: 60 };
 const width = 600 - margin.left - margin.right;
 const height = 400 - margin.top - margin.bottom;
 
