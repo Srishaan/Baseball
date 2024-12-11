@@ -326,7 +326,6 @@ cat("Cleaned Draft Data Columns with NA values:", columns_with_na_draft)
 cat("Cleaned Draft Data Columns without NA values:", columns_without_na_draft)
 ```
 
-
 ```{r}
 draft_info_uniform <- draft_info |>
   mutate(across(everything(), as.character))
@@ -349,4 +348,130 @@ ggplot(missing_draft_info, aes(x = variable, y = row_id, fill = missing)) +
     axis.text.x = element_text(angle = 45, hjust = 1),
     axis.text.y = element_blank()
   )
+```
+
+```{r}
+batting <- fread('batting_stats.csv')
+pitching <- fread('pitching_stats.csv')
+
+# Change the variable name for WAR so that it matches in both data frames
+batting <- 
+  batting |> 
+  rename(fWAR = `L-WAR`,
+         fg_playerID = IDfg)
+
+pitching <-
+  pitching |> 
+  rename(fWAR = WAR,
+         fg_playerID = IDfg)
+
+# Subset the columns which have less than 50% of values as NA values
+bat_columns <- 
+  which(batting[, lapply(.SD, function(x) {sum(is.na(x)) / length(x)})] <= 0.5)
+
+# Keep columns of interest for all players in the data
+batting <-
+  batting |> 
+  select(all_of(bat_columns), -Events, -Dol, -starts_with("GB"),
+         -starts_with("LD"), -starts_with("FB"), -c(Pitches:BUH), 
+         -c(`IFFB%`:`BUH%`), -Age, -Team, -IFFB)
+
+# Subset the columns which have less than 50% of values as NA values
+pitch_columns <- 
+  which(pitching[, lapply(.SD, function(x) {sum(is.na(x)) / length(x)})] <= 0.5)
+
+# Keep only columns of interest for all players in the data
+pitching <-
+  pitching |> 
+  select(all_of(pitch_columns), -Team, -Age, -c(GB:BUH), -c(`GB/FB`:xFIP),
+         -c(`-WPA`:`WPA/LI`), -c(`FB% 2`:`SwStr%`), -SD, -MD, -SIERA, -`RS/9`, 
+         -c(`O-Swing% (sc)`:`FDP-Wins`), -c(`Pull%`:`Hard%`), 
+         -c(`O-Swing% (pi)`:`Pace (pi)`), -c(`LD%+`:`CSW%`), -`xFIP-`) |> 
+  replace_na(list(BS = 0, HLD = 0))
+
+rm(bat_columns, pitch_columns)
+
+# Draft info for the batters
+## Separate from the stats because some players are drafted into the MLB multiple times.
+bat_draft <- 
+  batting |> 
+  inner_join(draft_info, by = "fg_playerID") |> 
+  filter(person_primary_position_name != "Pitcher")
+
+rm(batting) 
+
+# Career Stats for each batter from the draft information
+bat_stats <- 
+  bat_draft |>
+  # For picks whose rounds are none numerical we will designate them with a 1000
+  # to ensure it's clear that it was a supplemental draft round
+  mutate(pick_round = ifelse(is.na(as.numeric(pick_round)), 1000, 
+                             as.numeric(pick_round))) |> 
+  group_by(person_id) |> 
+  slice(which.min(pick_round)) |> # choose the lower round (the better pick)
+  ungroup() |> 
+  distinct(person_id, .keep_all = T) |>
+  arrange(desc(fWAR))
+
+# Removes players who do not have a person_birth_state_province
+bat_stats <-
+  bat_stats |> 
+  drop_na(home_state)
+
+# Select those with abbreviations with 2 letters
+bat_stats <- 
+  bat_stats |> 
+  filter(home_state %in% tolower(state.abb))
+
+# Full Draft information for pitcher's
+pitch_draft <- 
+  pitching |> 
+  inner_join(draft_info, by = "fg_playerID") |> 
+  filter(person_primary_position_name == "Pitcher")
+
+rm(pitching)
+
+# Career Stats for each pitcher from the draft information
+pitch_stats <- 
+  pitch_draft |> 
+  # For picks whose rounds are none numerical we will designate them with a 1000
+  # to ensure it's clear that it was a supplemental draft round
+  mutate(pick_round = ifelse(is.na(as.numeric(pick_round)), 1000, 
+                             as.numeric(pick_round))) |> 
+  group_by(person_id) |> 
+  slice(which.min(pick_round)) |> # choose the lower round (the better pick)
+  ungroup() |> 
+  distinct(person_id, .keep_all = T) |> 
+  arrange(desc(fWAR))
+
+# Removes players who do not have a person_birth_state_province
+pitch_stats <-
+  pitch_stats |> 
+  drop_na(home_state)
+
+# Select only those with abbreviations with 2 letters
+pitch_stats <- 
+  pitch_stats |>  
+  # Remove abbreviations 
+  filter(home_state %in% tolower(state.abb))
+
+# write_csv(bat_draft, 'batters_full_draft.csv')
+# write_csv(bat_stats, 'batters_draft_stats.csv')
+# write_csv(pitch_draft, 'pitchers_full_draft.csv')
+# write_csv(pitch_stats, 'pitchers_draft_stats.csv')
+# write_csv(bat_stats |> select(fg_playerID, person_id, person_full_name, fWAR, pick_round,
+#                                pick_number, year, person_birth_state_province,
+#                                person_height, person_weight, home_state,
+#                                person_primary_position_abbreviation,
+#                                person_bat_side_code, person_pitch_hand_code,
+#                                mlb_played_first, mlb_played_last, high_school
+#                                ), 'bat_subset.csv')
+
+# write_csv(pitch_stats |> select(fg_playerID, person_id, person_full_name, fWAR, pick_round,
+#                                pick_number, year, person_birth_state_province,
+#                                person_height, person_weight, home_state,
+#                                person_primary_position_abbreviation,
+#                                person_bat_side_code, person_pitch_hand_code,
+#                                mlb_played_first, mlb_played_last, high_school
+#                                ), 'pitch_subset.csv')
 ```
