@@ -97,8 +97,6 @@ svg.selectAll(".label")
   .attr("x", d => x(d.player) + x.bandwidth() / 2)
   .attr("y", d => y(d.home_runs) - 5)
   .attr("text-anchor", "middle")
-  .style("font-size", "12px")
-  .style("fill", "black")
   .text(d => d.home_runs);
 
 // Add a pie chart
