@@ -344,12 +344,12 @@ e.g.:
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>chadwick_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"chadwick_data.csv"</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>chadwick_data_uniform <span class="ot">&lt;-</span> chadwick_data <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>chadwick_data_uniform <span class="ot">&lt;-</span> chadwick_data <span class="sc">|&gt;</span></span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), as.character))</span>
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>missing_chadwick <span class="ot">&lt;-</span> chadwick_data_uniform <span class="sc">%&gt;%</span></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">row_id =</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>row_id, <span class="at">names_to =</span> <span class="st">"variable"</span>, <span class="at">values_to =</span> <span class="st">"value"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>missing_chadwick <span class="ot">&lt;-</span> chadwick_data_uniform <span class="sc">|&gt;</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">row_id =</span> <span class="fu">row_number</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>row_id, <span class="at">names_to =</span> <span class="st">"variable"</span>, <span class="at">values_to =</span> <span class="st">"value"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">missing =</span> <span class="fu">is.na</span>(value))</span>
 <span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(missing_chadwick, <span class="fu">aes</span>(<span class="at">x =</span> variable, <span class="at">y =</span> row_id, <span class="at">fill =</span> missing)) <span class="sc">+</span></span>
@@ -423,6 +423,269 @@ e.g.:
 <div>
 <figure class="figure">
 <p><img src="data_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(datasets) <span class="co"># for state abbreviations</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>draft_info <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">'draft_data.csv'</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>draft_info <span class="ot">&lt;-</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  draft_info <span class="sc">|&gt;</span> </span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add year columns to match up with Chadwick</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mlb_played_first =</span> <span class="fu">year</span>(person_mlb_debut_date),</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">high_school =</span> <span class="fu">ifelse</span>(<span class="fu">str_detect</span>(school_name, <span class="st">"</span><span class="sc">\\</span><span class="st">sHS"</span>) <span class="sc">==</span> <span class="cn">TRUE</span>, <span class="st">"Yes"</span>, </span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"No"</span>),</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">person_height =</span> <span class="fu">str_replace_all</span>(person_height, <span class="st">"</span><span class="sc">\"</span><span class="st">$"</span>, <span class="st">""</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">replace_na</span>(<span class="fu">list</span>(<span class="at">home_state =</span> <span class="st">"None"</span>, <span class="at">mlb_played_first =</span> <span class="dv">0</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mlb_played_last =</span> <span class="fu">ifelse</span>(mlb_played_first <span class="sc">==</span> <span class="dv">0</span>, <span class="dv">0</span>, </span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">year</span>(person_last_played_date))) <span class="sc">|&gt;</span> </span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">replace_na</span>(<span class="fu">list</span>(<span class="at">mlb_played_last =</span> <span class="dv">2023</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove variables of no interest</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>person_link, <span class="sc">-</span><span class="fu">c</span>(person_use_name<span class="sc">:</span>person_gender),</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span><span class="fu">c</span>(person_name_slug<span class="sc">:</span>person_init_last_name), </span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span><span class="fu">c</span>(person_name_matrilineal<span class="sc">:</span>home_city), <span class="sc">-</span><span class="fu">c</span>(home_country, school_state),</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span><span class="fu">c</span>(person_xref_ids<span class="sc">:</span>person_death_country), <span class="sc">-</span>person_name_title, <span class="sc">-</span>team_id,</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span>person_name_suffix, <span class="sc">-</span><span class="fu">c</span>(team_link<span class="sc">:</span>team_spring_league_abbreviation), </span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span>headshot_link, home_state)</span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>chadwick <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">'chadwick_data.csv'</span>)</span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Update Chadwick for players who were drafted after</span></span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>chadwick <span class="ot">&lt;-</span> </span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>  chadwick <span class="sc">|&gt;</span> </span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(pro_managed_first<span class="sc">:</span>mlb_umpired_last), <span class="sc">-</span>name_suffix, </span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span>name_matrilineal, <span class="sc">-</span>key_person, <span class="sc">-</span>key_uuid, <span class="sc">-</span>key_retro, </span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span>key_bbref_minors, <span class="sc">-</span><span class="fu">c</span>(key_npb<span class="sc">:</span>key_wikidata), <span class="sc">-</span>key_bbref) <span class="sc">|&gt;</span> </span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add variables to match up with Draft info</span></span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">person_birth_date =</span> </span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a>          <span class="fu">str_c</span>(birth_year, birth_month, birth_day, </span>
+<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>                 <span class="at">sep=</span><span class="st">"-"</span>),</span>
+<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a>         <span class="at">person_full_fml_name =</span> </span>
+<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a>           <span class="fu">str_c</span>(name_given, name_last, <span class="at">sep =</span> <span class="st">" "</span>),</span>
+<span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a>         <span class="at">person_full_name =</span> </span>
+<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a>           <span class="fu">str_c</span>(name_first, name_last, <span class="at">sep =</span> <span class="st">" "</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">person_id =</span> key_mlbam,</span>
+<span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a>         <span class="at">fg_playerID =</span> key_fangraphs) <span class="sc">|&gt;</span> </span>
+<span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(mlb_played_first) <span class="sc">|&gt;</span> </span>
+<span id="cb22-44"><a href="#cb22-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(person_id) <span class="co"># Remove players we don't have an identifier for</span></span>
+<span id="cb22-45"><a href="#cb22-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-46"><a href="#cb22-46" aria-hidden="true" tabindex="-1"></a><span class="co"># missing height is formatted as 0' 0" (0 feet 0 inches tall)</span></span>
+<span id="cb22-47"><a href="#cb22-47" aria-hidden="true" tabindex="-1"></a>missing_height <span class="ot">&lt;-</span> draft_info<span class="sc">$</span>person_height[<span class="dv">57</span>]</span>
+<span id="cb22-48"><a href="#cb22-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-49"><a href="#cb22-49" aria-hidden="true" tabindex="-1"></a>draft_info <span class="ot">&lt;-</span> </span>
+<span id="cb22-50"><a href="#cb22-50" aria-hidden="true" tabindex="-1"></a>  draft_info <span class="sc">|&gt;</span> </span>
+<span id="cb22-51"><a href="#cb22-51" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add the chadwick player info, particularly the `fg_playerID`</span></span>
+<span id="cb22-52"><a href="#cb22-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(chadwick <span class="sc">|&gt;</span> </span>
+<span id="cb22-53"><a href="#cb22-53" aria-hidden="true" tabindex="-1"></a>               <span class="fu">select</span>(<span class="sc">-</span>person_full_name, <span class="sc">-</span>person_birth_date, <span class="sc">-</span>person_full_fml_name,</span>
+<span id="cb22-54"><a href="#cb22-54" aria-hidden="true" tabindex="-1"></a>                      <span class="sc">-</span>mlb_played_first, <span class="sc">-</span>mlb_played_last), </span>
+<span id="cb22-55"><a href="#cb22-55" aria-hidden="true" tabindex="-1"></a>             <span class="at">by =</span> <span class="st">"person_id"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb22-56"><a href="#cb22-56" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove unnecessary variables</span></span>
+<span id="cb22-57"><a href="#cb22-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>person_first_name, <span class="sc">-</span>person_last_name, <span class="sc">-</span>person_primary_number, </span>
+<span id="cb22-58"><a href="#cb22-58" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span>person_current_age, <span class="sc">-</span><span class="fu">c</span>(person_name_first_last<span class="sc">:</span>person_strike_zone_bottom),</span>
+<span id="cb22-59"><a href="#cb22-59" aria-hidden="true" tabindex="-1"></a>         person_primary_position_code, person_primary_position_type, </span>
+<span id="cb22-60"><a href="#cb22-60" aria-hidden="true" tabindex="-1"></a>         person_bat_side_description, person_pitch_hand_description, <span class="sc">-</span>name_last,</span>
+<span id="cb22-61"><a href="#cb22-61" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span>name_first) <span class="sc">|&gt;</span> </span>
+<span id="cb22-62"><a href="#cb22-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(person_height <span class="sc">!=</span> missing_height)</span>
+<span id="cb22-63"><a href="#cb22-63" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(chadwick)</span>
+<span id="cb22-64"><a href="#cb22-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-65"><a href="#cb22-65" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the indices for the elements which contain a state abbreviation</span></span>
+<span id="cb22-66"><a href="#cb22-66" aria-hidden="true" tabindex="-1"></a>draft_index <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">str_detect</span>(draft_info<span class="sc">$</span>school_name, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">((.*?)</span><span class="sc">\\</span><span class="st">)"</span>))</span>
+<span id="cb22-67"><a href="#cb22-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-68"><a href="#cb22-68" aria-hidden="true" tabindex="-1"></a><span class="co"># List with all the match results for the pattern "(letters)"</span></span>
+<span id="cb22-69"><a href="#cb22-69" aria-hidden="true" tabindex="-1"></a>draft_list <span class="ot">&lt;-</span> <span class="fu">str_match_all</span>(draft_info<span class="sc">$</span>school_name, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">((.*?)</span><span class="sc">\\</span><span class="st">)"</span>)</span>
+<span id="cb22-70"><a href="#cb22-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-71"><a href="#cb22-71" aria-hidden="true" tabindex="-1"></a><span class="co"># Extracts the text within the "()", and stores it as a vector</span></span>
+<span id="cb22-72"><a href="#cb22-72" aria-hidden="true" tabindex="-1"></a>draft_states <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">lapply</span>(draft_list, <span class="cf">function</span>(x) {x[, <span class="dv">2</span>]}))</span>
+<span id="cb22-73"><a href="#cb22-73" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(draft_list) <span class="co"># Remove the list form of the home states</span></span>
+<span id="cb22-74"><a href="#cb22-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-75"><a href="#cb22-75" aria-hidden="true" tabindex="-1"></a><span class="co"># Removes any results where there was an NA result generated</span></span>
+<span id="cb22-76"><a href="#cb22-76" aria-hidden="true" tabindex="-1"></a>draft_states <span class="ot">&lt;-</span> draft_states[<span class="sc">!</span><span class="fu">is.na</span>(draft_states)]</span>
+<span id="cb22-77"><a href="#cb22-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-78"><a href="#cb22-78" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the index for the draft_stats which contain the pattern ", "</span></span>
+<span id="cb22-79"><a href="#cb22-79" aria-hidden="true" tabindex="-1"></a>comma_index <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">str_detect</span>(draft_states, <span class="st">",</span><span class="sc">\\</span><span class="st">s"</span>))</span>
+<span id="cb22-80"><a href="#cb22-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-81"><a href="#cb22-81" aria-hidden="true" tabindex="-1"></a><span class="co"># Extracts the states with the pattern ", " from `draft_states`</span></span>
+<span id="cb22-82"><a href="#cb22-82" aria-hidden="true" tabindex="-1"></a>comma_states <span class="ot">&lt;-</span> draft_states[comma_index]</span>
+<span id="cb22-83"><a href="#cb22-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-84"><a href="#cb22-84" aria-hidden="true" tabindex="-1"></a><span class="co"># Determines if there are any incorrect patterns</span></span>
+<span id="cb22-85"><a href="#cb22-85" aria-hidden="true" tabindex="-1"></a>wrong <span class="ot">&lt;-</span> comma_states[<span class="fu">which</span>(<span class="sc">!</span><span class="fu">str_detect</span>(comma_states, <span class="st">", ([:alpha:]+)"</span>))]</span>
+<span id="cb22-86"><a href="#cb22-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-87"><a href="#cb22-87" aria-hidden="true" tabindex="-1"></a><span class="co"># Replaces the pattern within the `comma_states` manually</span></span>
+<span id="cb22-88"><a href="#cb22-88" aria-hidden="true" tabindex="-1"></a>comma_states[<span class="fu">which</span>(<span class="sc">!</span><span class="fu">str_detect</span>(comma_states, <span class="st">", ([:alpha:]+)"</span>))] <span class="ot">&lt;-</span> <span class="st">", FL"</span></span>
+<span id="cb22-89"><a href="#cb22-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-90"><a href="#cb22-90" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the letters which follow the ", " pattern into a vector</span></span>
+<span id="cb22-91"><a href="#cb22-91" aria-hidden="true" tabindex="-1"></a>comma_states <span class="ot">&lt;-</span> </span>
+<span id="cb22-92"><a href="#cb22-92" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_match_all</span>(comma_states, <span class="st">", ([:alpha:]+)"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb22-93"><a href="#cb22-93" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lapply</span>(<span class="cf">function</span>(x) {x[, <span class="dv">2</span>]})</span>
+<span id="cb22-94"><a href="#cb22-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-95"><a href="#cb22-95" aria-hidden="true" tabindex="-1"></a><span class="co"># There was an error, so it was detecting Louis and MO</span></span>
+<span id="cb22-96"><a href="#cb22-96" aria-hidden="true" tabindex="-1"></a>comma_states[[<span class="dv">2525</span>]] <span class="ot">&lt;-</span> comma_states[[<span class="dv">2525</span>]][<span class="dv">2</span>]</span>
+<span id="cb22-97"><a href="#cb22-97" aria-hidden="true" tabindex="-1"></a><span class="co"># Unlist it into a single vector</span></span>
+<span id="cb22-98"><a href="#cb22-98" aria-hidden="true" tabindex="-1"></a>comma_states <span class="ot">&lt;-</span> comma_states <span class="sc">|&gt;</span> <span class="fu">unlist</span>()</span>
+<span id="cb22-99"><a href="#cb22-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-100"><a href="#cb22-100" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace the comma states with the correct abbreviations</span></span>
+<span id="cb22-101"><a href="#cb22-101" aria-hidden="true" tabindex="-1"></a>draft_states[comma_index] <span class="ot">&lt;-</span> comma_states</span>
+<span id="cb22-102"><a href="#cb22-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-103"><a href="#cb22-103" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a new variable home_state</span></span>
+<span id="cb22-104"><a href="#cb22-104" aria-hidden="true" tabindex="-1"></a>draft_info <span class="ot">&lt;-</span> draft_info <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">home_state =</span> person_birth_state_province)</span>
+<span id="cb22-105"><a href="#cb22-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-106"><a href="#cb22-106" aria-hidden="true" tabindex="-1"></a><span class="co"># Store all the draft_states to the new `draft_state` variable within `draft_info`</span></span>
+<span id="cb22-107"><a href="#cb22-107" aria-hidden="true" tabindex="-1"></a>draft_info<span class="sc">$</span>home_state[draft_index] <span class="ot">&lt;-</span> draft_states</span>
+<span id="cb22-108"><a href="#cb22-108" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(draft_index, draft_states, wrong)</span>
+<span id="cb22-109"><a href="#cb22-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-110"><a href="#cb22-110" aria-hidden="true" tabindex="-1"></a><span class="co"># Wrong abbreviations indices</span></span>
+<span id="cb22-111"><a href="#cb22-111" aria-hidden="true" tabindex="-1"></a>wrong_index <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">nchar</span>(draft_info<span class="sc">$</span>home_state) <span class="sc">&gt;</span> <span class="dv">2</span>)</span>
+<span id="cb22-112"><a href="#cb22-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-113"><a href="#cb22-113" aria-hidden="true" tabindex="-1"></a><span class="co"># Find the wrong abbreviations</span></span>
+<span id="cb22-114"><a href="#cb22-114" aria-hidden="true" tabindex="-1"></a>wrong_abbrev <span class="ot">&lt;-</span> draft_info<span class="sc">$</span>home_state[wrong_index]</span>
+<span id="cb22-115"><a href="#cb22-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-116"><a href="#cb22-116" aria-hidden="true" tabindex="-1"></a>state_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">state_name =</span> state.name, <span class="at">state_abb =</span> state.abb)</span>
+<span id="cb22-117"><a href="#cb22-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-118"><a href="#cb22-118" aria-hidden="true" tabindex="-1"></a>state_names_wrong <span class="ot">&lt;-</span> </span>
+<span id="cb22-119"><a href="#cb22-119" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">state_name =</span> wrong_abbrev[<span class="fu">which</span>(<span class="fu">tolower</span>(wrong_abbrev) <span class="sc">%in%</span> <span class="fu">tolower</span>(state.name))]) <span class="sc">|&gt;</span> </span>
+<span id="cb22-120"><a href="#cb22-120" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(state_data, <span class="at">by =</span> <span class="st">"state_name"</span>)</span>
+<span id="cb22-121"><a href="#cb22-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-122"><a href="#cb22-122" aria-hidden="true" tabindex="-1"></a><span class="co"># Fix the wrong abbreviations</span></span>
+<span id="cb22-123"><a href="#cb22-123" aria-hidden="true" tabindex="-1"></a>wrong_abbrev[<span class="fu">which</span>(<span class="fu">tolower</span>(wrong_abbrev) <span class="sc">%in%</span> <span class="fu">tolower</span>(state.name))] <span class="ot">&lt;-</span> state_names_wrong<span class="sc">$</span>state_abb</span>
+<span id="cb22-124"><a href="#cb22-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-125"><a href="#cb22-125" aria-hidden="true" tabindex="-1"></a><span class="co"># For those players who didn't go to high school</span></span>
+<span id="cb22-126"><a href="#cb22-126" aria-hidden="true" tabindex="-1"></a>no_hs <span class="ot">&lt;-</span> draft_info <span class="sc">|&gt;</span> </span>
+<span id="cb22-127"><a href="#cb22-127" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(wrong_index) <span class="sc">|&gt;</span> </span>
+<span id="cb22-128"><a href="#cb22-128" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(high_school <span class="sc">==</span> <span class="st">"No"</span>)</span>
+<span id="cb22-129"><a href="#cb22-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-130"><a href="#cb22-130" aria-hidden="true" tabindex="-1"></a><span class="co"># Improperly formatted states</span></span>
+<span id="cb22-131"><a href="#cb22-131" aria-hidden="true" tabindex="-1"></a>wrong_states <span class="ot">&lt;-</span> </span>
+<span id="cb22-132"><a href="#cb22-132" aria-hidden="true" tabindex="-1"></a>  wrong_abbrev[<span class="fu">which</span>(<span class="sc">!</span>(<span class="fu">tolower</span>(wrong_abbrev) <span class="sc">%in%</span> <span class="fu">tolower</span>(no_hs<span class="sc">$</span>home_state)))]</span>
+<span id="cb22-133"><a href="#cb22-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-134"><a href="#cb22-134" aria-hidden="true" tabindex="-1"></a><span class="co"># Find the unique improperly formatted states</span></span>
+<span id="cb22-135"><a href="#cb22-135" aria-hidden="true" tabindex="-1"></a>wrong <span class="ot">&lt;-</span> <span class="fu">unique</span>(wrong_states) <span class="sc">|&gt;</span> <span class="fu">sort</span>()</span>
+<span id="cb22-136"><a href="#cb22-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-137"><a href="#cb22-137" aria-hidden="true" tabindex="-1"></a>correct_states <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"FL"</span>, <span class="st">"AL"</span>, <span class="st">"ALB"</span>, <span class="st">"AZ"</span>, <span class="st">"AZ"</span>, <span class="st">"AR"</span>, <span class="st">"GA"</span>, <span class="st">"MD"</span>, <span class="st">"MI"</span>, <span class="st">"AL"</span>, </span>
+<span id="cb22-138"><a href="#cb22-138" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"CA"</span>, <span class="st">"CA"</span>, <span class="st">"CA"</span>, <span class="st">"CA"</span>, <span class="st">"Canada"</span>, <span class="st">"Canada"</span>, <span class="st">"IL"</span>, </span>
+<span id="cb22-139"><a href="#cb22-139" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Christian Brothers"</span>, <span class="st">"OH"</span>, <span class="st">"OH"</span>, <span class="st">"Coahuila"</span>, <span class="st">"CO"</span>, <span class="st">"CT"</span>, <span class="st">"CA"</span>, <span class="st">"CA"</span>,</span>
+<span id="cb22-140"><a href="#cb22-140" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"DE"</span>, <span class="st">"CO"</span>, <span class="st">"FL"</span>, <span class="st">"FL"</span>, <span class="st">"FL"</span>, <span class="st">"FL"</span>, <span class="st">"FL"</span>, <span class="st">"CA"</span>, <span class="st">"HI"</span>, <span class="st">"Holland"</span>, <span class="st">"FL"</span>,</span>
+<span id="cb22-141"><a href="#cb22-141" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"HI"</span>, <span class="st">"TX"</span>, <span class="st">"IA"</span>, <span class="st">"IL"</span>, <span class="st">"IL"</span>, <span class="st">"IL"</span>, <span class="st">"IL"</span>, <span class="st">"IN"</span>, <span class="st">"IN"</span>, <span class="st">"IA"</span>,</span>
+<span id="cb22-142"><a href="#cb22-142" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"KS"</span>, <span class="st">"CA"</span>, <span class="st">"LA"</span>, <span class="st">"IA"</span>, <span class="st">"MA"</span>, <span class="st">"FL"</span>, <span class="st">"FL"</span>, <span class="st">"MI"</span>, <span class="st">"MI"</span>,</span>
+<span id="cb22-143"><a href="#cb22-143" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"MI"</span>, <span class="st">"MN"</span>, <span class="st">"MS"</span>, <span class="st">"CA"</span>, <span class="st">"NC"</span>, <span class="st">"NE"</span>, <span class="st">"NJ"</span>, <span class="st">"NJ"</span>, <span class="st">"NY"</span>,</span>
+<span id="cb22-144"><a href="#cb22-144" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"NY"</span>, <span class="st">"OH"</span>, <span class="st">"OK"</span>, <span class="st">"OK"</span>, <span class="st">"OK"</span>, <span class="st">"OR"</span>, <span class="st">"PA"</span>, <span class="st">"PA"</span>, <span class="st">"PA"</span>, <span class="st">"PA"</span>, </span>
+<span id="cb22-145"><a href="#cb22-145" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"PA"</span>, <span class="st">"CA"</span>, <span class="st">"PA"</span>, <span class="st">"PA"</span>, <span class="st">"QUE"</span>, <span class="st">"QUE"</span>, <span class="st">"S. Australia"</span>, </span>
+<span id="cb22-146"><a href="#cb22-146" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"TX"</span>, <span class="st">"CA"</span>, <span class="st">"CA"</span>, <span class="st">"SASK"</span>, <span class="st">"St Thomas"</span>, <span class="st">"CA"</span>, <span class="st">"TN"</span>, <span class="st">"TX"</span>, </span>
+<span id="cb22-147"><a href="#cb22-147" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Trabuco Hills"</span>, <span class="st">"Trinity International"</span>, <span class="st">"TX"</span>, <span class="st">"TX"</span>, </span>
+<span id="cb22-148"><a href="#cb22-148" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"US Virgin Islands"</span>, <span class="st">"Ven"</span>, <span class="st">"WA"</span>, <span class="st">"OH"</span>, <span class="st">"WV"</span>, <span class="st">"Zacatecas"</span>)</span>
+<span id="cb22-149"><a href="#cb22-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-150"><a href="#cb22-150" aria-hidden="true" tabindex="-1"></a><span class="co"># Corrected abbreviations</span></span>
+<span id="cb22-151"><a href="#cb22-151" aria-hidden="true" tabindex="-1"></a>corrections <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">wrong =</span> wrong, <span class="at">correct =</span> correct_states)</span>
+<span id="cb22-152"><a href="#cb22-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-153"><a href="#cb22-153" aria-hidden="true" tabindex="-1"></a><span class="co"># Correct the wrong_states abbreviations with the correct ones, unless not in U.S.A.</span></span>
+<span id="cb22-154"><a href="#cb22-154" aria-hidden="true" tabindex="-1"></a>wrong_states <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(wrong_states <span class="sc">%in%</span> corrections<span class="sc">$</span>wrong, corrections<span class="sc">$</span>correct, wrong_states)</span>
+<span id="cb22-155"><a href="#cb22-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-156"><a href="#cb22-156" aria-hidden="true" tabindex="-1"></a><span class="co"># Update wrong_abbrev object with corrected abbreviations</span></span>
+<span id="cb22-157"><a href="#cb22-157" aria-hidden="true" tabindex="-1"></a>wrong_abbrev[<span class="fu">which</span>(<span class="sc">!</span>(<span class="fu">tolower</span>(wrong_abbrev) <span class="sc">%in%</span> <span class="fu">tolower</span>(no_hs<span class="sc">$</span>home_state)))] <span class="ot">&lt;-</span> wrong_states</span>
+<span id="cb22-158"><a href="#cb22-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-159"><a href="#cb22-159" aria-hidden="true" tabindex="-1"></a><span class="co"># Correct leftover wrong_abbrev</span></span>
+<span id="cb22-160"><a href="#cb22-160" aria-hidden="true" tabindex="-1"></a>correct_abbrev <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(wrong_abbrev <span class="sc">%in%</span> corrections<span class="sc">$</span>wrong, corrections<span class="sc">$</span>correct, wrong_abbrev)</span>
+<span id="cb22-161"><a href="#cb22-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-162"><a href="#cb22-162" aria-hidden="true" tabindex="-1"></a><span class="co"># Add the correct_abbrev to the draft_info</span></span>
+<span id="cb22-163"><a href="#cb22-163" aria-hidden="true" tabindex="-1"></a>draft_info<span class="sc">$</span>home_state[wrong_index] <span class="ot">&lt;-</span> correct_abbrev</span>
+<span id="cb22-164"><a href="#cb22-164" aria-hidden="true" tabindex="-1"></a>draft_info<span class="sc">$</span>home_state <span class="ot">&lt;-</span> <span class="fu">tolower</span>(draft_info<span class="sc">$</span>home_state) </span>
+<span id="cb22-165"><a href="#cb22-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-166"><a href="#cb22-166" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a list with all drafted player height</span></span>
+<span id="cb22-167"><a href="#cb22-167" aria-hidden="true" tabindex="-1"></a>height_list <span class="ot">&lt;-</span> <span class="fu">str_match_all</span>(draft_info<span class="sc">$</span>person_height, <span class="st">"</span><span class="sc">\\</span><span class="st">d+"</span>)</span>
+<span id="cb22-168"><a href="#cb22-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-169"><a href="#cb22-169" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the first element from feet to inches</span></span>
+<span id="cb22-170"><a href="#cb22-170" aria-hidden="true" tabindex="-1"></a>height_ft <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">unlist</span>(<span class="fu">lapply</span>(height_list, <span class="cf">function</span>(x) {x[<span class="dv">1</span>]}))) <span class="sc">*</span> <span class="dv">12</span></span>
+<span id="cb22-171"><a href="#cb22-171" aria-hidden="true" tabindex="-1"></a>height_in <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">unlist</span>(<span class="fu">lapply</span>(height_list, <span class="cf">function</span>(x) {x[<span class="dv">2</span>]}))) <span class="sc">+</span> <span class="fu">as.integer</span>(height_ft)</span>
+<span id="cb22-172"><a href="#cb22-172" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(height_list, height_ft) <span class="co"># Remove the height_list</span></span>
+<span id="cb22-173"><a href="#cb22-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-174"><a href="#cb22-174" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the person_height variable to inches</span></span>
+<span id="cb22-175"><a href="#cb22-175" aria-hidden="true" tabindex="-1"></a>draft_info<span class="sc">$</span>person_height <span class="ot">&lt;-</span> height_in</span>
+<span id="cb22-176"><a href="#cb22-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-177"><a href="#cb22-177" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(comma_index, comma_states, correct_abbrev, correct_states, height_in,</span>
+<span id="cb22-178"><a href="#cb22-178" aria-hidden="true" tabindex="-1"></a>   missing_height, wrong, wrong_abbrev, wrong_index, wrong_states, state_data,</span>
+<span id="cb22-179"><a href="#cb22-179" aria-hidden="true" tabindex="-1"></a>   state_names_wrong, no_hs, corrections)</span>
+<span id="cb22-180"><a href="#cb22-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-181"><a href="#cb22-181" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(draft_info, 'clean_draft.csv')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>cleaned_draft_na_count <span class="ot">&lt;-</span> <span class="fu">colSums</span>(<span class="fu">is.na</span>(draft_info)) <span class="sc">|&gt;</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>(<span class="at">decreasing =</span> <span class="cn">TRUE</span>) </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>cleaned_draft_na_count[cleaned_draft_na_count <span class="sc">&gt;</span> <span class="dv">30000</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>              death_day              death_year             death_month 
+                  47979                   47978                   47978 
+       person_nick_name person_last_played_date             fg_playerID 
+                  46823                   40962                   38857 
+  person_mlb_debut_date        col_played_first         col_played_last 
+                  38656                   31351                   31351 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>cleaned_draft_na_count[cleaned_draft_na_count <span class="sc">==</span> <span class="dv">0</span>][<span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>         pick_round         pick_number display_pick_number   round_pick_number 
+                  0                   0                   0                   0 
+         is_drafted             is_pass                year           person_id 
+                  0                   0                   0                   0 
+   person_full_name       person_height 
+                  0                   0 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>columns_with_na_draft <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">colSums</span>(<span class="fu">is.na</span>(draft_info)) <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>columns_without_na_draft <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">colSums</span>(<span class="fu">is.na</span>(draft_info)) <span class="sc">==</span> <span class="dv">0</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Cleaned Draft Data Columns with NA values:"</span>, columns_with_na_draft)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Cleaned Draft Data Columns with NA values: 26</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Cleaned Draft Data Columns without NA values:"</span>, columns_without_na_draft)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Cleaned Draft Data Columns without NA values: 27</code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>draft_info_uniform <span class="ot">&lt;-</span> draft_info <span class="sc">|&gt;</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), as.character))</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>missing_draft_info <span class="ot">&lt;-</span> draft_info_uniform <span class="sc">|&gt;</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">row_id =</span> <span class="fu">row_number</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>row_id, <span class="at">names_to =</span> <span class="st">"variable"</span>, <span class="at">values_to =</span> <span class="st">"value"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">missing =</span> <span class="fu">is.na</span>(value)) </span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(missing_draft_info, <span class="fu">aes</span>(<span class="at">x =</span> variable, <span class="at">y =</span> row_id, <span class="at">fill =</span> missing)) <span class="sc">+</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>() <span class="sc">+</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"FALSE"</span> <span class="ot">=</span> <span class="st">"white"</span>, <span class="st">"TRUE"</span> <span class="ot">=</span> <span class="st">"red"</span>), <span class="at">name =</span> <span class="st">"Missing"</span>) <span class="sc">+</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Heatmap of Missing Values in Cleaned Draft Data"</span>,</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Variables"</span>,</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Rows"</span></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>),</span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="data_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
