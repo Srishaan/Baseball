@@ -176,8 +176,11 @@ corrplot(correlation_matrix, method = "color")
 title("Correlation Plot (Pitching)",line = 3,adj=0)
 #title(sub = "Plot 6: Correlation Plot of Pitchers", line=4.5)
 ```
+
 ## State Frequency Map
+
 We create a frequency heatmap to examine which state generates the most number of draftees: The majority of athletes selected come originally from California, with Texas and Florida being the other two main home states, according to our state map [see Figure 5]. We can blame this tendency on the weather since, in contrast to the East, Midwest, and Northwest, these states often have warmer temperatures and little to no snow, allowing people to play baseball year-round and giving youth leagues more seasonal flexibility. Additionally, these states have sizable populations, which may help to explain why the majority of draftees come from them.
+
 ```{r statemap,fig.height=3, fig.width=6.5, fig.align='center', fig.cap = "Frequency Heatmap of Players per State"}
 library(ggplot2)
 library(dplyr)
@@ -233,8 +236,11 @@ home_heat_map <-
         legend.text = element_text(size = 10))
 home_heat_map
 ```
+
 ## Relationship between Time Played in MLB VS WAR
+
 We create the following scatterplot to investigate the relationship between a player's career length and WAR: The duration of a player's career does not always translate into a high WAR, as seen by the comparison of each player's total MLB time played and WAR [see Figure 6]. There does appear to be an upward trend, though, which makes logical given that we anticipate a player to win more the longer they play.
+
 ```{r mlbwar, fig.cap = "Relationship between Time Played in MLB vs. WAR", fig.height=3}
 players <- bind_rows(bat_draft_df, pitch_draft_df) |>
   arrange(desc(fWAR)) |> 
@@ -264,4 +270,173 @@ ggplot(players, aes(x = time_played, y=fWAR)) +
         axis.text = element_text(size = 10),
         legend.title = element_text(size = 10, face = "bold"),
         legend.text = element_text(size = 10))
+```
+
+```{r}
+draft_info <- fread('draft_data.csv') %>% 
+  mutate(mlb_played_first = year(person_mlb_debut_date),
+         high_school = ifelse(str_detect(school_name, "\\sHS") == TRUE, "Yes", 
+                              "No"),
+         person_height = str_replace_all(person_height, "\"$", "")) %>% 
+  replace_na(list(home_state = "None", mlb_played_first = 0)) %>% 
+  mutate(mlb_played_last = ifelse(mlb_played_first == 0, 0, 
+                           year(person_last_played_date)),
+         made_mlb = ifelse(mlb_played_first == 0, 0, 1)) %>% 
+  replace_na(list(mlb_played_last = 2023)) %>% 
+  # Remove variables of no interest
+  select(-person_link, -c(person_use_name:person_gender),
+         -c(person_name_slug:person_init_last_name), 
+         -c(person_name_matrilineal:home_city), -c(home_country, school_state),
+         -c(person_xref_ids:person_death_country), -person_name_title, -team_id,
+         -person_name_suffix, -c(team_link:team_spring_league_abbreviation), 
+         -headshot_link, home_state)
+
+mlb_info <- 
+  draft_info %>% 
+  mutate(pick_round = as.numeric(pick_round)) %>% 
+  filter(pick_round %in% c(1:100)) %>% 
+  group_by(person_id) %>% 
+  dplyr::slice(which.max(year)) %>% 
+  ungroup() %>%  
+  summarise(`Drafted` = n(), 
+            `Made MLB` = sum(made_mlb), 
+            `% Made MLB` = round((`Made MLB` / `Drafted`) * 100, 2),
+            `% Missed MLB` = round((100 - `% Made MLB`), 2))
+
+mlb_info_long <- 
+  mlb_info %>% 
+  pivot_longer(cols = c(`Made MLB`, `Drafted`), names_to = "Category", values_to = "Total Players")
+
+pie_chart <-
+  ggplot(data = mlb_info_long, aes(x = "", y = `Total Players`, fill = Category)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y", start = 0) +
+  theme_void() +
+  labs(title = "Pie Chart of MLB Status") + 
+  geom_text(aes(label = c(paste(mlb_info$`% Made MLB`, "%", sep = ""), 
+                          paste(mlb_info$`% Missed MLB`, "%", sep = "")), 
+                hjust = 0.75, vjust = -1), size = 5.3) +
+  theme(plot.title = element_text(size = 12, face = "bold"),
+        legend.title = element_text(size = 12, face = "bold"),
+        legend.text = element_text(size = 12))
+
+pie_chart
+```
+
+```{r draftclassfWAR, fig.cap="Best Draft Classes by fWAR"}
+bat_draft <- 
+  fread('batters_full_draft.csv') %>%
+  select(fg_playerID, person_id, person_full_name, fWAR, pick_round,
+         pick_number, year, person_birth_state_province,
+         person_height, person_weight, home_state,
+         person_primary_position_abbreviation,
+         person_bat_side_code, person_pitch_hand_code,
+         mlb_played_first, mlb_played_last, high_school,
+         birth_year)
+# load in full pitchers draft data
+pitch_draft <- 
+  fread('pitchers_full_draft.csv') %>%
+  select(fg_playerID, person_id, person_full_name, fWAR, pick_round,
+         pick_number, year, person_birth_state_province,
+         person_height, person_weight, home_state,
+         person_primary_position_abbreviation,
+         person_bat_side_code, person_pitch_hand_code,
+         mlb_played_first, mlb_played_last, high_school, birth_year
+         )
+
+# bind them into players data
+players <- 
+  bind_rows(pitch_draft, bat_draft) %>% 
+  mutate(pick_round = as.numeric(pick_round)) %>% 
+  filter(pick_round %in% c(1:100)) %>% 
+  group_by(person_id) %>% 
+  # Choose the player's most recent draft year (if drafted more than once)
+  dplyr::slice(which.max(year)) %>% 
+  ungroup() %>% 
+  # Add these classifier variables for data table presentation
+  mutate(less_five_war = ifelse(fWAR < 5, 1, 0),
+         five_to_10 = ifelse(fWAR >= 5 & fWAR < 10, 1, 0),
+         ten_to_15 = ifelse(fWAR >= 10 & fWAR < 15, 1, 0),
+         fifteen_to_20 = ifelse(fWAR >= 15 & fWAR < 20, 1, 0),
+         twenty_to_25 = ifelse(fWAR >= 20 & fWAR <= 25, 1, 0),
+         more_than_25 = ifelse(fWAR > 25, 1, 0),
+         yrs_before_debut = mlb_played_first - year,
+         time_played = (mlb_played_last - mlb_played_first) + 1,
+         debut_age = mlb_played_first - birth_year,
+         draft_age = debut_age - yrs_before_debut) %>% 
+  arrange(desc(fWAR))
+
+total_fwar_by_year <- 
+  players |> 
+  group_by(year) |> 
+  summarise(total_fWAR = sum(fWAR)) |> 
+  arrange(desc(total_fWAR)) |> 
+  mutate(rank = c(1:59) )
+
+fwar_levels <- 
+  total_fwar_by_year |> 
+  slice_head(n = 10) |> 
+  select(year) |>  
+  unlist() |>
+  as.character()
+
+# Plot of top 10 draft classes by total fWAR
+draft_class_fwar <-
+  ggplot(total_fwar_by_year %>% 
+         slice_head(n = 10), 
+       aes(x = factor(rank, levels = c(1:10), labels = fwar_levels), 
+           y = total_fWAR
+           )
+       ) + 
+  geom_bar(stat = "identity", fill = "deepskyblue") +
+  labs(x = "Draft Class", y = "Total fWAR", 
+       title = "Top 10 Draft Classes by Total fWAR") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 12, face = "bold"),
+        axis.title = element_text(size = 12, face = "bold"),
+        axis.text = element_text(size = 12),
+        legend.title = element_text(size = 10, face = "bold"),
+        legend.text = element_text(size = 10)) +
+  geom_text(aes(label = total_fWAR, vjust = -0.5))
+draft_class_fwar
+```
+
+```{r positionfWAR, fig.cap="Best Draft Classes by Year and Position"}
+total_fwar_by_pos_and_year <- 
+  players %>% 
+  filter(person_primary_position_abbreviation != "P") %>% 
+  group_by(year, person_primary_position_abbreviation) %>% 
+  summarise(total_fWAR = sum(fWAR)) %>% 
+  arrange(desc(total_fWAR)) %>% 
+  ungroup() %>% 
+  mutate(label = paste(year, person_primary_position_abbreviation, sep = "/"),
+         rank = seq_len(n()))
+
+pos_class_labels <- 
+  total_fwar_by_pos_and_year %>% 
+  slice_head(n = 10) %>% 
+  select(label) %>% 
+  unlist() %>% 
+  as.character()
+
+# Barplot of total top 10 total fWAR Draft Class/Position Combination
+pos_class_fwar <- 
+  ggplot(total_fwar_by_pos_and_year %>% 
+         slice_head(n = 10), 
+       aes(x = factor(rank, levels = c(1:10), labels = pos_class_labels), 
+           y = total_fWAR
+           )
+       ) + 
+  geom_bar(stat = "identity", fill = "deepskyblue") +
+  labs(x = "Draft Class/Position", y = "Total fWAR", 
+       title = "Top 10 Position Classes by Total fWAR") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 12, face = "bold"),
+        axis.title = element_text(size = 12, face = "bold"),
+        axis.text = element_text(size = 12),
+        legend.title = element_text(size = 10, face = "bold"),
+        legend.text = element_text(size = 10)) +
+  geom_text(aes(label = total_fWAR, vjust = -0.5))
+
+pos_class_fwar
 ```
