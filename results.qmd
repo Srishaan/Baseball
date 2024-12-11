@@ -176,8 +176,11 @@ corrplot(correlation_matrix, method = "color")
 title("Correlation Plot (Pitching)",line = 3,adj=0)
 #title(sub = "Plot 6: Correlation Plot of Pitchers", line=4.5)
 ```
+
 ## State Frequency Map
+
 We create a frequency heatmap to examine which state generates the most number of draftees: The majority of athletes selected come originally from California, with Texas and Florida being the other two main home states, according to our state map [see Figure 5]. We can blame this tendency on the weather since, in contrast to the East, Midwest, and Northwest, these states often have warmer temperatures and little to no snow, allowing people to play baseball year-round and giving youth leagues more seasonal flexibility. Additionally, these states have sizable populations, which may help to explain why the majority of draftees come from them.
+
 ```{r statemap,fig.height=3, fig.width=6.5, fig.align='center', fig.cap = "Frequency Heatmap of Players per State"}
 library(ggplot2)
 library(dplyr)
@@ -233,8 +236,11 @@ home_heat_map <-
         legend.text = element_text(size = 10))
 home_heat_map
 ```
+
 ## Relationship between Time Played in MLB VS WAR
+
 We create the following scatterplot to investigate the relationship between a player's career length and WAR: The duration of a player's career does not always translate into a high WAR, as seen by the comparison of each player's total MLB time played and WAR [see Figure 6]. There does appear to be an upward trend, though, which makes logical given that we anticipate a player to win more the longer they play.
+
 ```{r mlbwar, fig.cap = "Relationship between Time Played in MLB vs. WAR", fig.height=3}
 players <- bind_rows(bat_draft_df, pitch_draft_df) |>
   arrange(desc(fWAR)) |> 
@@ -264,4 +270,56 @@ ggplot(players, aes(x = time_played, y=fWAR)) +
         axis.text = element_text(size = 10),
         legend.title = element_text(size = 10, face = "bold"),
         legend.text = element_text(size = 10))
+```
+
+```{r}
+draft_info <- fread('draft_data.csv') %>% 
+  mutate(mlb_played_first = year(person_mlb_debut_date),
+         high_school = ifelse(str_detect(school_name, "\\sHS") == TRUE, "Yes", 
+                              "No"),
+         person_height = str_replace_all(person_height, "\"$", "")) %>% 
+  replace_na(list(home_state = "None", mlb_played_first = 0)) %>% 
+  mutate(mlb_played_last = ifelse(mlb_played_first == 0, 0, 
+                           year(person_last_played_date)),
+         made_mlb = ifelse(mlb_played_first == 0, 0, 1)) %>% 
+  replace_na(list(mlb_played_last = 2023)) %>% 
+  # Remove variables of no interest
+  select(-person_link, -c(person_use_name:person_gender),
+         -c(person_name_slug:person_init_last_name), 
+         -c(person_name_matrilineal:home_city), -c(home_country, school_state),
+         -c(person_xref_ids:person_death_country), -person_name_title, -team_id,
+         -person_name_suffix, -c(team_link:team_spring_league_abbreviation), 
+         -headshot_link, home_state)
+
+mlb_info <- 
+  draft_info %>% 
+  mutate(pick_round = as.numeric(pick_round)) %>% 
+  filter(pick_round %in% c(1:100)) %>% 
+  group_by(person_id) %>% 
+  dplyr::slice(which.max(year)) %>% 
+  ungroup() %>%  
+  summarise(`Drafted` = n(), 
+            `Made MLB` = sum(made_mlb), 
+            `% Made MLB` = round((`Made MLB` / `Drafted`) * 100, 2),
+            `% Missed MLB` = round((100 - `% Made MLB`), 2))
+
+mlb_info_long <- 
+  mlb_info %>% 
+  pivot_longer(cols = c(`Made MLB`, `Drafted`), names_to = "Category", values_to = "Total Players")
+
+pie_chart <-
+  ggplot(data = mlb_info_long, aes(x = "", y = `Total Players`, fill = Category)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y", start = 0) +
+  theme_void() +
+  labs(title = "Pie Chart of MLB Status") + 
+  geom_text(aes(label = c(paste(mlb_info$`% Made MLB`, "%", sep = ""), 
+                          paste(mlb_info$`% Missed MLB`, "%", sep = "")), 
+                hjust = 0.75, vjust = -1), size = 5.3) +
+  theme(plot.title = element_text(size = 12, face = "bold"),
+        legend.title = element_text(size = 12, face = "bold"),
+        legend.text = element_text(size = 12))
+
+pie_chart
+
 ```
