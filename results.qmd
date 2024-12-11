@@ -400,3 +400,43 @@ draft_class_fwar <-
   geom_text(aes(label = total_fWAR, vjust = -0.5))
 draft_class_fwar
 ```
+
+```{r positionfWAR, fig.cap="Best Draft Classes by Year and Position"}
+total_fwar_by_pos_and_year <- 
+  players %>% 
+  filter(person_primary_position_abbreviation != "P") %>% 
+  group_by(year, person_primary_position_abbreviation) %>% 
+  summarise(total_fWAR = sum(fWAR)) %>% 
+  arrange(desc(total_fWAR)) %>% 
+  ungroup() %>% 
+  mutate(label = paste(year, person_primary_position_abbreviation, sep = "/"),
+         rank = seq_len(n()))
+
+pos_class_labels <- 
+  total_fwar_by_pos_and_year %>% 
+  slice_head(n = 10) %>% 
+  select(label) %>% 
+  unlist() %>% 
+  as.character()
+
+# Barplot of total top 10 total fWAR Draft Class/Position Combination
+pos_class_fwar <- 
+  ggplot(total_fwar_by_pos_and_year %>% 
+         slice_head(n = 10), 
+       aes(x = factor(rank, levels = c(1:10), labels = pos_class_labels), 
+           y = total_fWAR
+           )
+       ) + 
+  geom_bar(stat = "identity", fill = "deepskyblue") +
+  labs(x = "Draft Class/Position", y = "Total fWAR", 
+       title = "Top 10 Position Classes by Total fWAR") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 12, face = "bold"),
+        axis.title = element_text(size = 12, face = "bold"),
+        axis.text = element_text(size = 12),
+        legend.title = element_text(size = 10, face = "bold"),
+        legend.text = element_text(size = 10)) +
+  geom_text(aes(label = total_fWAR, vjust = -0.5))
+
+pos_class_fwar
+```
