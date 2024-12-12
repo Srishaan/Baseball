@@ -150,26 +150,6 @@
     ]
   },
   {
-    "objectID": "conclusion.html",
-    "href": "conclusion.html",
-    "title": "5  Conclusion",
-    "section": "",
-    "text": "The preference for selecting high school baseball players over collegiate ones is the first of these biases. Generally speaking, organizations are more cautious when selecting high school players unless they are exceptional, which is why college players are picked more frequently. The fact that more high school athletes are selected in rounds 1 through 5 than in any other part of the draft serves as an example of this. This lends credence to the notion that high school athletes are being selected at a very early stage of the draft and are considered elite.\nThe draft bias for athletes based on their home state was another element we were able to uncover. Although all states have sizable populations, it should come as no surprise that gamers were most often from major states like California, Texas, and Florida. In addition, there was a preference for players from warmer temperature states, such those in the west and the south. Teams would probably be reluctant to select players from underrepresented states like Wyoming or Vermont because of the smaller talent pool and the uncertainty surrounding the players’ past performance.\nWe were able to ascertain from our statistical data regarding draft prospects who made it to the Major Leagues that players who play high leverage positions are more likely to succeed in their careers by using our success metric, fWAR. Left field (LF), center field (CF), and third base (3B) are some of these positions. These players make significant contributions to the game in both their batting and fielding roles. These players can contribute at most game levels and are typically strong players overall. First base (1B) was the other position that stood out, but first basemen don’t usually make a significant contribution on the defensive end of the ball. Although they typically have less fielding responsibilities, first basemen are among the finest hitters overall. Home runs and runs batted in are two of the most valuable contributors to value in terms of fWAR, and first basemen are renowned for being exceptional power hitters.",
-    "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Conclusion</span>"
-    ]
-  },
-  {
-    "objectID": "d3graph.html#interactive-d3.js-baseball-graphs",
-    "href": "d3graph.html#interactive-d3.js-baseball-graphs",
-    "title": "4  Interactive Component in D3",
-    "section": "",
-    "text": "4.1.1 Batting Stats\n\n\n\n\n\n4.1.2 Pitching Stats",
-    "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Interactive Component in D3</span>"
-    ]
-  },
-  {
     "objectID": "d3graph.html#mlb-draft-picks-pitching-and-batting-war-analysis",
     "href": "d3graph.html#mlb-draft-picks-pitching-and-batting-war-analysis",
     "title": "4  Interactive Components in D3",
@@ -177,6 +157,16 @@
     "text": "4.1.1 Batting Statistics\n\n\n\n\n\n4.1.2 Pitching Statistics",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Interactive Components in D3</span>"
+    ]
+  },
+  {
+    "objectID": "conclusion.html",
+    "href": "conclusion.html",
+    "title": "5  Conclusion",
+    "section": "",
+    "text": "The preference for selecting high school baseball players over collegiate ones is the first of these biases. Generally speaking, organizations are more cautious when selecting high school players unless they are exceptional, which is why college players are picked more frequently. The fact that more high school athletes are selected in rounds 1 through 5 than in any other part of the draft serves as an example of this. This lends credence to the notion that high school athletes are being selected at a very early stage of the draft and are considered elite.\nThe draft bias for athletes based on their home state was another element we were able to uncover. Although all states have sizable populations, it should come as no surprise that gamers were most often from major states like California, Texas, and Florida. In addition, there was a preference for players from warmer temperature states, such those in the west and the south. Teams would probably be reluctant to select players from underrepresented states like Wyoming or Vermont because of the smaller talent pool and the uncertainty surrounding the players’ past performance.\nWe were able to ascertain from our statistical data regarding draft prospects who made it to the Major Leagues that players who play high leverage positions are more likely to succeed in their careers by using our success metric, fWAR. Left field (LF), center field (CF), and third base (3B) are some of these positions. These players make significant contributions to the game in both their batting and fielding roles. These players can contribute at most game levels and are typically strong players overall. First base (1B) was the other position that stood out, but first basemen don’t usually make a significant contribution on the defensive end of the ball. Although they typically have less fielding responsibilities, first basemen are among the finest hitters overall. Home runs and runs batted in are two of the most valuable contributors to value in terms of fWAR, and first basemen are renowned for being exceptional power hitters.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Conclusion</span>"
     ]
   }
 ]
