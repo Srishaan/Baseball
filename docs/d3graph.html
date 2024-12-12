@@ -153,6 +153,7 @@ ul.task-list li input[type="checkbox"] {
   <ul class="collapse">
   <li><a href="#batting-statistics" id="toc-batting-statistics" class="nav-link" data-scroll-target="#batting-statistics"><span class="header-section-number">4.1.1</span> Batting Statistics</a></li>
   <li><a href="#pitching-statistics" id="toc-pitching-statistics" class="nav-link" data-scroll-target="#pitching-statistics"><span class="header-section-number">4.1.2</span> Pitching Statistics</a></li>
+  <li><a href="#why-these-interactive-components-are-useful" id="toc-why-these-interactive-components-are-useful" class="nav-link" data-scroll-target="#why-these-interactive-components-are-useful"><span class="header-section-number">4.1.3</span> Why these Interactive Components Are Useful</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/Srishaan/Baseball/edit/main/d3graph.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/Srishaan/Baseball/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -183,15 +184,55 @@ ul.task-list li input[type="checkbox"] {
 <h2 data-number="4.1" class="anchored" data-anchor-id="mlb-draft-picks-pitching-and-batting-war-analysis"><span class="header-section-number">4.1</span> MLB Draft Picks: Pitching and Batting WAR Analysis</h2>
 <section id="batting-statistics" class="level3" data-number="4.1.1">
 <h3 data-number="4.1.1" class="anchored" data-anchor-id="batting-statistics"><span class="header-section-number">4.1.1</span> Batting Statistics</h3>
+<p>The first scatter plot below visualizes the <strong>Wins Above Replacement (WAR)</strong> for MLB batting draftees across draft rounds. Each point represents a player, colored based on their batting hand: right-handed, left-handed, or switch-hitter.</p>
+<section id="key-observations" class="level4" data-number="4.1.1.1">
+<h4 data-number="4.1.1.1" class="anchored" data-anchor-id="key-observations"><span class="header-section-number">4.1.1.1</span> Key Observations:</h4>
+<ol type="1">
+<li><strong>WAR Decreases with Later Draft Rounds</strong>: As expected, players drafted in earlier rounds (e.g., rounds 1-10) tend to have higher WAR, while later rounds show diminishing returns.</li>
+<li><strong>Switch-Hitters Have Some High WAR Values</strong>: While fewer switch-hitters are drafted, some exhibit significant WAR, indicating that ambidextrous batting can lead to greater utility for teams.</li>
+<li><strong>Outliers in Later Rounds</strong>: A few players from rounds 20 and beyond have exceptionally high WAR, demonstrating the occasional success of undervalued players or late bloomers.</li>
+</ol>
 <div id="bat_plot">
 
 </div>
+<hr>
+</section>
 </section>
 <section id="pitching-statistics" class="level3" data-number="4.1.2">
 <h3 data-number="4.1.2" class="anchored" data-anchor-id="pitching-statistics"><span class="header-section-number">4.1.2</span> Pitching Statistics</h3>
+<p>The second scatter plot below examines <strong>Wins Above Replacement (WAR)</strong> for MLB pitching draftees across draft rounds. Each point represents a pitcher, colored based on their throwing hand: right-handed or left-handed.</p>
+<section id="key-observations-1" class="level4" data-number="4.1.2.1">
+<h4 data-number="4.1.2.1" class="anchored" data-anchor-id="key-observations-1"><span class="header-section-number">4.1.2.1</span> Key Observations:</h4>
+<ol type="1">
+<li><strong>Consistent Decline in WAR Across Rounds</strong>: Similar to batting, earlier-round pitchers exhibit higher WAR, while later rounds show a steep decline.</li>
+<li><strong>Left-Handed Pitchers</strong>: Left-handed pitchers are more sparsely distributed but occasionally achieve high WAR, reflecting the possible demand for left-handed specialists.</li>
+<li><strong>Outliers</strong>: A handful of late-round picks exceed expectations with WAR values comparable to early-round selections, underlying the unpredictable nature of pitching talent.</li>
+</ol>
 <div id="pitch_plot">
 
 </div>
+<hr>
+</section>
+</section>
+<section id="why-these-interactive-components-are-useful" class="level3" data-number="4.1.3">
+<h3 data-number="4.1.3" class="anchored" data-anchor-id="why-these-interactive-components-are-useful"><span class="header-section-number">4.1.3</span> Why these Interactive Components Are Useful</h3>
+<section id="hover-for-detailed-player-insights" class="level4" data-number="4.1.3.1">
+<h4 data-number="4.1.3.1" class="anchored" data-anchor-id="hover-for-detailed-player-insights"><span class="header-section-number">4.1.3.1</span> 1. <strong>Hover for Detailed Player Insights</strong>:</h4>
+<ul>
+<li>Hovering over a data point reveals detailed player information such as name, WAR, draft round, and pick number. This interactivity allows users to explore specific players’ data without worrying about cluttering the graph.</li>
+</ul>
+</section>
+<section id="zoom-in-and-out-functionality" class="level4" data-number="4.1.3.2">
+<h4 data-number="4.1.3.2" class="anchored" data-anchor-id="zoom-in-and-out-functionality"><span class="header-section-number">4.1.3.2</span> 2. <strong>Zoom in and out functionality</strong>:</h4>
+<ul>
+<li>The zoom functionality lets users focus on specific draft rounds or WAR ranges, which is especially useful for analyzing dense areas in the scatter plot.</li>
+</ul>
+</section>
+<section id="color-coding" class="level4" data-number="4.1.3.3">
+<h4 data-number="4.1.3.3" class="anchored" data-anchor-id="color-coding"><span class="header-section-number">4.1.3.3</span> 3. <strong>Color Coding</strong>:</h4>
+<ul>
+<li>The use of color to represent batting and pitching hands (e.g., right-handed vs.&nbsp;left-handed players) provides immediate visual differentiation, helping users identify trends related to player attributes.</li>
+</ul>
 <style>
   #bat_plot, #pitch_plot {
     width: 100%;
@@ -210,6 +251,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="scripts/myscript.js"></script>
 
 
+</section>
 </section>
 </section>
 
