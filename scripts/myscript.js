@@ -5,11 +5,11 @@ const batRowConverter = function (d) {
     pick_round: +d.pick_round, 
     pick_number: +d.pick_number, 
     person_full_name: d.person_full_name, 
-    person_bat_hand_code: d.person_bat_hand_code 
+    person_bat_side_code: d.person_bat_side_code 
   };
 };
 
-d3.csv("https://raw.githubusercontent.com/Srishaan/Baseball/refs/heads/main/bat_stats_subset.csv", batRowConverter)
+d3.csv("https://raw.githubusercontent.com/a1anw0ng/Baseball/refs/heads/main/data/subsets/bat_stats_subset.csv", batRowConverter)
   .then(function (data) {
     // Filter out invalid `pick_round` values 
     const filteredData = data.filter(d => d.pick_round !== 1000);
@@ -81,7 +81,7 @@ d3.csv("https://raw.githubusercontent.com/Srishaan/Baseball/refs/heads/main/bat_
       .attr("cx", d => xScale(d.pick_round))
       .attr("cy", d => yScale(d.fWAR))
       .attr("r", 4)
-      .attr("fill", d => colorScale(d.person_bat_hand_code)) 
+      .attr("fill", d => colorScale(d.person_bat_side_code)) 
       .on("mouseover", function (event, d) {
         tooltip.style("visibility", "visible")
           .html(`
@@ -161,7 +161,7 @@ const pitchRowConverter = function (d) {
   };
 };
 
-d3.csv("https://raw.githubusercontent.com/Srishaan/Baseball/refs/heads/main/pitch_stats_subset.csv", pitchRowConverter)
+d3.csv("https://raw.githubusercontent.com/a1anw0ng/Baseball/refs/heads/main/data/subsets/pitch_stats_subset.csv", pitchRowConverter)
   .then(function (data) {
     // Filter out invalid `pick_round` values (e.g., 1000 if it’s a placeholder)
     const filteredData = data.filter(d => d.pick_round !== 1000);

@@ -11,7 +11,7 @@ We made a stacked bar chart that displayed the percentage of draftees by round, 
 library(tidyverse)
 library(data.table)
 
-draft_info <- fread('clean_draft.csv')
+draft_info <- fread('data/cleaned/clean_draft.csv')
 draft_info <- 
   draft_info |> 
   mutate(mlb_years = ifelse(mlb_played_first == 0 & mlb_played_last == 0, 0,
@@ -80,8 +80,8 @@ Through using histograms, we determined the number of years between a player's f
 #| fig-height: 6
 library(gridExtra)
 
-bat_stats_df <- fread('bat_stats_subset.csv')
-pitch_stats_df <- fread('pitch_stats_subset.csv')
+bat_stats_df <- fread('data/subsets/bat_stats_subset.csv')
+pitch_stats_df <- fread('data/subsets/pitch_stats_subset.csv')
 
 # Created a new variable for each dataset that gives number of years it took 
 # player to play their first MLB game
@@ -306,7 +306,7 @@ ggplot(players, aes(x = time_played, y=fWAR)) +
 The majority of players miss the major leagues, and only 13.06% of draftees actually get the chance to play, according to the pie chart showing whether or not they eventually made it to the MLB. We shall pay particular attention to the players who qualified for the Major Leagues.
 
 ```{r piechart, fig.align='center', warning=FALSE}
-draft_info <- fread('draft_data.csv') |> 
+draft_info <- fread('data/original/draft_data.csv') |> 
   mutate(mlb_played_first = year(person_mlb_debut_date),
          high_school = ifelse(str_detect(school_name, "\\sHS") == TRUE, "Yes", 
                               "No"),
@@ -364,8 +364,8 @@ We can see from the barplot that the 1965, 1985, and 2002 draft classes are high
 #| fig-width: 10
 #| fig-height: 6
 
-bat_draft_df <- fread('bat_draft_subset.csv')
-pitch_draft_df <- fread('pitch_draft_subset.csv')
+bat_draft_df <- fread('data/subsets/bat_draft_subset.csv')
+pitch_draft_df <- fread('data/subsets/pitch_draft_subset.csv')
 
 players <- 
   bind_rows(pitch_draft_df, bat_draft_df) |>
