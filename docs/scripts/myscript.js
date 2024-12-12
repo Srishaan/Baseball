@@ -9,7 +9,7 @@ const batRowConverter = function (d) {
   };
 };
 
-d3.csv("https://raw.githubusercontent.com/Srishaan/Baseball/refs/heads/main/bat_stats_subset.csv", batRowConverter)
+d3.csv("https://raw.githubusercontent.com/a1anw0ng/Baseball/refs/heads/main/data/subsets/bat_stats_subset.csv", batRowConverter)
   .then(function (data) {
     // Filter out invalid `pick_round` values 
     const filteredData = data.filter(d => d.pick_round !== 1000);
@@ -161,7 +161,7 @@ const pitchRowConverter = function (d) {
   };
 };
 
-d3.csv("https://raw.githubusercontent.com/Srishaan/Baseball/refs/heads/main/pitch_stats_subset.csv", pitchRowConverter)
+d3.csv("https://raw.githubusercontent.com/a1anw0ng/Baseball/refs/heads/main/data/subsets/pitch_stats_subset.csv", pitchRowConverter)
   .then(function (data) {
     // Filter out invalid `pick_round` values (e.g., 1000 if it’s a placeholder)
     const filteredData = data.filter(d => d.pick_round !== 1000);
