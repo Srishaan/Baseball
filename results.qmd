@@ -470,3 +470,33 @@ pos_class_war <-
 
 pos_class_war
 ```
+## Age vs WAR
+This scatter plot investigates the connection between a player's career WAR (Wins Above Replacement) and their age at draft time. Younger players (e.g., 18 or 19 years old) who are drafted show a variety of WAR values, including very high accomplishments. On the other hand, athletes who are drafted later in life (e.g., 22 years of age or beyond) typically cluster around lower WAR values, suggesting less variability and a lower chance of reaching high lifetime WAR. This implies that while older draftees typically have more predictable results, picking younger athletes carries more risks but also the potential for bigger rewards.
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+#| message: false
+
+# Filter and prepare data for draft age vs WAR analysis
+draft_age_war <- 
+  players |> 
+  filter(!is.na(draft_age)) |> 
+  arrange(desc(fWAR))
+
+# Plot: Draft Age vs WAR
+draft_age_plot <- 
+  ggplot(draft_age_war, aes(x = draft_age, y = fWAR)) +
+  geom_point(alpha = 0.6, size = 2, color = "darkblue") +
+  geom_smooth(method = "lm", color = "red", se = TRUE, alpha = 0.3) +
+  labs(title = "Draft Age vs WAR",
+       x = "Draft Age",
+       y = "Wins Above Replacement (WAR)") +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 12, face = "bold", hjust = 0.5),
+        axis.title = element_text(size = 12, face = "bold"),
+        axis.text = element_text(size = 10),
+        legend.title = element_text(size = 10, face = "bold"),
+        legend.text = element_text(size = 10))
+
+draft_age_plot
+```

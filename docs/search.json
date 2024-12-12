@@ -130,6 +130,16 @@
     ]
   },
   {
+    "objectID": "results.html#age-vs-war",
+    "href": "results.html#age-vs-war",
+    "title": "3  Results",
+    "section": "3.10 Age vs WAR",
+    "text": "3.10 Age vs WAR\nThis scatter plot investigates the connection between a player’s career WAR (Wins Above Replacement) and their age at draft time. Younger players (e.g., 18 or 19 years old) who are drafted show a variety of WAR values, including very high accomplishments. On the other hand, athletes who are drafted later in life (e.g., 22 years of age or beyond) typically cluster around lower WAR values, suggesting less variability and a lower chance of reaching high lifetime WAR. This implies that while older draftees typically have more predictable results, picking younger athletes carries more risks but also the potential for bigger rewards.\n\n\nCode\n# Filter and prepare data for draft age vs WAR analysis\ndraft_age_war &lt;- \n  players |&gt; \n  filter(!is.na(draft_age)) |&gt; \n  arrange(desc(fWAR))\n\n# Plot: Draft Age vs WAR\ndraft_age_plot &lt;- \n  ggplot(draft_age_war, aes(x = draft_age, y = fWAR)) +\n  geom_point(alpha = 0.6, size = 2, color = \"darkblue\") +\n  geom_smooth(method = \"lm\", color = \"red\", se = TRUE, alpha = 0.3) +\n  labs(title = \"Draft Age vs WAR\",\n       x = \"Draft Age\",\n       y = \"Wins Above Replacement (WAR)\") +\n  theme_minimal() +\n  theme(plot.title = element_text(size = 12, face = \"bold\", hjust = 0.5),\n        axis.title = element_text(size = 12, face = \"bold\"),\n        axis.text = element_text(size = 10),\n        legend.title = element_text(size = 10, face = \"bold\"),\n        legend.text = element_text(size = 10))\n\ndraft_age_plot",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Results</span>"
+    ]
+  },
+  {
     "objectID": "d3graph.html",
     "href": "d3graph.html",
     "title": "4  D3 Baseball Graph",
