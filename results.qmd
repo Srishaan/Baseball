@@ -89,7 +89,7 @@ bat_stats_df$DifferenceYearsDraftFGPlayed <- bat_stats_df$mlb_played_first - bat
 pitch_stats_df$DifferenceYearsDraftFGPlayed <- pitch_stats_df$mlb_played_first - pitch_stats_df$year
 
 plot1 <- ggplot(bat_stats_df, aes(x = DifferenceYearsDraftFGPlayed)) +
-  geom_histogram(binwidth = 0.5, fill = "skyblue", color = "black", alpha = 0.8) +
+  geom_histogram(binwidth = 0.5, fill = "deepskyblue", color = "black", alpha = 0.8) +
   labs(title = "Years for Batting Draftee to Play First MLB Game", 
        x = "# of Years", y = "Frequency") +
   theme_minimal() +
@@ -122,19 +122,19 @@ Additionally, we looked into the correlation between height and weight for both 
 #| fig-height: 7
 #| 
 plot1 <- ggplot(bat_stats_df, aes(x = person_weight, y=person_height)) +
-  geom_point(fill="skyblue", shape=21, size=2, alpha = 0.8) +
+  geom_point(fill="deepskyblue", shape=21, size=2, alpha = 0.8) +
   geom_hline(yintercept = mean(bat_stats_df$person_height,na.rm=T), 
              color = "red", linetype = "dashed", alpha = 0.8) + 
   geom_vline(xintercept = mean(bat_stats_df$person_weight,na.rm=T), 
              color = "blue", linetype = "dashed", alpha = 0.8) +
+  geom_text(aes(x = mean(bat_stats_df$person_weight,na.rm=T), 
+                y = mean(bat_stats_df$person_height,na.rm=T) - 1, 
+                label = paste("Mean Height")), 
+            color = "red", hjust = -3, vjust = 0, alpha = 0.8) + 
   geom_text(aes(x = mean(bat_stats_df$person_weight,na.rm=T) + 1, 
                 y = mean(bat_stats_df$person_height,na.rm=T), 
                 label = paste("Mean Weight")), 
             color = "blue", hjust = 0, vjust = -15, alpha = 0.8) +  
-  geom_text(aes(x = mean(bat_stats_df$person_weight,na.rm=T), 
-                y = mean(bat_stats_df$person_height,na.rm=T) - 1, 
-                label = paste("Mean Height")), 
-            color = "red", hjust = -3, vjust = 0, alpha = 0.8) +  
   geom_smooth(method = "lm", se = FALSE, color = "black", alpha = 0.8) +
   labs(title = "Weight vs. Height (Batters)", 
        x = "Draftee Weight", y = "Draftee Height") +
@@ -151,14 +151,14 @@ plot2 <- ggplot(pitch_stats_df, aes(x = person_weight, y=person_height)) +
              color = "red", linetype = "dashed", alpha = 0.8) + 
   geom_vline(xintercept = mean(pitch_stats_df$person_weight,na.rm=T), 
              color = "blue", linetype = "dashed", alpha = 0.8) +
-  geom_text(aes(x = mean(pitch_stats_df$person_weight,na.rm=T) + 1, 
-                y = mean(pitch_stats_df$person_height,na.rm=T), 
-                label = paste("Mean Weight")), 
-            color = "blue", hjust = 0, vjust = -16, alpha = 0.8) +  
   geom_text(aes(x = mean(pitch_stats_df$person_weight,na.rm=T), 
                 y = mean(pitch_stats_df$person_height,na.rm=T) - 1, 
                 label = paste("Mean Height")), 
             color = "red", hjust = -2.8, vjust = 0, alpha = 0.8) +  
+  geom_text(aes(x = mean(pitch_stats_df$person_weight,na.rm=T) + 1, 
+                y = mean(pitch_stats_df$person_height,na.rm=T), 
+                label = paste("Mean Weight")), 
+            color = "blue", hjust = 0, vjust = -16, alpha = 0.8) +  
   geom_smooth(method = "lm", se = FALSE, color = "black", alpha = 0.8) +
   labs(title = "Weight vs. Height (Pitchers)", 
        x = "Draftee Weight", y = "Draftee Height") +
@@ -189,14 +189,14 @@ bat_stats_df1 <- bat_stats_df |>
   drop_na()
 correlation_matrix <- cor(bat_stats_df1[, c(4,5,7,9,10)]) 
 corrplot(correlation_matrix, method = "color")
-title("Correlation Plot (Batting)",line = 3,adj=0)
+title("Correlation Plot (Batting)", line = 3,adj=0)
 
 pitch_stats_df1 <- pitch_stats_df |>
   mutate(pick_round=as.numeric(pick_round)) |>
   drop_na()
 correlation_matrix <- cor(pitch_stats_df1[, c(4,5,7,9,10)]) 
 corrplot(correlation_matrix, method = "color")
-title("Correlation Plot (Pitching)",line = 3,adj=0)
+title("Correlation Plot (Pitching)", line = 3,adj=0)
 ```
 
 ## State Frequency Map
@@ -283,14 +283,14 @@ ggplot(players, aes(x = time_played, y=fWAR)) +
              color = "red", linetype = "dashed", alpha = 0.8) + 
   geom_vline(xintercept = mean(players$time_played,na.rm=T), 
              color = "blue", linetype = "dashed", alpha = 0.8) +
-  geom_text(aes(x = mean(players$time_played,na.rm=T)+0.5, 
-                y = mean(players$fWAR,na.rm=T)+40, 
-                label = paste("Mean Time")), 
-            color = "blue", hjust = 0, vjust = -10, alpha = 0.8) +  
   geom_text(aes(x = mean(players$time_played,na.rm=T)+8, 
                 y = mean(players$fWAR,na.rm=T)+5, 
                 label = paste("Mean WAR")), 
             color = "red", hjust = -4, vjust = 0, alpha = 0.8) +
+  geom_text(aes(x = mean(players$time_played,na.rm=T)+0.5, 
+                y = mean(players$fWAR,na.rm=T)+40, 
+                label = paste("Mean Time")), 
+            color = "blue", hjust = 0, vjust = -10, alpha = 0.8) +  
   labs(title = "Total Time in MLB vs. WAR", 
        x = "Total Time Played in MLB", y = "Wins Above Replacement") +
   theme_minimal() +
@@ -457,7 +457,7 @@ pos_class_war <-
            y = total_WAR
            )
        ) + 
-  geom_bar(stat = "identity", fill = "deepskyblue") +
+  geom_bar(stat = "identity", fill = "orange") +
   labs(x = "Draft Class/Position", y = "Total WAR", 
        title = "Top 10 Position Classes by Total WAR") +
   theme_minimal() +
@@ -470,23 +470,24 @@ pos_class_war <-
 
 pos_class_war
 ```
+
 ## Age vs WAR
+
 This scatter plot investigates the connection between a player's career WAR (Wins Above Replacement) and their age at draft time. Younger players (e.g., 18 or 19 years old) who are drafted show a variety of WAR values, including very high accomplishments. On the other hand, athletes who are drafted later in life (e.g., 22 years of age or beyond) typically cluster around lower WAR values, suggesting less variability and a lower chance of reaching high lifetime WAR. This implies that while older draftees typically have more predictable results, picking younger athletes carries more risks but also the potential for bigger rewards.
-```{r}
+
+```{r agevwar, fig.align='center', warning=FALSE}
 #| fig-width: 10
 #| fig-height: 6
 #| message: false
 
-# Filter and prepare data for draft age vs WAR analysis
 draft_age_war <- 
   players |> 
   filter(!is.na(draft_age)) |> 
   arrange(desc(fWAR))
 
-# Plot: Draft Age vs WAR
 draft_age_plot <- 
   ggplot(draft_age_war, aes(x = draft_age, y = fWAR)) +
-  geom_point(alpha = 0.6, size = 2, color = "darkblue") +
+  geom_point(alpha = 0.6, size = 2, color = "deepskyblue") +
   geom_smooth(method = "lm", color = "red", se = TRUE, alpha = 0.3) +
   labs(title = "Draft Age vs WAR",
        x = "Draft Age",
