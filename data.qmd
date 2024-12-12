@@ -26,7 +26,7 @@ library(ggplot2)
 Within our batting statistics dataset, there are a large amount of missing values, where even some variables have the same amount of missing values as there are rows in the dataset. For variables that have this situation, it is due to that feature not being applicable for batters. For example, a variable tracking a specific pitch type (like `UN%` or `FT%`) will not have data since the data primarily focuses on batting. There are some variables that contain some missing variables, which may be due to data collection gaps or data source limitation. Other common statistics though, such as `AB` (At Bats), `H` (Hits), and `RBI` (Runs Batted In), are core metrics in baseball datasets and are therefore recorded in our dataset without missing values. Due to the large nature of this dataset where there are over 319 variables, a summary of missing values is included instead of a heatmap visually showing the missing values of each variable at each column. A count of how many columns contain missing values and how many do not is also shown for greater clarification on the significant amount of missing variables.
 
 ```{r batstatsNA}
-batting_stats <- read_csv("batting_stats.csv", show_col_types = FALSE)
+batting_stats <- read_csv("data/original/batting_stats.csv", show_col_types = FALSE)
 
 batting_na_count = colSums(is.na(batting_stats)) |>
   sort(decreasing = TRUE)
@@ -42,7 +42,7 @@ cat("Batting Columns without NA values:", columns_without_na_batting, "\n")
 Within our pitching statistics dataset, there are also a large amount of missing values, though there are not as many variables nor observations as that of the batting dataset. Again, some variables contain have the same amount of missing values as there are rows in the dataset. For variables that have this situation, it is due to that feature not being applicable for pitchers. For example, a variable tracking advanced metrics such as `Stf+ FO` (Stuff+ for Four-Seam Fastballs) or `Loc+ FO` (Location+ for Four-Seam Fastballs) will not have data since these variables require specific conditions or a sufficient sample size of pitches to calculate, making them inapplicable to all pitchers. There are some variables that contain some missing values, which may be due to data collection gaps or data source limitations. Other common statistics, such as `W` (Wins), `L` (Losses), and `ERA` (Earned Run Average), are core metrics in baseball datasets and are therefore recorded in our dataset without missing values. Due to the large nature of this dataset where there are over 392 variables, a summary of missing values is included instead of a heatmap visually showing the missing values of each variable at each column. A count of how many columns contain missing values and how many do not is also shown for greater clarification on the significant amount of missing variables.
 
 ```{r pitchstatsNA, warning=FALSE}
-pitching_stats <- read_csv("pitching_stats.csv", show_col_types = FALSE)
+pitching_stats <- read_csv("data/original/pitching_stats.csv", show_col_types = FALSE)
 
 pitching_na_count = colSums(is.na(pitching_stats)) |>
   sort(decreasing = TRUE)
@@ -58,7 +58,7 @@ cat("Pitching Columns without NA values:", columns_without_na_pitching, "\n")
 Missing values are also present within the Chadwick data, which contains the biographical and career information of people associated with the MLB. Some columns are seen to be entirely misisng given that they are shown as solid red bars, which suggests that these variables are either not relevant to the dataset's context or represent data that was not collected. Other columns have a mix of missing and non-missing values, which means that these variables may suffer from data collection gaps or were conditionally applicable, such as metrics that may applicable to baseball managers or metrics that were unavailable for certain time periods. Lastly, columns with no missing values as seen with white bars represent essential metrics such as a person's name and position in the MLB. These metrics are recorded across the Chadwick dataset which shows that despite it having missing data present, its key metrics still are reliably available for analysis.
 
 ```{r chadwickheatmap, warning = FALSE}
-chadwick_data <- read_csv("chadwick_data.csv", show_col_types = FALSE)
+chadwick_data <- read_csv("data/original/chadwick_data.csv", show_col_types = FALSE)
 
 chadwick_data_uniform <- chadwick_data |>
   mutate(across(everything(), as.character))
@@ -86,7 +86,7 @@ ggplot(missing_chadwick, aes(x = variable, y = row_id, fill = missing)) +
 Lastly, missing values were also present within the draft data containing the team, round, and selection year of a player. To visualize the missing values in this dataset, I selected the top 20 variables with the most missing values and the top 20 with the least missing values. This was done due to there being a large amount of variables present in the dataset, though it was not as extensive as those in the batting and pitching datasets. Some columns are seen to be entirely misisng given that they are shown as solid red bars, which suggests that they might not be applicable to the dataset's context, such as fields related to specific player demographics or draft-related outcomes that were not recorded. Other columns have a mix of missing and non-missing values, which means that these variables may suffer from data collection gaps or were attributes relevant only to certain players, teams, or draft rounds. Lastly, columns with no missing values as seen with white bars represent essential metrics such as a player's name, their draft pick numbers, or other key metrics that are consistently recorded. These metrics are recorded throughout the draft dataset, which still demonstrates that while missing data is also present in this dataset, the key metrics in this dataset also still remain reliably available for analysis.
 
 ```{r draftheatmap, warning = FALSE}
-draft_data <- read_csv("draft_data.csv", show_col_types = FALSE)
+draft_data <- read_csv("data/original/draft_data.csv", show_col_types = FALSE)
 
 top_missing_vars_draft <- draft_data |>
   summarise(across(everything(), ~ sum(is.na(.)))) |>
@@ -137,7 +137,7 @@ To address the missing values in our datasets, we have performed data cleaning. 
 library(data.table)
 library(datasets) # for state abbreviations
 
-draft_info <- fread('draft_data.csv')
+draft_info <- fread('data/original/draft_data.csv')
 
 draft_info <-
   draft_info |> 
@@ -158,7 +158,7 @@ draft_info <-
          -person_name_suffix, -c(team_link:team_spring_league_abbreviation), 
          -headshot_link, home_state)
 
-chadwick <- fread('chadwick_data.csv')
+chadwick <- fread('data/original/chadwick_data.csv')
 
 # Update Chadwick for players who were drafted after
 chadwick <- 
@@ -360,8 +360,8 @@ ggplot(missing_draft_info, aes(x = variable, y = row_id, fill = missing)) +
 We will now create subsets of the batting and pitching data to use for our analysis. First, we will filter the columns to include only those with less than 50% missing values and remove any unnecessary variables. Next, we will create two datasets containing the complete draft information for batters and pitchers, saving them as "batters_full_draft.csv" and "pitchers_full_draft.csv." From these full datasets, we will create subsets containing each player's best draft pick, naming these files "batters_draft_stats.csv" and "pitchers_draft_stats.csv." Further, we will create additional subsets of "batters_draft_stats.csv" and "pitchers_draft_stats.csv," selecting only the variables relevant to our analysis, and save them as "batters_stats_subset.csv" and "pitchers_stats_subset.csv." Lastly, subsets of "batters_full_draft.csv" and "pitchers_full_draft.csv" will be created, focusing on the variables needed for analysis, and these will be named "batters_draft_subset.csv" and "pitchers_draft_subset.csv." These four subsets will serve as the foundation for our analysis, with the final two specifically being filtered by filtered by the player’s most recent draft year rather than their best draft pick in our analysis.
 
 ```{r batpitchcleaning, warning=FALSE}
-batting <- fread('batting_stats.csv')
-pitching <- fread('pitching_stats.csv')
+batting <- fread('data/original/batting_stats.csv')
+pitching <- fread('data/original/pitching_stats.csv')
 
 # Change the variable name for WAR so that it matches in both data frames
 batting <- 
@@ -501,7 +501,7 @@ pitch_stats <-
 When analyzing the heatmaps for the four data subsets that we will be analyzing, we see that there are virtually no missing values present given the minimal amount of red cells present in the heatmaps. In fact, missing values are generally sparse and concentrated in specific variable(s) rather than being evenly distributed. In the all four data subsets, the amount of missing data is incredibly minimal, with small gaps appearing in variables relating to a player's birth or home state that are likely due to inconsistencies in recording older or less-documented player data. This indicates that most essential features in these subsets are complete and ready for analysis and that variables related to biographical or supplementary information notably exhibit more missingness compared to performance metrics. Overall, the data subsets are largely complete, with the missing data unlikely to significantly impact the analysis.
 
 ```{r batstatsheatmap}
-bat_stats_df <- fread('bat_stats_subset.csv')
+bat_stats_df <- fread('data/subsets/bat_stats_subset.csv')
 
 bat_stats_uniform <- bat_stats_df |>
   mutate(across(everything(), as.character))
@@ -527,7 +527,7 @@ ggplot(missing_bat_stats, aes(x = variable, y = row_id, fill = missing)) +
 ```
 
 ```{r pitchstatsheatmap}
-pitch_stats_df <- fread('pitch_stats_subset.csv')
+pitch_stats_df <- fread('data/subsets/pitch_stats_subset.csv')
 
 pitch_stats_uniform <- pitch_stats_df |>
   mutate(across(everything(), as.character))
@@ -553,7 +553,7 @@ ggplot(missing_pitch_stats, aes(x = variable, y = row_id, fill = missing)) +
 ```
 
 ```{r batdraftheatmap}
-bat_draft_df <- fread('bat_draft_subset.csv')
+bat_draft_df <- fread('data/subsets/bat_draft_subset.csv')
 
 bat_draft_uniform <- bat_draft_df |>
   mutate(across(everything(), as.character))
@@ -579,7 +579,7 @@ ggplot(missing_bat_draft, aes(x = variable, y = row_id, fill = missing)) +
 ```
 
 ```{r pitchdraftheatmap}
-pitch_draft_df <- fread('pitch_draft_subset.csv')
+pitch_draft_df <- fread('data/subsets/pitch_draft_subset.csv')
 
 pitch_draft_uniform <- pitch_draft_df |>
   mutate(across(everything(), as.character))
