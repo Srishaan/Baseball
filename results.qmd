@@ -265,7 +265,7 @@ home_heat_map
 
 ## Relationship between Time Played in MLB vs. WAR
 
-We create the following scatterplot to investigate the relationship between a player's career length and WAR: The duration of a player's career does not always translate into a high WAR, as seen by the comparison of each player's total MLB time played and WAR. There does appear to be an upward trend, though, which makes logical given that we anticipate a player to win more the longer they play.
+We create the following boxplots to investigate the relationship between a player's career length and WAR. While the total time a player spends in MLB does not guarantee a high WAR, as shown by the wide range of outliers, there is a noticeable upward trend in the median WAR values as career length increases. This trend aligns with the expectation that players who remain in MLB longer generally have more opportunities to accumulate higher WAR values over time.
 
 ```{r mlbwar, fig.align='center', warning=FALSE}
 #| fig-width: 10
