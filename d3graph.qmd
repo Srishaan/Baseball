@@ -33,13 +33,13 @@ The second scatter plot below examines **Wins Above Replacement (WAR)** for MLB 
 
 ### Why these Interactive Components Are Useful?
 
-#### 1. **Hover for Detailed Player Insights**:
+#### **Hover for Detailed Player Insights**:
    - Hovering over a data point reveals detailed player information such as name, WAR, draft round, and pick number. This interactivity allows users to explore specific players' data without worrying about cluttering the graph.
 
-#### 2. **Zoom in and out functionality**:
+#### **Zoom in and out functionality**:
    - The zoom functionality lets users focus on specific draft rounds or WAR ranges, which is especially useful for analyzing dense areas in the scatter plot.
 
-#### 3. **Color Coding**:
+#### **Color Coding**:
    - The use of color to represent batting and pitching hands (e.g., right-handed vs. left-handed players) provides immediate visual differentiation, helping users identify trends related to player attributes.
 
 
