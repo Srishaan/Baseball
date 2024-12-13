@@ -1,9 +1,9 @@
 ---
-title: "Interactive Components in D3"
+title: "Interactive D3 Components"
 format: html
 ---
 
-## MLB Draft Picks: Pitching and Batting WAR Analysis
+## What Insights Can Be Gained from WAR Trends Across Draft Rounds for Batters and Pitchers?
 
 ### Batting Statistics
 
@@ -31,7 +31,7 @@ The second scatter plot below examines **Wins Above Replacement (WAR)** for MLB 
 
 ---
 
-### Why these Interactive Components Are Useful
+### Why these Interactive Components Are Useful?
 
 #### 1. **Hover for Detailed Player Insights**:
    - Hovering over a data point reveals detailed player information such as name, WAR, draft round, and pick number. This interactivity allows users to explore specific players' data without worrying about cluttering the graph.

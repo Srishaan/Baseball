@@ -142,11 +142,11 @@
   {
     "objectID": "d3graph.html",
     "href": "d3graph.html",
-    "title": "4  Interactive Components in D3",
+    "title": "4  Interactive D3 Components",
     "section": "",
-    "text": "4.1 MLB Draft Picks: Pitching and Batting WAR Analysis",
+    "text": "4.1 What Insights Can Be Gained from WAR Trends Across Draft Rounds for Batters and Pitchers?",
     "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Interactive Components in D3</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Interactive D3 Components</span>"
     ]
   },
   {
@@ -247,6 +247,16 @@
     "text": "3.10 What Is the Relationship Between Age and WAR?\nThis scatter plot investigates the connection between a player’s career WAR (Wins Above Replacement) and their age at draft time. Younger players (e.g., 18 or 19 years old) who are drafted show a variety of WAR values, including very high accomplishments. On the other hand, athletes who are drafted later in life (e.g., 22 years of age or beyond) typically cluster around lower WAR values, suggesting less variability and a lower chance of reaching high lifetime WAR. This implies that while older draftees typically have more predictable results, picking younger athletes carries more risks but also the potential for bigger rewards.\n\n\nCode\ndraft_age_war &lt;- \n  players |&gt; \n  filter(!is.na(draft_age)) |&gt; \n  arrange(desc(fWAR))\n\ndraft_age_plot &lt;- \n  ggplot(draft_age_war, aes(x = draft_age, y = fWAR)) +\n  geom_point(alpha = 0.6, size = 2, color = \"deepskyblue\") +\n  geom_smooth(method = \"lm\", color = \"red\", se = TRUE, alpha = 0.3) +\n  labs(title = \"Draft Age vs WAR\",\n       x = \"Draft Age\",\n       y = \"Wins Above Replacement (WAR)\") +\n  theme_minimal() +\n  theme(plot.title = element_text(size = 12, face = \"bold\", hjust = 0.5),\n        axis.title = element_text(size = 12, face = \"bold\"),\n        axis.text = element_text(size = 10),\n        legend.title = element_text(size = 10, face = \"bold\"),\n        legend.text = element_text(size = 10))\n\ndraft_age_plot",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Results</span>"
+    ]
+  },
+  {
+    "objectID": "d3graph.html#what-insights-can-be-gained-from-war-trends-across-draft-rounds-for-batters-and-pitchers",
+    "href": "d3graph.html#what-insights-can-be-gained-from-war-trends-across-draft-rounds-for-batters-and-pitchers",
+    "title": "4  Interactive D3 Components",
+    "section": "",
+    "text": "4.1.1 Batting Statistics\nThe first scatter plot below visualizes the Wins Above Replacement (WAR) for MLB batting draftees across draft rounds. Each point represents a player, colored based on their batting hand: right-handed, left-handed, or switch-hitter.\n\n4.1.1.1 Key Observations:\n\nWAR Decreases with Later Draft Rounds: As expected, players drafted in earlier rounds (e.g., rounds 1-10) tend to have higher WAR, while later rounds show diminishing returns.\nSwitch-Hitters Have Some High WAR Values: While fewer switch-hitters are drafted, some exhibit significant WAR, indicating that ambidextrous batting can lead to greater utility for teams.\nOutliers in Later Rounds: A few players from rounds 20 and beyond have exceptionally high WAR, demonstrating the occasional success of undervalued players or late bloomers.\n\n\n\n\n\n\n\n\n4.1.2 Pitching Statistics\nThe second scatter plot below examines Wins Above Replacement (WAR) for MLB pitching draftees across draft rounds. Each point represents a pitcher, colored based on their throwing hand: right-handed or left-handed.\n\n4.1.2.1 Key Observations:\n\nConsistent Decline in WAR Across Rounds: Similar to batting, earlier-round pitchers exhibit higher WAR, while later rounds show a steep decline.\nLeft-Handed Pitchers: Left-handed pitchers are more sparsely distributed but occasionally achieve high WAR, reflecting the possible demand for left-handed specialists.\nOutliers: A handful of late-round picks exceed expectations with WAR values comparable to early-round selections, underlying the unpredictable nature of pitching talent.\n\n\n\n\n\n\n\n\n4.1.3 Why these Interactive Components Are Useful?\n\n4.1.3.1 1. Hover for Detailed Player Insights:\n\nHovering over a data point reveals detailed player information such as name, WAR, draft round, and pick number. This interactivity allows users to explore specific players’ data without worrying about cluttering the graph.\n\n\n\n4.1.3.2 2. Zoom in and out functionality:\n\nThe zoom functionality lets users focus on specific draft rounds or WAR ranges, which is especially useful for analyzing dense areas in the scatter plot.\n\n\n\n4.1.3.3 3. Color Coding:\n\nThe use of color to represent batting and pitching hands (e.g., right-handed vs. left-handed players) provides immediate visual differentiation, helping users identify trends related to player attributes.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Interactive D3 Components</span>"
     ]
   }
 ]
