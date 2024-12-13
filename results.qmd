@@ -277,11 +277,11 @@ players <- bind_rows(bat_stats_df, pitch_stats_df) |>
 
 players$time_played <- (players$mlb_played_last - players$mlb_played_first) + 1
 
-ggplot(players, aes(x = time_played, y=fWAR)) +
-  geom_point(fill="white", shape=21, size=2, alpha = 0.8) +
-  geom_hline(yintercept = mean(players$fWAR,na.rm=T), 
+ggplot(players, aes(x = factor(time_played), y = fWAR)) + 
+  geom_boxplot(fill = "lightblue", alpha = 0.7, outlier.color = "red", outlier.size = 1.5) +
+  geom_hline(yintercept = mean(players$fWAR, na.rm = TRUE), 
              color = "red", linetype = "dashed", alpha = 0.8) + 
-  geom_vline(xintercept = mean(players$time_played,na.rm=T), 
+  geom_vline(xintercept = mean(players$time_played, na.rm = TRUE), 
              color = "blue", linetype = "dashed", alpha = 0.8) +
   geom_text(aes(x = mean(players$time_played,na.rm=T)+8, 
                 y = mean(players$fWAR,na.rm=T)+5, 
@@ -290,15 +290,18 @@ ggplot(players, aes(x = time_played, y=fWAR)) +
   geom_text(aes(x = mean(players$time_played,na.rm=T)+0.5, 
                 y = mean(players$fWAR,na.rm=T)+40, 
                 label = paste("Mean Time")), 
-            color = "blue", hjust = 0, vjust = -10, alpha = 0.8) +  
+            color = "blue", hjust = 0, vjust = -10, alpha = 0.8) + 
   labs(title = "Total Time in MLB vs. WAR", 
-       x = "Total Time Played in MLB", y = "Wins Above Replacement") +
+       x = "Total Time Played in MLB", 
+       y = "Wins Above Replacement") +
   theme_minimal() +
   theme(plot.title = element_text(size = 12, face = "bold"),
         axis.title = element_text(size = 12, face = "bold"),
         axis.text = element_text(size = 10),
         legend.title = element_text(size = 10, face = "bold"),
         legend.text = element_text(size = 10))
+
+
 ```
 
 ## How often do Player Draftees make the MLB?
