@@ -2,7 +2,7 @@
 
 ## What Is the Relationship Between a Draftee's Draft Round and Their School Level Status?
 
-We made a stacked bar chart that displayed the percentage of draftees by round, with colors indicating high school status at the time of drafting, in order to examine the relationship between draft round and high school status. This stacked bar chart analysis shows that a much less number of high school athletes are selected as the first ten rounds go.
+We made a stacked bar chart that displayed the percentage of draftees by round, with colors indicating high school or college status at the time of drafting, in order to examine the relationship between draft round and school status. This stacked bar chart analysis shows that as the first ten rounds go, the number of high school athletes that are selected decreases.
 
 ```{r stackedbarchart, fig.align='center', warning=FALSE}
 #| message: false
