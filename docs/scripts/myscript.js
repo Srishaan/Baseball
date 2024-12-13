@@ -67,7 +67,7 @@ d3.csv("https://raw.githubusercontent.com/a1anw0ng/Baseball/refs/heads/main/data
     const xAxisGroup = zoomGroup.append("g")
       .attr("class", "x-axis")
       .attr("transform", `translate(0, ${height})`)
-      .call(d3.axisBottom(xScale).ticks(Math.ceil(d3.max(filteredData, d => d.pick_round)))); 
+      .call(d3.axisBottom(xScale).ticks(width / 100).tickFormat(d => (d % 5 === 0 ? d : ""))); 
 
     const yAxisGroup = zoomGroup.append("g")
       .attr("class", "y-axis")
@@ -120,7 +120,8 @@ d3.csv("https://raw.githubusercontent.com/a1anw0ng/Baseball/refs/heads/main/data
 
         points.attr("cx", d => newXScale(d.pick_round))
               .attr("cy", d => newYScale(d.fWAR));
-      });
+    });
+      
 
     svg.call(zoom);
 
@@ -219,7 +220,7 @@ d3.csv("https://raw.githubusercontent.com/a1anw0ng/Baseball/refs/heads/main/data
     const xAxisGroup = zoomGroup.append("g")
       .attr("class", "x-axis")
       .attr("transform", `translate(0, ${height})`)
-      .call(d3.axisBottom(xScale).ticks(Math.ceil(d3.max(filteredData, d => d.pick_round)))); 
+      .call(d3.axisBottom(xScale).ticks(width / 100).tickFormat(d => (d % 5 === 0 ? d : ""))); 
 
     const yAxisGroup = zoomGroup.append("g")
       .attr("class", "y-axis")
