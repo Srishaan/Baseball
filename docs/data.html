@@ -164,7 +164,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./d3graph.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Interactive Components in D3</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Interactive D3 Components</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -184,8 +184,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#description" id="toc-description" class="nav-link active" data-scroll-target="#description"><span class="header-section-number">2.1</span> Description</a></li>
-  <li><a href="#missing-value-analysis" id="toc-missing-value-analysis" class="nav-link" data-scroll-target="#missing-value-analysis"><span class="header-section-number">2.2</span> Missing value analysis</a></li>
-  <li><a href="#cleaning" id="toc-cleaning" class="nav-link" data-scroll-target="#cleaning"><span class="header-section-number">2.3</span> Cleaning</a></li>
+  <li><a href="#missing-value-analysis" id="toc-missing-value-analysis" class="nav-link" data-scroll-target="#missing-value-analysis"><span class="header-section-number">2.2</span> Missing Value Analysis</a>
+  <ul class="collapse">
+  <li><a href="#batting-statistics-dataset" id="toc-batting-statistics-dataset" class="nav-link" data-scroll-target="#batting-statistics-dataset"><span class="header-section-number">2.2.1</span> Batting Statistics Dataset</a></li>
+  <li><a href="#pitching-statistics-dataset" id="toc-pitching-statistics-dataset" class="nav-link" data-scroll-target="#pitching-statistics-dataset"><span class="header-section-number">2.2.2</span> Pitching Statistics Dataset</a></li>
+  <li><a href="#chadwick-dataset" id="toc-chadwick-dataset" class="nav-link" data-scroll-target="#chadwick-dataset"><span class="header-section-number">2.2.3</span> Chadwick Dataset</a></li>
+  <li><a href="#draft-dataset" id="toc-draft-dataset" class="nav-link" data-scroll-target="#draft-dataset"><span class="header-section-number">2.2.4</span> Draft Dataset</a></li>
+  </ul></li>
+  <li><a href="#cleaning" id="toc-cleaning" class="nav-link" data-scroll-target="#cleaning"><span class="header-section-number">2.3</span> Cleaning</a>
+  <ul class="collapse">
+  <li><a href="#clean-draft-dataset" id="toc-clean-draft-dataset" class="nav-link" data-scroll-target="#clean-draft-dataset"><span class="header-section-number">2.3.1</span> Clean Draft Dataset</a></li>
+  <li><a href="#clean-batting-and-pitching-subsets" id="toc-clean-batting-and-pitching-subsets" class="nav-link" data-scroll-target="#clean-batting-and-pitching-subsets"><span class="header-section-number">2.3.2</span> Clean Batting and Pitching Subsets</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/Srishaan/Baseball/edit/main/data.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/Srishaan/Baseball/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -214,13 +224,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="description" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="description"><span class="header-section-number">2.1</span> Description</h2>
 <p>For this project, there are four key data sources that will be utilized.</p>
-<p>The first two datasets are obtained using the <a href="https://github.com/jldbc/pybaseball"><code>pybaseball</code></a> package, a Python library (last updated on September 8, 2023 with updates every 1-2 months on average) that is provides access to various reputable baseball sources such as <a href="https://www.fangraphs.com/">FanGraphs</a> and <a href="https://www.baseball-reference.com/">Baseball Reference</a>. By utilizing <code>pybaseball</code>’s implemented <code>batting_stats()</code> and <code>pitching_stats()</code> functions, we get the batting data and pitching statistics for MLB players, saved as “batting_stats.csv” and “pitching_stats.csv”, respectively. The batting statistics dataset has dimensions of 10,665 × 319, and the pitching statistics dataset has the dimensions of 6,423 × 392.</p>
-<p>The last two datasets are sourced from <a href="https://billpetti.github.io/baseballr/"><code>BaseballR</code></a> package, an R library (last updated on January 16, 2024 with updates every 2-3 months on average) designed for accessing and analyzing baseball data from other reputable sources such as Statcast (an analytics system used by the MLB to track baseball data) and <a href="https://baseballsavant.mlb.com/">Baseball Savant</a>. Using the <code>BaseballR</code> package, we retrieve baseball draft data for each year from 1965 to 2023, which includes details about player drafts such as team, round, and selection year, saved as “draft_df.csv”. Additionally, we run the <code>chadwick_player_lu()</code> function from <code>BaseballR</code> to get a database of player biographical and career information from the Chadwick Baseball Bureau, which we save as “chadwick_data.csv”. The draft dataset has dimensions of 67903 x 84 and the Chadwick player dataset has dimensions of 512843 x 40.</p>
+<p>The first two datasets are obtained using the <a href="https://github.com/jldbc/pybaseball"><code>pybaseball</code></a> package, a Python library (last updated on September 8, 2023 with updates every 1-2 months on average) that provides access to various reputable baseball sources such as <a href="https://www.fangraphs.com/">FanGraphs</a> and <a href="https://www.baseball-reference.com/">Baseball Reference</a>. By utilizing <code>pybaseball</code>’s implemented <code>batting_stats()</code> and <code>pitching_stats()</code> functions, we get the batting data and pitching statistics for MLB players, saved as “batting_stats.csv” and “pitching_stats.csv”, respectively. The batting statistics dataset has dimensions of 10,665 × 319, and the pitching statistics dataset has the dimensions of 6,423 × 392.</p>
+<p>The last two datasets are sourced from <a href="https://billpetti.github.io/baseballr/"><code>BaseballR</code></a> package, an R library (last updated on January 16, 2024 with updates every 2-3 months on average) designed for accessing and analyzing baseball data from other reputable sources such as Statcast (an analytics system used by the MLB to track baseball data) and <a href="https://baseballsavant.mlb.com/">Baseball Savant</a>. Using the <code>BaseballR</code> package, we retrieve baseball draft data for each year from 1965 to 2023, which includes details about player drafts such as team, round, and selection year, saved as “draft_df.csv”. Additionally, we run the <code>chadwick_player_lu()</code> function from <code>BaseballR</code> to get a database of player biographical and career information from the Chadwick Baseball Bureau, which we save as “chadwick_data.csv”. The draft dataset has dimensions of 67,903 x 84 and the Chadwick player dataset has dimensions of 512,843 x 40.</p>
 <p>The main issues/problems with the data is that there are missing values present, and an in-depth analysis about this will be provided in the missing value analysis section below.</p>
 </section>
 <section id="missing-value-analysis" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="missing-value-analysis"><span class="header-section-number">2.2</span> Missing value analysis</h2>
-<p>Within our data, we see a plethora of missing values from each of our data sets.</p>
+<h2 data-number="2.2" class="anchored" data-anchor-id="missing-value-analysis"><span class="header-section-number">2.2</span> Missing Value Analysis</h2>
+<p>Within our data, we see many missing values from each of our data sets.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -229,7 +239,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Within our batting statistics dataset, there are a large amount of missing values, where even some variables have the same amount of missing values as there are rows in the dataset. For variables that have this situation, it is due to that feature not being applicable for batters. For example, a variable tracking a specific pitch type (like <code>UN%</code> or <code>FT%</code>) will not have data since the data primarily focuses on batting. There are some variables that contain some missing variables, which may be due to data collection gaps or data source limitation. Other common statistics though, such as <code>AB</code> (At Bats), <code>H</code> (Hits), and <code>RBI</code> (Runs Batted In), are core metrics in baseball datasets and are therefore recorded in our dataset without missing values. Due to the large nature of this dataset where there are over 319 variables, a summary of missing values is included instead of a heatmap visually showing the missing values of each variable at each column. A count of how many columns contain missing values and how many do not is also shown for greater clarification on the significant amount of missing variables.</p>
+<section id="batting-statistics-dataset" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="batting-statistics-dataset"><span class="header-section-number">2.2.1</span> Batting Statistics Dataset</h3>
+<p>Within our batting statistics dataset, there are a large amount of missing values, where even some variables have the same amount of missing values as there are rows in the dataset. For variables that have this situation, it is due to that feature not being applicable for batters. For example, a variable tracking a specific pitch type (like <code>UN%</code> or <code>FT%</code>) will not have data since the data primarily focuses on batting. There are some variables that contain some missing values, which may be due to data collection gaps or data source limitation. Other common statistics though, such as <code>AB</code> (At Bats), <code>H</code> (Hits), and <code>RBI</code> (Runs Batted In), are core metrics in baseball datasets and are therefore recorded in our dataset without missing values. Due to the large nature of this dataset where there are 319 variables, a summary of missing values is included instead of a heatmap visually showing the missing values of each variable at each column. A count of how many columns contain missing values and how many do not is also shown for greater clarification on the significant amount of missing variables.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -278,7 +290,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>Batting Columns without NA values: 49 </code></pre>
 </div>
 </div>
-<p>Within our pitching statistics dataset, there are also a large amount of missing values, though there are not as many variables nor observations as that of the batting dataset. Again, some variables contain have the same amount of missing values as there are rows in the dataset. For variables that have this situation, it is due to that feature not being applicable for pitchers. For example, a variable tracking advanced metrics such as <code>Stf+ FO</code> (Stuff+ for Four-Seam Fastballs) or <code>Loc+ FO</code> (Location+ for Four-Seam Fastballs) will not have data since these variables require specific conditions or a sufficient sample size of pitches to calculate, making them inapplicable to all pitchers. There are some variables that contain some missing values, which may be due to data collection gaps or data source limitations. Other common statistics, such as <code>W</code> (Wins), <code>L</code> (Losses), and <code>ERA</code> (Earned Run Average), are core metrics in baseball datasets and are therefore recorded in our dataset without missing values. Due to the large nature of this dataset where there are over 392 variables, a summary of missing values is included instead of a heatmap visually showing the missing values of each variable at each column. A count of how many columns contain missing values and how many do not is also shown for greater clarification on the significant amount of missing variables.</p>
+</section>
+<section id="pitching-statistics-dataset" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="pitching-statistics-dataset"><span class="header-section-number">2.2.2</span> Pitching Statistics Dataset</h3>
+<p>Within our pitching statistics dataset, there are also a large amount of missing values, though there are not as many variables nor observations as that of the batting dataset. Again, some variables in this dataset have the same amount of missing values as there are rows in the dataset. For variables that have this situation, it is due to that feature not being applicable for pitchers. For example, a variable tracking advanced metrics such as <code>Stf+ FO</code> (Stuff+ for Four-Seam Fastballs) or <code>Loc+ FO</code> (Location+ for Four-Seam Fastballs) will not have data since these variables require specific conditions or a sufficient sample size of pitches to calculate, making them inapplicable to all pitchers. There are some variables that contain some missing values, which may be due to data collection gaps or data source limitations. Other common statistics, such as <code>W</code> (Wins), <code>L</code> (Losses), and <code>ERA</code> (Earned Run Average), are core metrics in baseball datasets and are therefore recorded in our dataset without missing values. Due to the large nature of this dataset where there are 392 variables, a summary of missing values is included instead of a heatmap visually showing the missing values of each variable. A count of how many columns contain missing values and how many do not is also shown for greater clarification on the significant amount of missing variables.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -331,7 +346,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>Pitching Columns without NA values: 48 </code></pre>
 </div>
 </div>
-<p>Missing values are also present within the Chadwick data, which contains the biographical and career information of people associated with the MLB. Some columns are seen to be entirely misisng given that they are shown as solid red bars, which suggests that these variables are either not relevant to the dataset’s context or represent data that was not collected. Other columns have a mix of missing and non-missing values, which means that these variables may suffer from data collection gaps or were conditionally applicable, such as metrics that may applicable to baseball managers or metrics that were unavailable for certain time periods. Lastly, columns with no missing values as seen with white bars represent essential metrics such as a person’s name and position in the MLB. These metrics are recorded across the Chadwick dataset which shows that despite it having missing data present, its key metrics still are reliably available for analysis.</p>
+</section>
+<section id="chadwick-dataset" class="level3" data-number="2.2.3">
+<h3 data-number="2.2.3" class="anchored" data-anchor-id="chadwick-dataset"><span class="header-section-number">2.2.3</span> Chadwick Dataset</h3>
+<p>Missing values are also present within the Chadwick data, which contains the biographical and career information of people associated with the MLB. Some columns are seen to be entirely missing given that they are shown as solid red bars, which suggests that these variables are either not relevant to the dataset’s context or represent data that was not collected. Other columns have a mix of missing and non-missing values, which means that these variables may suffer from data collection gaps or were conditionally applicable, such as metrics that may applicable to baseball managers or metrics that were unavailable for certain time periods. Lastly, columns with no missing values as seen with white bars represent essential metrics such as a person’s name and position in the MLB. These metrics are recorded across the Chadwick dataset which shows that despite the dataset having missing data present, its key metrics still are reliably available for analysis.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -367,7 +385,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Lastly, missing values were also present within the draft data containing the team, round, and selection year of a player. To visualize the missing values in this dataset, I selected the top 20 variables with the most missing values and the top 20 with the least missing values. This was done due to there being a large amount of variables present in the dataset, though it was not as extensive as those in the batting and pitching datasets. Some columns are seen to be entirely misisng given that they are shown as solid red bars, which suggests that they might not be applicable to the dataset’s context, such as fields related to specific player demographics or draft-related outcomes that were not recorded. Other columns have a mix of missing and non-missing values, which means that these variables may suffer from data collection gaps or were attributes relevant only to certain players, teams, or draft rounds. Lastly, columns with no missing values as seen with white bars represent essential metrics such as a player’s name, their draft pick numbers, or other key metrics that are consistently recorded. These metrics are recorded throughout the draft dataset, which still demonstrates that while missing data is also present in this dataset, the key metrics in this dataset also still remain reliably available for analysis.</p>
+</section>
+<section id="draft-dataset" class="level3" data-number="2.2.4">
+<h3 data-number="2.2.4" class="anchored" data-anchor-id="draft-dataset"><span class="header-section-number">2.2.4</span> Draft Dataset</h3>
+<p>Lastly, missing values were also present within the draft data containing the team, round, and selection year of a player. To visualize the missing values in this dataset, I selected the top 20 variables with the most missing values and the top 20 with the least missing values. This was done due to there being a large amount of variables present in the dataset, though it was not as extensive as those in the batting and pitching datasets. Some columns are seen to be entirely missing given that they are shown as solid red bars, which suggests that they might not be applicable to the dataset’s context, such as fields related to specific player demographics or draft-related outcomes that were not recorded. Other columns have a mix of missing and non-missing values, which means that these variables may suffer from data collection gaps or were attributes relevant only to certain players, teams, or draft rounds. Lastly, columns with no missing values as seen with white bars represent essential metrics such as a player’s name, their draft pick numbers, or other key metrics that are consistently recorded. These metrics are recorded throughout the draft dataset, which still demonstrates that while missing data is also present in this dataset, the key metrics in this dataset also still remain reliably available for analysis.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -421,8 +442,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
+</section>
 <section id="cleaning" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="cleaning"><span class="header-section-number">2.3</span> Cleaning</h2>
+<section id="clean-draft-dataset" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="clean-draft-dataset"><span class="header-section-number">2.3.1</span> Clean Draft Dataset</h3>
 <p>To address the missing values in our datasets, we have performed data cleaning. By combining the draft data and the Chadwick data, we now have a comprehensive dataset that includes a player’s draft information as well as their biological and career details. Unnecessary variables have been removed to reduce the overall presence of missing values, while retaining valuable information such as a player’s draft round and height. Consistency has been ensured in both datasets regarding the formatting of variables like height and place of origin, facilitating a smooth merging process. New columns were created to represent the year of a player’s MLB debut and the year they last played, player height was converted into total inches, and state abbreviations in school names were extracted and corrected.</p>
 <div class="cell">
 <details class="code-fold">
@@ -470,14 +494,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">person_id =</span> key_mlbam,</span>
 <span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a>         <span class="at">fg_playerID =</span> key_fangraphs) <span class="sc">|&gt;</span> </span>
 <span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(mlb_played_first) <span class="sc">|&gt;</span> </span>
-<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(person_id) <span class="co"># Remove players we don't have an identifier for</span></span>
+<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(person_id) </span>
 <span id="cb20-45"><a href="#cb20-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-46"><a href="#cb20-46" aria-hidden="true" tabindex="-1"></a><span class="co"># missing height is formatted as 0' 0" (0 feet 0 inches tall)</span></span>
+<span id="cb20-46"><a href="#cb20-46" aria-hidden="true" tabindex="-1"></a><span class="co"># missing height is formatted as 0' 0" </span></span>
 <span id="cb20-47"><a href="#cb20-47" aria-hidden="true" tabindex="-1"></a>missing_height <span class="ot">&lt;-</span> draft_info<span class="sc">$</span>person_height[<span class="dv">57</span>]</span>
 <span id="cb20-48"><a href="#cb20-48" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-49"><a href="#cb20-49" aria-hidden="true" tabindex="-1"></a>draft_info <span class="ot">&lt;-</span> </span>
 <span id="cb20-50"><a href="#cb20-50" aria-hidden="true" tabindex="-1"></a>  draft_info <span class="sc">|&gt;</span> </span>
-<span id="cb20-51"><a href="#cb20-51" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add the chadwick player info, particularly the `fg_playerID`</span></span>
+<span id="cb20-51"><a href="#cb20-51" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add the chadwick player info</span></span>
 <span id="cb20-52"><a href="#cb20-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(chadwick <span class="sc">|&gt;</span> </span>
 <span id="cb20-53"><a href="#cb20-53" aria-hidden="true" tabindex="-1"></a>               <span class="fu">select</span>(<span class="sc">-</span>person_full_name, <span class="sc">-</span>person_birth_date, <span class="sc">-</span>person_full_fml_name,</span>
 <span id="cb20-54"><a href="#cb20-54" aria-hidden="true" tabindex="-1"></a>                      <span class="sc">-</span>mlb_played_first, <span class="sc">-</span>mlb_played_last), </span>
@@ -494,122 +518,103 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb20-65"><a href="#cb20-65" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the indices for the elements which contain a state abbreviation</span></span>
 <span id="cb20-66"><a href="#cb20-66" aria-hidden="true" tabindex="-1"></a>draft_index <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">str_detect</span>(draft_info<span class="sc">$</span>school_name, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">((.*?)</span><span class="sc">\\</span><span class="st">)"</span>))</span>
 <span id="cb20-67"><a href="#cb20-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-68"><a href="#cb20-68" aria-hidden="true" tabindex="-1"></a><span class="co"># List with all the match results for the pattern "(letters)"</span></span>
-<span id="cb20-69"><a href="#cb20-69" aria-hidden="true" tabindex="-1"></a>draft_list <span class="ot">&lt;-</span> <span class="fu">str_match_all</span>(draft_info<span class="sc">$</span>school_name, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">((.*?)</span><span class="sc">\\</span><span class="st">)"</span>)</span>
-<span id="cb20-70"><a href="#cb20-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-71"><a href="#cb20-71" aria-hidden="true" tabindex="-1"></a><span class="co"># Extracts the text within the "()", and stores it as a vector</span></span>
-<span id="cb20-72"><a href="#cb20-72" aria-hidden="true" tabindex="-1"></a>draft_states <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">lapply</span>(draft_list, <span class="cf">function</span>(x) {x[, <span class="dv">2</span>]}))</span>
-<span id="cb20-73"><a href="#cb20-73" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(draft_list) <span class="co"># Remove the list form of the home states</span></span>
-<span id="cb20-74"><a href="#cb20-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-75"><a href="#cb20-75" aria-hidden="true" tabindex="-1"></a><span class="co"># Removes any results where there was an NA result generated</span></span>
-<span id="cb20-76"><a href="#cb20-76" aria-hidden="true" tabindex="-1"></a>draft_states <span class="ot">&lt;-</span> draft_states[<span class="sc">!</span><span class="fu">is.na</span>(draft_states)]</span>
-<span id="cb20-77"><a href="#cb20-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-78"><a href="#cb20-78" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the index for the draft_stats which contain the pattern ", "</span></span>
-<span id="cb20-79"><a href="#cb20-79" aria-hidden="true" tabindex="-1"></a>comma_index <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">str_detect</span>(draft_states, <span class="st">",</span><span class="sc">\\</span><span class="st">s"</span>))</span>
+<span id="cb20-68"><a href="#cb20-68" aria-hidden="true" tabindex="-1"></a>draft_list <span class="ot">&lt;-</span> <span class="fu">str_match_all</span>(draft_info<span class="sc">$</span>school_name, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">((.*?)</span><span class="sc">\\</span><span class="st">)"</span>)</span>
+<span id="cb20-69"><a href="#cb20-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-70"><a href="#cb20-70" aria-hidden="true" tabindex="-1"></a><span class="co"># Extracts the text within the "()", and stores it as a vector</span></span>
+<span id="cb20-71"><a href="#cb20-71" aria-hidden="true" tabindex="-1"></a>draft_states <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">lapply</span>(draft_list, <span class="cf">function</span>(x) {x[, <span class="dv">2</span>]}))</span>
+<span id="cb20-72"><a href="#cb20-72" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(draft_list) </span>
+<span id="cb20-73"><a href="#cb20-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-74"><a href="#cb20-74" aria-hidden="true" tabindex="-1"></a>draft_states <span class="ot">&lt;-</span> draft_states[<span class="sc">!</span><span class="fu">is.na</span>(draft_states)]</span>
+<span id="cb20-75"><a href="#cb20-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-76"><a href="#cb20-76" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the index for the draft_stats which contain the pattern ", "</span></span>
+<span id="cb20-77"><a href="#cb20-77" aria-hidden="true" tabindex="-1"></a>comma_index <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">str_detect</span>(draft_states, <span class="st">",</span><span class="sc">\\</span><span class="st">s"</span>))</span>
+<span id="cb20-78"><a href="#cb20-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-79"><a href="#cb20-79" aria-hidden="true" tabindex="-1"></a>comma_states <span class="ot">&lt;-</span> draft_states[comma_index]</span>
 <span id="cb20-80"><a href="#cb20-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-81"><a href="#cb20-81" aria-hidden="true" tabindex="-1"></a><span class="co"># Extracts the states with the pattern ", " from `draft_states`</span></span>
-<span id="cb20-82"><a href="#cb20-82" aria-hidden="true" tabindex="-1"></a>comma_states <span class="ot">&lt;-</span> draft_states[comma_index]</span>
-<span id="cb20-83"><a href="#cb20-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-84"><a href="#cb20-84" aria-hidden="true" tabindex="-1"></a><span class="co"># Determines if there are any incorrect patterns</span></span>
-<span id="cb20-85"><a href="#cb20-85" aria-hidden="true" tabindex="-1"></a>wrong <span class="ot">&lt;-</span> comma_states[<span class="fu">which</span>(<span class="sc">!</span><span class="fu">str_detect</span>(comma_states, <span class="st">", ([:alpha:]+)"</span>))]</span>
-<span id="cb20-86"><a href="#cb20-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-87"><a href="#cb20-87" aria-hidden="true" tabindex="-1"></a><span class="co"># Replaces the pattern within the `comma_states` manually</span></span>
-<span id="cb20-88"><a href="#cb20-88" aria-hidden="true" tabindex="-1"></a>comma_states[<span class="fu">which</span>(<span class="sc">!</span><span class="fu">str_detect</span>(comma_states, <span class="st">", ([:alpha:]+)"</span>))] <span class="ot">&lt;-</span> <span class="st">", FL"</span></span>
-<span id="cb20-89"><a href="#cb20-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-90"><a href="#cb20-90" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the letters which follow the ", " pattern into a vector</span></span>
-<span id="cb20-91"><a href="#cb20-91" aria-hidden="true" tabindex="-1"></a>comma_states <span class="ot">&lt;-</span> </span>
-<span id="cb20-92"><a href="#cb20-92" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_match_all</span>(comma_states, <span class="st">", ([:alpha:]+)"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb20-93"><a href="#cb20-93" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lapply</span>(<span class="cf">function</span>(x) {x[, <span class="dv">2</span>]})</span>
-<span id="cb20-94"><a href="#cb20-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-95"><a href="#cb20-95" aria-hidden="true" tabindex="-1"></a><span class="co"># There was an error, so it was detecting Louis and MO</span></span>
-<span id="cb20-96"><a href="#cb20-96" aria-hidden="true" tabindex="-1"></a>comma_states[[<span class="dv">2525</span>]] <span class="ot">&lt;-</span> comma_states[[<span class="dv">2525</span>]][<span class="dv">2</span>]</span>
-<span id="cb20-97"><a href="#cb20-97" aria-hidden="true" tabindex="-1"></a><span class="co"># Unlist it into a single vector</span></span>
-<span id="cb20-98"><a href="#cb20-98" aria-hidden="true" tabindex="-1"></a>comma_states <span class="ot">&lt;-</span> comma_states <span class="sc">|&gt;</span> <span class="fu">unlist</span>()</span>
-<span id="cb20-99"><a href="#cb20-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-100"><a href="#cb20-100" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace the comma states with the correct abbreviations</span></span>
-<span id="cb20-101"><a href="#cb20-101" aria-hidden="true" tabindex="-1"></a>draft_states[comma_index] <span class="ot">&lt;-</span> comma_states</span>
-<span id="cb20-102"><a href="#cb20-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-103"><a href="#cb20-103" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a new variable home_state</span></span>
-<span id="cb20-104"><a href="#cb20-104" aria-hidden="true" tabindex="-1"></a>draft_info <span class="ot">&lt;-</span> draft_info <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">home_state =</span> person_birth_state_province)</span>
+<span id="cb20-81"><a href="#cb20-81" aria-hidden="true" tabindex="-1"></a>wrong <span class="ot">&lt;-</span> comma_states[<span class="fu">which</span>(<span class="sc">!</span><span class="fu">str_detect</span>(comma_states, <span class="st">", ([:alpha:]+)"</span>))]</span>
+<span id="cb20-82"><a href="#cb20-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-83"><a href="#cb20-83" aria-hidden="true" tabindex="-1"></a>comma_states[<span class="fu">which</span>(<span class="sc">!</span><span class="fu">str_detect</span>(comma_states, <span class="st">", ([:alpha:]+)"</span>))] <span class="ot">&lt;-</span> <span class="st">", FL"</span></span>
+<span id="cb20-84"><a href="#cb20-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-85"><a href="#cb20-85" aria-hidden="true" tabindex="-1"></a>comma_states <span class="ot">&lt;-</span> </span>
+<span id="cb20-86"><a href="#cb20-86" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_match_all</span>(comma_states, <span class="st">", ([:alpha:]+)"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb20-87"><a href="#cb20-87" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lapply</span>(<span class="cf">function</span>(x) {x[, <span class="dv">2</span>]})</span>
+<span id="cb20-88"><a href="#cb20-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-89"><a href="#cb20-89" aria-hidden="true" tabindex="-1"></a>comma_states[[<span class="dv">2525</span>]] <span class="ot">&lt;-</span> comma_states[[<span class="dv">2525</span>]][<span class="dv">2</span>]</span>
+<span id="cb20-90"><a href="#cb20-90" aria-hidden="true" tabindex="-1"></a>comma_states <span class="ot">&lt;-</span> comma_states <span class="sc">|&gt;</span> <span class="fu">unlist</span>()</span>
+<span id="cb20-91"><a href="#cb20-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-92"><a href="#cb20-92" aria-hidden="true" tabindex="-1"></a>draft_states[comma_index] <span class="ot">&lt;-</span> comma_states</span>
+<span id="cb20-93"><a href="#cb20-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-94"><a href="#cb20-94" aria-hidden="true" tabindex="-1"></a>draft_info <span class="ot">&lt;-</span> draft_info <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">home_state =</span> person_birth_state_province)</span>
+<span id="cb20-95"><a href="#cb20-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-96"><a href="#cb20-96" aria-hidden="true" tabindex="-1"></a>draft_info<span class="sc">$</span>home_state[draft_index] <span class="ot">&lt;-</span> draft_states</span>
+<span id="cb20-97"><a href="#cb20-97" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(draft_index, draft_states, wrong)</span>
+<span id="cb20-98"><a href="#cb20-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-99"><a href="#cb20-99" aria-hidden="true" tabindex="-1"></a><span class="co"># Wrong abbreviations indices</span></span>
+<span id="cb20-100"><a href="#cb20-100" aria-hidden="true" tabindex="-1"></a>wrong_index <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">nchar</span>(draft_info<span class="sc">$</span>home_state) <span class="sc">&gt;</span> <span class="dv">2</span>)</span>
+<span id="cb20-101"><a href="#cb20-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-102"><a href="#cb20-102" aria-hidden="true" tabindex="-1"></a>wrong_abbrev <span class="ot">&lt;-</span> draft_info<span class="sc">$</span>home_state[wrong_index]</span>
+<span id="cb20-103"><a href="#cb20-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-104"><a href="#cb20-104" aria-hidden="true" tabindex="-1"></a>state_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">state_name =</span> state.name, <span class="at">state_abb =</span> state.abb)</span>
 <span id="cb20-105"><a href="#cb20-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-106"><a href="#cb20-106" aria-hidden="true" tabindex="-1"></a><span class="co"># Store all the draft_states to the new `draft_state` variable within `draft_info`</span></span>
-<span id="cb20-107"><a href="#cb20-107" aria-hidden="true" tabindex="-1"></a>draft_info<span class="sc">$</span>home_state[draft_index] <span class="ot">&lt;-</span> draft_states</span>
-<span id="cb20-108"><a href="#cb20-108" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(draft_index, draft_states, wrong)</span>
+<span id="cb20-106"><a href="#cb20-106" aria-hidden="true" tabindex="-1"></a>state_names_wrong <span class="ot">&lt;-</span> </span>
+<span id="cb20-107"><a href="#cb20-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">state_name =</span> wrong_abbrev[<span class="fu">which</span>(<span class="fu">tolower</span>(wrong_abbrev) <span class="sc">%in%</span> <span class="fu">tolower</span>(state.name))]) <span class="sc">|&gt;</span> </span>
+<span id="cb20-108"><a href="#cb20-108" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(state_data, <span class="at">by =</span> <span class="st">"state_name"</span>)</span>
 <span id="cb20-109"><a href="#cb20-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-110"><a href="#cb20-110" aria-hidden="true" tabindex="-1"></a><span class="co"># Wrong abbreviations indices</span></span>
-<span id="cb20-111"><a href="#cb20-111" aria-hidden="true" tabindex="-1"></a>wrong_index <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">nchar</span>(draft_info<span class="sc">$</span>home_state) <span class="sc">&gt;</span> <span class="dv">2</span>)</span>
-<span id="cb20-112"><a href="#cb20-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-113"><a href="#cb20-113" aria-hidden="true" tabindex="-1"></a><span class="co"># Find the wrong abbreviations</span></span>
-<span id="cb20-114"><a href="#cb20-114" aria-hidden="true" tabindex="-1"></a>wrong_abbrev <span class="ot">&lt;-</span> draft_info<span class="sc">$</span>home_state[wrong_index]</span>
-<span id="cb20-115"><a href="#cb20-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-116"><a href="#cb20-116" aria-hidden="true" tabindex="-1"></a>state_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">state_name =</span> state.name, <span class="at">state_abb =</span> state.abb)</span>
-<span id="cb20-117"><a href="#cb20-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-118"><a href="#cb20-118" aria-hidden="true" tabindex="-1"></a>state_names_wrong <span class="ot">&lt;-</span> </span>
-<span id="cb20-119"><a href="#cb20-119" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">state_name =</span> wrong_abbrev[<span class="fu">which</span>(<span class="fu">tolower</span>(wrong_abbrev) <span class="sc">%in%</span> <span class="fu">tolower</span>(state.name))]) <span class="sc">|&gt;</span> </span>
-<span id="cb20-120"><a href="#cb20-120" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(state_data, <span class="at">by =</span> <span class="st">"state_name"</span>)</span>
-<span id="cb20-121"><a href="#cb20-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-122"><a href="#cb20-122" aria-hidden="true" tabindex="-1"></a><span class="co"># Fix the wrong abbreviations</span></span>
-<span id="cb20-123"><a href="#cb20-123" aria-hidden="true" tabindex="-1"></a>wrong_abbrev[<span class="fu">which</span>(<span class="fu">tolower</span>(wrong_abbrev) <span class="sc">%in%</span> <span class="fu">tolower</span>(state.name))] <span class="ot">&lt;-</span> state_names_wrong<span class="sc">$</span>state_abb</span>
-<span id="cb20-124"><a href="#cb20-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-125"><a href="#cb20-125" aria-hidden="true" tabindex="-1"></a><span class="co"># For those players who didn't go to high school</span></span>
-<span id="cb20-126"><a href="#cb20-126" aria-hidden="true" tabindex="-1"></a>no_hs <span class="ot">&lt;-</span> draft_info <span class="sc">|&gt;</span> </span>
-<span id="cb20-127"><a href="#cb20-127" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(wrong_index) <span class="sc">|&gt;</span> </span>
-<span id="cb20-128"><a href="#cb20-128" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(high_school <span class="sc">==</span> <span class="st">"No"</span>)</span>
-<span id="cb20-129"><a href="#cb20-129" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-130"><a href="#cb20-130" aria-hidden="true" tabindex="-1"></a><span class="co"># Improperly formatted states</span></span>
-<span id="cb20-131"><a href="#cb20-131" aria-hidden="true" tabindex="-1"></a>wrong_states <span class="ot">&lt;-</span> </span>
-<span id="cb20-132"><a href="#cb20-132" aria-hidden="true" tabindex="-1"></a>  wrong_abbrev[<span class="fu">which</span>(<span class="sc">!</span>(<span class="fu">tolower</span>(wrong_abbrev) <span class="sc">%in%</span> <span class="fu">tolower</span>(no_hs<span class="sc">$</span>home_state)))]</span>
-<span id="cb20-133"><a href="#cb20-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-134"><a href="#cb20-134" aria-hidden="true" tabindex="-1"></a><span class="co"># Find the unique improperly formatted states</span></span>
-<span id="cb20-135"><a href="#cb20-135" aria-hidden="true" tabindex="-1"></a>wrong <span class="ot">&lt;-</span> <span class="fu">unique</span>(wrong_states) <span class="sc">|&gt;</span> <span class="fu">sort</span>()</span>
-<span id="cb20-136"><a href="#cb20-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-137"><a href="#cb20-137" aria-hidden="true" tabindex="-1"></a>correct_states <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"FL"</span>, <span class="st">"AL"</span>, <span class="st">"ALB"</span>, <span class="st">"AZ"</span>, <span class="st">"AZ"</span>, <span class="st">"AR"</span>, <span class="st">"GA"</span>, <span class="st">"MD"</span>, <span class="st">"MI"</span>, <span class="st">"AL"</span>, </span>
-<span id="cb20-138"><a href="#cb20-138" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"CA"</span>, <span class="st">"CA"</span>, <span class="st">"CA"</span>, <span class="st">"CA"</span>, <span class="st">"Canada"</span>, <span class="st">"Canada"</span>, <span class="st">"IL"</span>, </span>
-<span id="cb20-139"><a href="#cb20-139" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Christian Brothers"</span>, <span class="st">"OH"</span>, <span class="st">"OH"</span>, <span class="st">"Coahuila"</span>, <span class="st">"CO"</span>, <span class="st">"CT"</span>, <span class="st">"CA"</span>, <span class="st">"CA"</span>,</span>
-<span id="cb20-140"><a href="#cb20-140" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"DE"</span>, <span class="st">"CO"</span>, <span class="st">"FL"</span>, <span class="st">"FL"</span>, <span class="st">"FL"</span>, <span class="st">"FL"</span>, <span class="st">"FL"</span>, <span class="st">"CA"</span>, <span class="st">"HI"</span>, <span class="st">"Holland"</span>, <span class="st">"FL"</span>,</span>
-<span id="cb20-141"><a href="#cb20-141" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"HI"</span>, <span class="st">"TX"</span>, <span class="st">"IA"</span>, <span class="st">"IL"</span>, <span class="st">"IL"</span>, <span class="st">"IL"</span>, <span class="st">"IL"</span>, <span class="st">"IN"</span>, <span class="st">"IN"</span>, <span class="st">"IA"</span>,</span>
-<span id="cb20-142"><a href="#cb20-142" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"KS"</span>, <span class="st">"CA"</span>, <span class="st">"LA"</span>, <span class="st">"IA"</span>, <span class="st">"MA"</span>, <span class="st">"FL"</span>, <span class="st">"FL"</span>, <span class="st">"MI"</span>, <span class="st">"MI"</span>,</span>
-<span id="cb20-143"><a href="#cb20-143" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"MI"</span>, <span class="st">"MN"</span>, <span class="st">"MS"</span>, <span class="st">"CA"</span>, <span class="st">"NC"</span>, <span class="st">"NE"</span>, <span class="st">"NJ"</span>, <span class="st">"NJ"</span>, <span class="st">"NY"</span>,</span>
-<span id="cb20-144"><a href="#cb20-144" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"NY"</span>, <span class="st">"OH"</span>, <span class="st">"OK"</span>, <span class="st">"OK"</span>, <span class="st">"OK"</span>, <span class="st">"OR"</span>, <span class="st">"PA"</span>, <span class="st">"PA"</span>, <span class="st">"PA"</span>, <span class="st">"PA"</span>, </span>
-<span id="cb20-145"><a href="#cb20-145" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"PA"</span>, <span class="st">"CA"</span>, <span class="st">"PA"</span>, <span class="st">"PA"</span>, <span class="st">"QUE"</span>, <span class="st">"QUE"</span>, <span class="st">"S. Australia"</span>, </span>
-<span id="cb20-146"><a href="#cb20-146" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"TX"</span>, <span class="st">"CA"</span>, <span class="st">"CA"</span>, <span class="st">"SASK"</span>, <span class="st">"St Thomas"</span>, <span class="st">"CA"</span>, <span class="st">"TN"</span>, <span class="st">"TX"</span>, </span>
-<span id="cb20-147"><a href="#cb20-147" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Trabuco Hills"</span>, <span class="st">"Trinity International"</span>, <span class="st">"TX"</span>, <span class="st">"TX"</span>, </span>
-<span id="cb20-148"><a href="#cb20-148" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"US Virgin Islands"</span>, <span class="st">"Ven"</span>, <span class="st">"WA"</span>, <span class="st">"OH"</span>, <span class="st">"WV"</span>, <span class="st">"Zacatecas"</span>)</span>
-<span id="cb20-149"><a href="#cb20-149" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-150"><a href="#cb20-150" aria-hidden="true" tabindex="-1"></a><span class="co"># Corrected abbreviations</span></span>
-<span id="cb20-151"><a href="#cb20-151" aria-hidden="true" tabindex="-1"></a>corrections <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">wrong =</span> wrong, <span class="at">correct =</span> correct_states)</span>
-<span id="cb20-152"><a href="#cb20-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-153"><a href="#cb20-153" aria-hidden="true" tabindex="-1"></a><span class="co"># Correct the wrong_states abbreviations with the correct ones, unless not in U.S.A.</span></span>
-<span id="cb20-154"><a href="#cb20-154" aria-hidden="true" tabindex="-1"></a>wrong_states <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(wrong_states <span class="sc">%in%</span> corrections<span class="sc">$</span>wrong, corrections<span class="sc">$</span>correct, wrong_states)</span>
+<span id="cb20-110"><a href="#cb20-110" aria-hidden="true" tabindex="-1"></a>wrong_abbrev[<span class="fu">which</span>(<span class="fu">tolower</span>(wrong_abbrev) <span class="sc">%in%</span> <span class="fu">tolower</span>(state.name))] <span class="ot">&lt;-</span> state_names_wrong<span class="sc">$</span>state_abb</span>
+<span id="cb20-111"><a href="#cb20-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-112"><a href="#cb20-112" aria-hidden="true" tabindex="-1"></a><span class="co"># For those players who didn't go to high school</span></span>
+<span id="cb20-113"><a href="#cb20-113" aria-hidden="true" tabindex="-1"></a>no_hs <span class="ot">&lt;-</span> draft_info <span class="sc">|&gt;</span> </span>
+<span id="cb20-114"><a href="#cb20-114" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(wrong_index) <span class="sc">|&gt;</span> </span>
+<span id="cb20-115"><a href="#cb20-115" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(high_school <span class="sc">==</span> <span class="st">"No"</span>)</span>
+<span id="cb20-116"><a href="#cb20-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-117"><a href="#cb20-117" aria-hidden="true" tabindex="-1"></a><span class="co"># Improperly formatted states</span></span>
+<span id="cb20-118"><a href="#cb20-118" aria-hidden="true" tabindex="-1"></a>wrong_states <span class="ot">&lt;-</span> </span>
+<span id="cb20-119"><a href="#cb20-119" aria-hidden="true" tabindex="-1"></a>  wrong_abbrev[<span class="fu">which</span>(<span class="sc">!</span>(<span class="fu">tolower</span>(wrong_abbrev) <span class="sc">%in%</span> <span class="fu">tolower</span>(no_hs<span class="sc">$</span>home_state)))]</span>
+<span id="cb20-120"><a href="#cb20-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-121"><a href="#cb20-121" aria-hidden="true" tabindex="-1"></a>wrong <span class="ot">&lt;-</span> <span class="fu">unique</span>(wrong_states) <span class="sc">|&gt;</span> <span class="fu">sort</span>()</span>
+<span id="cb20-122"><a href="#cb20-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-123"><a href="#cb20-123" aria-hidden="true" tabindex="-1"></a>correct_states <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"FL"</span>, <span class="st">"AL"</span>, <span class="st">"ALB"</span>, <span class="st">"AZ"</span>, <span class="st">"AZ"</span>, <span class="st">"AR"</span>, <span class="st">"GA"</span>, <span class="st">"MD"</span>, <span class="st">"MI"</span>, <span class="st">"AL"</span>, </span>
+<span id="cb20-124"><a href="#cb20-124" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"CA"</span>, <span class="st">"CA"</span>, <span class="st">"CA"</span>, <span class="st">"CA"</span>, <span class="st">"Canada"</span>, <span class="st">"Canada"</span>, <span class="st">"IL"</span>, </span>
+<span id="cb20-125"><a href="#cb20-125" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Christian Brothers"</span>, <span class="st">"OH"</span>, <span class="st">"OH"</span>, <span class="st">"Coahuila"</span>, <span class="st">"CO"</span>, <span class="st">"CT"</span>, <span class="st">"CA"</span>, <span class="st">"CA"</span>,</span>
+<span id="cb20-126"><a href="#cb20-126" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"DE"</span>, <span class="st">"CO"</span>, <span class="st">"FL"</span>, <span class="st">"FL"</span>, <span class="st">"FL"</span>, <span class="st">"FL"</span>, <span class="st">"FL"</span>, <span class="st">"CA"</span>, <span class="st">"HI"</span>, <span class="st">"Holland"</span>, <span class="st">"FL"</span>,</span>
+<span id="cb20-127"><a href="#cb20-127" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"HI"</span>, <span class="st">"TX"</span>, <span class="st">"IA"</span>, <span class="st">"IL"</span>, <span class="st">"IL"</span>, <span class="st">"IL"</span>, <span class="st">"IL"</span>, <span class="st">"IN"</span>, <span class="st">"IN"</span>, <span class="st">"IA"</span>,</span>
+<span id="cb20-128"><a href="#cb20-128" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"KS"</span>, <span class="st">"CA"</span>, <span class="st">"LA"</span>, <span class="st">"IA"</span>, <span class="st">"MA"</span>, <span class="st">"FL"</span>, <span class="st">"FL"</span>, <span class="st">"MI"</span>, <span class="st">"MI"</span>,</span>
+<span id="cb20-129"><a href="#cb20-129" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"MI"</span>, <span class="st">"MN"</span>, <span class="st">"MS"</span>, <span class="st">"CA"</span>, <span class="st">"NC"</span>, <span class="st">"NE"</span>, <span class="st">"NJ"</span>, <span class="st">"NJ"</span>, <span class="st">"NY"</span>,</span>
+<span id="cb20-130"><a href="#cb20-130" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"NY"</span>, <span class="st">"OH"</span>, <span class="st">"OK"</span>, <span class="st">"OK"</span>, <span class="st">"OK"</span>, <span class="st">"OR"</span>, <span class="st">"PA"</span>, <span class="st">"PA"</span>, <span class="st">"PA"</span>, <span class="st">"PA"</span>, </span>
+<span id="cb20-131"><a href="#cb20-131" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"PA"</span>, <span class="st">"CA"</span>, <span class="st">"PA"</span>, <span class="st">"PA"</span>, <span class="st">"QUE"</span>, <span class="st">"QUE"</span>, <span class="st">"S. Australia"</span>, </span>
+<span id="cb20-132"><a href="#cb20-132" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"TX"</span>, <span class="st">"CA"</span>, <span class="st">"CA"</span>, <span class="st">"SASK"</span>, <span class="st">"St Thomas"</span>, <span class="st">"CA"</span>, <span class="st">"TN"</span>, <span class="st">"TX"</span>, </span>
+<span id="cb20-133"><a href="#cb20-133" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Trabuco Hills"</span>, <span class="st">"Trinity International"</span>, <span class="st">"TX"</span>, <span class="st">"TX"</span>, </span>
+<span id="cb20-134"><a href="#cb20-134" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"US Virgin Islands"</span>, <span class="st">"Ven"</span>, <span class="st">"WA"</span>, <span class="st">"OH"</span>, <span class="st">"WV"</span>, <span class="st">"Zacatecas"</span>)</span>
+<span id="cb20-135"><a href="#cb20-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-136"><a href="#cb20-136" aria-hidden="true" tabindex="-1"></a>corrections <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">wrong =</span> wrong, <span class="at">correct =</span> correct_states)</span>
+<span id="cb20-137"><a href="#cb20-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-138"><a href="#cb20-138" aria-hidden="true" tabindex="-1"></a>wrong_states <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(wrong_states <span class="sc">%in%</span> corrections<span class="sc">$</span>wrong, corrections<span class="sc">$</span>correct, wrong_states)</span>
+<span id="cb20-139"><a href="#cb20-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-140"><a href="#cb20-140" aria-hidden="true" tabindex="-1"></a>wrong_abbrev[<span class="fu">which</span>(<span class="sc">!</span>(<span class="fu">tolower</span>(wrong_abbrev) <span class="sc">%in%</span> <span class="fu">tolower</span>(no_hs<span class="sc">$</span>home_state)))] <span class="ot">&lt;-</span> wrong_states</span>
+<span id="cb20-141"><a href="#cb20-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-142"><a href="#cb20-142" aria-hidden="true" tabindex="-1"></a>correct_abbrev <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(wrong_abbrev <span class="sc">%in%</span> corrections<span class="sc">$</span>wrong, corrections<span class="sc">$</span>correct, wrong_abbrev)</span>
+<span id="cb20-143"><a href="#cb20-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-144"><a href="#cb20-144" aria-hidden="true" tabindex="-1"></a>draft_info<span class="sc">$</span>home_state[wrong_index] <span class="ot">&lt;-</span> correct_abbrev</span>
+<span id="cb20-145"><a href="#cb20-145" aria-hidden="true" tabindex="-1"></a>draft_info<span class="sc">$</span>home_state <span class="ot">&lt;-</span> <span class="fu">tolower</span>(draft_info<span class="sc">$</span>home_state) </span>
+<span id="cb20-146"><a href="#cb20-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-147"><a href="#cb20-147" aria-hidden="true" tabindex="-1"></a>height_list <span class="ot">&lt;-</span> <span class="fu">str_match_all</span>(draft_info<span class="sc">$</span>person_height, <span class="st">"</span><span class="sc">\\</span><span class="st">d+"</span>)</span>
+<span id="cb20-148"><a href="#cb20-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-149"><a href="#cb20-149" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the first element from feet to inches</span></span>
+<span id="cb20-150"><a href="#cb20-150" aria-hidden="true" tabindex="-1"></a>height_ft <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">unlist</span>(<span class="fu">lapply</span>(height_list, <span class="cf">function</span>(x) {x[<span class="dv">1</span>]}))) <span class="sc">*</span> <span class="dv">12</span></span>
+<span id="cb20-151"><a href="#cb20-151" aria-hidden="true" tabindex="-1"></a>height_in <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">unlist</span>(<span class="fu">lapply</span>(height_list, <span class="cf">function</span>(x) {x[<span class="dv">2</span>]}))) <span class="sc">+</span> <span class="fu">as.integer</span>(height_ft)</span>
+<span id="cb20-152"><a href="#cb20-152" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(height_list, height_ft) </span>
+<span id="cb20-153"><a href="#cb20-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-154"><a href="#cb20-154" aria-hidden="true" tabindex="-1"></a>draft_info<span class="sc">$</span>person_height <span class="ot">&lt;-</span> height_in</span>
 <span id="cb20-155"><a href="#cb20-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-156"><a href="#cb20-156" aria-hidden="true" tabindex="-1"></a><span class="co"># Update wrong_abbrev object with corrected abbreviations</span></span>
-<span id="cb20-157"><a href="#cb20-157" aria-hidden="true" tabindex="-1"></a>wrong_abbrev[<span class="fu">which</span>(<span class="sc">!</span>(<span class="fu">tolower</span>(wrong_abbrev) <span class="sc">%in%</span> <span class="fu">tolower</span>(no_hs<span class="sc">$</span>home_state)))] <span class="ot">&lt;-</span> wrong_states</span>
-<span id="cb20-158"><a href="#cb20-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-159"><a href="#cb20-159" aria-hidden="true" tabindex="-1"></a><span class="co"># Correct leftover wrong_abbrev</span></span>
-<span id="cb20-160"><a href="#cb20-160" aria-hidden="true" tabindex="-1"></a>correct_abbrev <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(wrong_abbrev <span class="sc">%in%</span> corrections<span class="sc">$</span>wrong, corrections<span class="sc">$</span>correct, wrong_abbrev)</span>
-<span id="cb20-161"><a href="#cb20-161" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-162"><a href="#cb20-162" aria-hidden="true" tabindex="-1"></a><span class="co"># Add the correct_abbrev to the draft_info</span></span>
-<span id="cb20-163"><a href="#cb20-163" aria-hidden="true" tabindex="-1"></a>draft_info<span class="sc">$</span>home_state[wrong_index] <span class="ot">&lt;-</span> correct_abbrev</span>
-<span id="cb20-164"><a href="#cb20-164" aria-hidden="true" tabindex="-1"></a>draft_info<span class="sc">$</span>home_state <span class="ot">&lt;-</span> <span class="fu">tolower</span>(draft_info<span class="sc">$</span>home_state) </span>
-<span id="cb20-165"><a href="#cb20-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-166"><a href="#cb20-166" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a list with all drafted player height</span></span>
-<span id="cb20-167"><a href="#cb20-167" aria-hidden="true" tabindex="-1"></a>height_list <span class="ot">&lt;-</span> <span class="fu">str_match_all</span>(draft_info<span class="sc">$</span>person_height, <span class="st">"</span><span class="sc">\\</span><span class="st">d+"</span>)</span>
-<span id="cb20-168"><a href="#cb20-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-169"><a href="#cb20-169" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the first element from feet to inches</span></span>
-<span id="cb20-170"><a href="#cb20-170" aria-hidden="true" tabindex="-1"></a>height_ft <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">unlist</span>(<span class="fu">lapply</span>(height_list, <span class="cf">function</span>(x) {x[<span class="dv">1</span>]}))) <span class="sc">*</span> <span class="dv">12</span></span>
-<span id="cb20-171"><a href="#cb20-171" aria-hidden="true" tabindex="-1"></a>height_in <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">unlist</span>(<span class="fu">lapply</span>(height_list, <span class="cf">function</span>(x) {x[<span class="dv">2</span>]}))) <span class="sc">+</span> <span class="fu">as.integer</span>(height_ft)</span>
-<span id="cb20-172"><a href="#cb20-172" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(height_list, height_ft) <span class="co"># Remove the height_list</span></span>
-<span id="cb20-173"><a href="#cb20-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-174"><a href="#cb20-174" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the person_height variable to inches</span></span>
-<span id="cb20-175"><a href="#cb20-175" aria-hidden="true" tabindex="-1"></a>draft_info<span class="sc">$</span>person_height <span class="ot">&lt;-</span> height_in</span>
-<span id="cb20-176"><a href="#cb20-176" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-177"><a href="#cb20-177" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(comma_index, comma_states, correct_abbrev, correct_states, height_in,</span>
-<span id="cb20-178"><a href="#cb20-178" aria-hidden="true" tabindex="-1"></a>   missing_height, wrong, wrong_abbrev, wrong_index, wrong_states, state_data,</span>
-<span id="cb20-179"><a href="#cb20-179" aria-hidden="true" tabindex="-1"></a>   state_names_wrong, no_hs, corrections)</span>
-<span id="cb20-180"><a href="#cb20-180" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-181"><a href="#cb20-181" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(draft_info, 'clean_draft.csv')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-156"><a href="#cb20-156" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(comma_index, comma_states, correct_abbrev, correct_states, height_in,</span>
+<span id="cb20-157"><a href="#cb20-157" aria-hidden="true" tabindex="-1"></a>   missing_height, wrong, wrong_abbrev, wrong_index, wrong_states, state_data,</span>
+<span id="cb20-158"><a href="#cb20-158" aria-hidden="true" tabindex="-1"></a>   state_names_wrong, no_hs, corrections)</span>
+<span id="cb20-159"><a href="#cb20-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-160"><a href="#cb20-160" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(draft_info, 'clean_draft.csv')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+<section id="missing-value-analysis-of-clean-draft-dataset" class="level4" data-number="2.3.1.1">
+<h4 data-number="2.3.1.1" class="anchored" data-anchor-id="missing-value-analysis-of-clean-draft-dataset"><span class="header-section-number">2.3.1.1</span> Missing Value Analysis of Clean Draft Dataset</h4>
 <p>Upon analyzing the cleaned draft data, some variables, such as a player’s death date and nickname, still contain missing values. This is expected, as many players are still alive and may not have nicknames. However, columns containing essential information, such as a player’s draft pick details and biological attributes, are complete, reflecting data that is uniformly available for all baseball draftees. Overall, the cleaned dataset includes 26 variables with at least one missing value and 27 variables without any missing values. This represents a significant improvement compared to the initial analysis of the draft and Chadwick datasets.</p>
 <div class="cell">
 <details class="code-fold">
@@ -689,7 +694,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>We will now create subsets of the batting and pitching data to use for our analysis. First, we will filter the columns to include only those with less than 50% missing values and remove any unnecessary variables. Next, we will create two datasets containing the complete draft information for batters and pitchers, saving them as “batters_full_draft.csv” and “pitchers_full_draft.csv.” From these full datasets, we will create subsets containing each player’s best draft pick, naming these files “batters_draft_stats.csv” and “pitchers_draft_stats.csv.” Further, we will create additional subsets of “batters_draft_stats.csv” and “pitchers_draft_stats.csv,” selecting only the variables relevant to our analysis, and save them as “batters_stats_subset.csv” and “pitchers_stats_subset.csv.” Lastly, subsets of “batters_full_draft.csv” and “pitchers_full_draft.csv” will be created, focusing on the variables needed for analysis, and these will be named “batters_draft_subset.csv” and “pitchers_draft_subset.csv.” These four subsets will serve as the foundation for our analysis, with the final two specifically being filtered by filtered by the player’s most recent draft year rather than their best draft pick in our analysis.</p>
+</section>
+</section>
+<section id="clean-batting-and-pitching-subsets" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="clean-batting-and-pitching-subsets"><span class="header-section-number">2.3.2</span> Clean Batting and Pitching Subsets</h3>
+<p>We will now create subsets of the batting and pitching data to use for our analysis. First, we will filter the columns to include only those with less than 50% missing values and remove any unnecessary variables. Next, we will create two datasets containing the complete draft information for batters and pitchers, saving them as “batters_full_draft.csv” and “pitchers_full_draft.csv.” From these full datasets, we will create subsets containing each player’s best draft pick, naming these files “batters_draft_stats.csv” and “pitchers_draft_stats.csv.” Further, we will create additional subsets of “batters_draft_stats.csv” and “pitchers_draft_stats.csv,” selecting only the variables relevant to our analysis, and save them as “batters_stats_subset.csv” and “pitchers_stats_subset.csv.” Lastly, subsets of “batters_full_draft.csv” and “pitchers_full_draft.csv” will be created, focusing on the variables needed for analysis, and these will be named “batters_draft_subset.csv” and “pitchers_draft_subset.csv.” These four subsets will serve as the foundation for our analysis, with the final two specifically being filtered by filtered by the player’s most recent draft year rather than their best draft pick in our upcoming analysis.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -755,83 +764,80 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb30-60"><a href="#cb30-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(person_id, <span class="at">.keep_all =</span> T) <span class="sc">|&gt;</span></span>
 <span id="cb30-61"><a href="#cb30-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(fWAR))</span>
 <span id="cb30-62"><a href="#cb30-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-63"><a href="#cb30-63" aria-hidden="true" tabindex="-1"></a><span class="co"># Removes players who do not have a person_birth_state_province</span></span>
-<span id="cb30-64"><a href="#cb30-64" aria-hidden="true" tabindex="-1"></a>bat_stats <span class="ot">&lt;-</span></span>
-<span id="cb30-65"><a href="#cb30-65" aria-hidden="true" tabindex="-1"></a>  bat_stats <span class="sc">|&gt;</span> </span>
-<span id="cb30-66"><a href="#cb30-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(home_state)</span>
-<span id="cb30-67"><a href="#cb30-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-68"><a href="#cb30-68" aria-hidden="true" tabindex="-1"></a><span class="co"># Select those with abbreviations with 2 letters</span></span>
-<span id="cb30-69"><a href="#cb30-69" aria-hidden="true" tabindex="-1"></a>bat_stats <span class="ot">&lt;-</span> </span>
-<span id="cb30-70"><a href="#cb30-70" aria-hidden="true" tabindex="-1"></a>  bat_stats <span class="sc">|&gt;</span> </span>
-<span id="cb30-71"><a href="#cb30-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(home_state <span class="sc">%in%</span> <span class="fu">tolower</span>(state.abb))</span>
-<span id="cb30-72"><a href="#cb30-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-73"><a href="#cb30-73" aria-hidden="true" tabindex="-1"></a><span class="co"># Full Draft information for pitcher's</span></span>
-<span id="cb30-74"><a href="#cb30-74" aria-hidden="true" tabindex="-1"></a>pitch_draft <span class="ot">&lt;-</span> </span>
-<span id="cb30-75"><a href="#cb30-75" aria-hidden="true" tabindex="-1"></a>  pitching <span class="sc">|&gt;</span> </span>
-<span id="cb30-76"><a href="#cb30-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(draft_info, <span class="at">by =</span> <span class="st">"fg_playerID"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb30-77"><a href="#cb30-77" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(person_primary_position_name <span class="sc">==</span> <span class="st">"Pitcher"</span>)</span>
+<span id="cb30-63"><a href="#cb30-63" aria-hidden="true" tabindex="-1"></a>bat_stats <span class="ot">&lt;-</span></span>
+<span id="cb30-64"><a href="#cb30-64" aria-hidden="true" tabindex="-1"></a>  bat_stats <span class="sc">|&gt;</span> </span>
+<span id="cb30-65"><a href="#cb30-65" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(home_state)</span>
+<span id="cb30-66"><a href="#cb30-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-67"><a href="#cb30-67" aria-hidden="true" tabindex="-1"></a>bat_stats <span class="ot">&lt;-</span> </span>
+<span id="cb30-68"><a href="#cb30-68" aria-hidden="true" tabindex="-1"></a>  bat_stats <span class="sc">|&gt;</span> </span>
+<span id="cb30-69"><a href="#cb30-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(home_state <span class="sc">%in%</span> <span class="fu">tolower</span>(state.abb))</span>
+<span id="cb30-70"><a href="#cb30-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-71"><a href="#cb30-71" aria-hidden="true" tabindex="-1"></a><span class="co"># Full Draft information for pitcher's</span></span>
+<span id="cb30-72"><a href="#cb30-72" aria-hidden="true" tabindex="-1"></a>pitch_draft <span class="ot">&lt;-</span> </span>
+<span id="cb30-73"><a href="#cb30-73" aria-hidden="true" tabindex="-1"></a>  pitching <span class="sc">|&gt;</span> </span>
+<span id="cb30-74"><a href="#cb30-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(draft_info, <span class="at">by =</span> <span class="st">"fg_playerID"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb30-75"><a href="#cb30-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(person_primary_position_name <span class="sc">==</span> <span class="st">"Pitcher"</span>)</span>
+<span id="cb30-76"><a href="#cb30-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-77"><a href="#cb30-77" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(pitching)</span>
 <span id="cb30-78"><a href="#cb30-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-79"><a href="#cb30-79" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(pitching)</span>
-<span id="cb30-80"><a href="#cb30-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-81"><a href="#cb30-81" aria-hidden="true" tabindex="-1"></a><span class="co"># Career Stats for each pitcher from the draft information</span></span>
-<span id="cb30-82"><a href="#cb30-82" aria-hidden="true" tabindex="-1"></a>pitch_stats <span class="ot">&lt;-</span> </span>
-<span id="cb30-83"><a href="#cb30-83" aria-hidden="true" tabindex="-1"></a>  pitch_draft <span class="sc">|&gt;</span> </span>
-<span id="cb30-84"><a href="#cb30-84" aria-hidden="true" tabindex="-1"></a>  <span class="co"># For picks whose rounds are none numerical we will designate them with a 1000</span></span>
-<span id="cb30-85"><a href="#cb30-85" aria-hidden="true" tabindex="-1"></a>  <span class="co"># to ensure it's clear that it was a supplemental draft round</span></span>
-<span id="cb30-86"><a href="#cb30-86" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pick_round =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(<span class="fu">as.numeric</span>(pick_round)), <span class="dv">1000</span>, </span>
-<span id="cb30-87"><a href="#cb30-87" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">as.numeric</span>(pick_round))) <span class="sc">|&gt;</span> </span>
-<span id="cb30-88"><a href="#cb30-88" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(person_id) <span class="sc">|&gt;</span> </span>
-<span id="cb30-89"><a href="#cb30-89" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="fu">which.min</span>(pick_round)) <span class="sc">|&gt;</span> <span class="co"># choose the lower round (the better pick)</span></span>
-<span id="cb30-90"><a href="#cb30-90" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb30-91"><a href="#cb30-91" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(person_id, <span class="at">.keep_all =</span> T) <span class="sc">|&gt;</span> </span>
-<span id="cb30-92"><a href="#cb30-92" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(fWAR))</span>
-<span id="cb30-93"><a href="#cb30-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-94"><a href="#cb30-94" aria-hidden="true" tabindex="-1"></a><span class="co"># Removes players who do not have a person_birth_state_province</span></span>
-<span id="cb30-95"><a href="#cb30-95" aria-hidden="true" tabindex="-1"></a>pitch_stats <span class="ot">&lt;-</span></span>
-<span id="cb30-96"><a href="#cb30-96" aria-hidden="true" tabindex="-1"></a>  pitch_stats <span class="sc">|&gt;</span> </span>
-<span id="cb30-97"><a href="#cb30-97" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(home_state)</span>
-<span id="cb30-98"><a href="#cb30-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-99"><a href="#cb30-99" aria-hidden="true" tabindex="-1"></a><span class="co"># Select only those with abbreviations with 2 letters</span></span>
-<span id="cb30-100"><a href="#cb30-100" aria-hidden="true" tabindex="-1"></a>pitch_stats <span class="ot">&lt;-</span> </span>
-<span id="cb30-101"><a href="#cb30-101" aria-hidden="true" tabindex="-1"></a>  pitch_stats <span class="sc">|&gt;</span>  </span>
-<span id="cb30-102"><a href="#cb30-102" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove abbreviations </span></span>
-<span id="cb30-103"><a href="#cb30-103" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(home_state <span class="sc">%in%</span> <span class="fu">tolower</span>(state.abb))</span>
-<span id="cb30-104"><a href="#cb30-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-105"><a href="#cb30-105" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(bat_draft, 'batters_full_draft.csv')</span></span>
-<span id="cb30-106"><a href="#cb30-106" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(bat_stats, 'batters_draft_stats.csv')</span></span>
-<span id="cb30-107"><a href="#cb30-107" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(pitch_draft, 'pitchers_full_draft.csv')</span></span>
-<span id="cb30-108"><a href="#cb30-108" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(pitch_stats, 'pitchers_draft_stats.csv')</span></span>
-<span id="cb30-109"><a href="#cb30-109" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(bat_stats |&gt; select(fg_playerID, person_id, person_full_name, fWAR, pick_round,</span></span>
-<span id="cb30-110"><a href="#cb30-110" aria-hidden="true" tabindex="-1"></a><span class="co">#                                pick_number, year, person_birth_state_province,</span></span>
-<span id="cb30-111"><a href="#cb30-111" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_height, person_weight, home_state,</span></span>
-<span id="cb30-112"><a href="#cb30-112" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_primary_position_abbreviation,</span></span>
-<span id="cb30-113"><a href="#cb30-113" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_bat_side_code, person_pitch_hand_code,</span></span>
-<span id="cb30-114"><a href="#cb30-114" aria-hidden="true" tabindex="-1"></a><span class="co">#                                mlb_played_first, mlb_played_last, high_school</span></span>
-<span id="cb30-115"><a href="#cb30-115" aria-hidden="true" tabindex="-1"></a><span class="co">#                                ), 'bat_stats_subset.csv')</span></span>
-<span id="cb30-116"><a href="#cb30-116" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(pitch_stats |&gt; select(fg_playerID, person_id, person_full_name, fWAR, pick_round,</span></span>
-<span id="cb30-117"><a href="#cb30-117" aria-hidden="true" tabindex="-1"></a><span class="co">#                                pick_number, year, person_birth_state_province,</span></span>
-<span id="cb30-118"><a href="#cb30-118" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_height, person_weight, home_state,</span></span>
-<span id="cb30-119"><a href="#cb30-119" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_primary_position_abbreviation,</span></span>
-<span id="cb30-120"><a href="#cb30-120" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_bat_side_code, person_pitch_hand_code,</span></span>
-<span id="cb30-121"><a href="#cb30-121" aria-hidden="true" tabindex="-1"></a><span class="co">#                                mlb_played_first, mlb_played_last, high_school</span></span>
-<span id="cb30-122"><a href="#cb30-122" aria-hidden="true" tabindex="-1"></a><span class="co">#                                ), 'pitch_stats_subset.csv')</span></span>
-<span id="cb30-123"><a href="#cb30-123" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(bat_draft |&gt; select(fg_playerID, person_id, person_full_name, fWAR, pick_round,</span></span>
-<span id="cb30-124"><a href="#cb30-124" aria-hidden="true" tabindex="-1"></a><span class="co">#                                pick_number, year, person_birth_state_province,</span></span>
-<span id="cb30-125"><a href="#cb30-125" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_height, person_weight, home_state,</span></span>
-<span id="cb30-126"><a href="#cb30-126" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_primary_position_abbreviation,</span></span>
-<span id="cb30-127"><a href="#cb30-127" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_bat_side_code, person_pitch_hand_code,</span></span>
-<span id="cb30-128"><a href="#cb30-128" aria-hidden="true" tabindex="-1"></a><span class="co">#                                mlb_played_first, mlb_played_last, high_school, birth_year</span></span>
-<span id="cb30-129"><a href="#cb30-129" aria-hidden="true" tabindex="-1"></a><span class="co">#                                ), 'bat_draft_subset.csv')</span></span>
-<span id="cb30-130"><a href="#cb30-130" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(pitch_draft |&gt; select(fg_playerID, person_id, person_full_name, fWAR, pick_round,</span></span>
-<span id="cb30-131"><a href="#cb30-131" aria-hidden="true" tabindex="-1"></a><span class="co">#                                pick_number, year, person_birth_state_province,</span></span>
-<span id="cb30-132"><a href="#cb30-132" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_height, person_weight, home_state,</span></span>
-<span id="cb30-133"><a href="#cb30-133" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_primary_position_abbreviation,</span></span>
-<span id="cb30-134"><a href="#cb30-134" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_bat_side_code, person_pitch_hand_code,</span></span>
-<span id="cb30-135"><a href="#cb30-135" aria-hidden="true" tabindex="-1"></a><span class="co">#                                mlb_played_first, mlb_played_last, high_school, birth_year</span></span>
-<span id="cb30-136"><a href="#cb30-136" aria-hidden="true" tabindex="-1"></a><span class="co">#                                ), 'pitch_draft_subset.csv')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb30-79"><a href="#cb30-79" aria-hidden="true" tabindex="-1"></a><span class="co"># Career Stats for each pitcher from the draft information</span></span>
+<span id="cb30-80"><a href="#cb30-80" aria-hidden="true" tabindex="-1"></a>pitch_stats <span class="ot">&lt;-</span> </span>
+<span id="cb30-81"><a href="#cb30-81" aria-hidden="true" tabindex="-1"></a>  pitch_draft <span class="sc">|&gt;</span> </span>
+<span id="cb30-82"><a href="#cb30-82" aria-hidden="true" tabindex="-1"></a>  <span class="co"># For picks whose rounds are none numerical we will designate them with a 1000</span></span>
+<span id="cb30-83"><a href="#cb30-83" aria-hidden="true" tabindex="-1"></a>  <span class="co"># to ensure it's clear that it was a supplemental draft round</span></span>
+<span id="cb30-84"><a href="#cb30-84" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pick_round =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(<span class="fu">as.numeric</span>(pick_round)), <span class="dv">1000</span>, </span>
+<span id="cb30-85"><a href="#cb30-85" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">as.numeric</span>(pick_round))) <span class="sc">|&gt;</span> </span>
+<span id="cb30-86"><a href="#cb30-86" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(person_id) <span class="sc">|&gt;</span> </span>
+<span id="cb30-87"><a href="#cb30-87" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="fu">which.min</span>(pick_round)) <span class="sc">|&gt;</span> <span class="co"># choose the lower round (the better pick)</span></span>
+<span id="cb30-88"><a href="#cb30-88" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb30-89"><a href="#cb30-89" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(person_id, <span class="at">.keep_all =</span> T) <span class="sc">|&gt;</span> </span>
+<span id="cb30-90"><a href="#cb30-90" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(fWAR))</span>
+<span id="cb30-91"><a href="#cb30-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-92"><a href="#cb30-92" aria-hidden="true" tabindex="-1"></a>pitch_stats <span class="ot">&lt;-</span></span>
+<span id="cb30-93"><a href="#cb30-93" aria-hidden="true" tabindex="-1"></a>  pitch_stats <span class="sc">|&gt;</span> </span>
+<span id="cb30-94"><a href="#cb30-94" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(home_state)</span>
+<span id="cb30-95"><a href="#cb30-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-96"><a href="#cb30-96" aria-hidden="true" tabindex="-1"></a>pitch_stats <span class="ot">&lt;-</span> </span>
+<span id="cb30-97"><a href="#cb30-97" aria-hidden="true" tabindex="-1"></a>  pitch_stats <span class="sc">|&gt;</span>  </span>
+<span id="cb30-98"><a href="#cb30-98" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(home_state <span class="sc">%in%</span> <span class="fu">tolower</span>(state.abb))</span>
+<span id="cb30-99"><a href="#cb30-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-100"><a href="#cb30-100" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(bat_draft, 'batters_full_draft.csv')</span></span>
+<span id="cb30-101"><a href="#cb30-101" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(bat_stats, 'batters_draft_stats.csv')</span></span>
+<span id="cb30-102"><a href="#cb30-102" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(pitch_draft, 'pitchers_full_draft.csv')</span></span>
+<span id="cb30-103"><a href="#cb30-103" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(pitch_stats, 'pitchers_draft_stats.csv')</span></span>
+<span id="cb30-104"><a href="#cb30-104" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(bat_stats |&gt; select(fg_playerID, person_id, person_full_name, fWAR, pick_round,</span></span>
+<span id="cb30-105"><a href="#cb30-105" aria-hidden="true" tabindex="-1"></a><span class="co">#                                pick_number, year, person_birth_state_province,</span></span>
+<span id="cb30-106"><a href="#cb30-106" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_height, person_weight, home_state,</span></span>
+<span id="cb30-107"><a href="#cb30-107" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_primary_position_abbreviation,</span></span>
+<span id="cb30-108"><a href="#cb30-108" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_bat_side_code, person_pitch_hand_code,</span></span>
+<span id="cb30-109"><a href="#cb30-109" aria-hidden="true" tabindex="-1"></a><span class="co">#                                mlb_played_first, mlb_played_last, high_school</span></span>
+<span id="cb30-110"><a href="#cb30-110" aria-hidden="true" tabindex="-1"></a><span class="co">#                                ), 'bat_stats_subset.csv')</span></span>
+<span id="cb30-111"><a href="#cb30-111" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(pitch_stats |&gt; select(fg_playerID, person_id, person_full_name, fWAR, pick_round,</span></span>
+<span id="cb30-112"><a href="#cb30-112" aria-hidden="true" tabindex="-1"></a><span class="co">#                                pick_number, year, person_birth_state_province,</span></span>
+<span id="cb30-113"><a href="#cb30-113" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_height, person_weight, home_state,</span></span>
+<span id="cb30-114"><a href="#cb30-114" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_primary_position_abbreviation,</span></span>
+<span id="cb30-115"><a href="#cb30-115" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_bat_side_code, person_pitch_hand_code,</span></span>
+<span id="cb30-116"><a href="#cb30-116" aria-hidden="true" tabindex="-1"></a><span class="co">#                                mlb_played_first, mlb_played_last, high_school</span></span>
+<span id="cb30-117"><a href="#cb30-117" aria-hidden="true" tabindex="-1"></a><span class="co">#                                ), 'pitch_stats_subset.csv')</span></span>
+<span id="cb30-118"><a href="#cb30-118" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(bat_draft |&gt; select(fg_playerID, person_id, person_full_name, fWAR, pick_round,</span></span>
+<span id="cb30-119"><a href="#cb30-119" aria-hidden="true" tabindex="-1"></a><span class="co">#                                pick_number, year, person_birth_state_province,</span></span>
+<span id="cb30-120"><a href="#cb30-120" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_height, person_weight, home_state,</span></span>
+<span id="cb30-121"><a href="#cb30-121" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_primary_position_abbreviation,</span></span>
+<span id="cb30-122"><a href="#cb30-122" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_bat_side_code, person_pitch_hand_code,</span></span>
+<span id="cb30-123"><a href="#cb30-123" aria-hidden="true" tabindex="-1"></a><span class="co">#                                mlb_played_first, mlb_played_last, high_school, birth_year</span></span>
+<span id="cb30-124"><a href="#cb30-124" aria-hidden="true" tabindex="-1"></a><span class="co">#                                ), 'bat_draft_subset.csv')</span></span>
+<span id="cb30-125"><a href="#cb30-125" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(pitch_draft |&gt; select(fg_playerID, person_id, person_full_name, fWAR, pick_round,</span></span>
+<span id="cb30-126"><a href="#cb30-126" aria-hidden="true" tabindex="-1"></a><span class="co">#                                pick_number, year, person_birth_state_province,</span></span>
+<span id="cb30-127"><a href="#cb30-127" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_height, person_weight, home_state,</span></span>
+<span id="cb30-128"><a href="#cb30-128" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_primary_position_abbreviation,</span></span>
+<span id="cb30-129"><a href="#cb30-129" aria-hidden="true" tabindex="-1"></a><span class="co">#                                person_bat_side_code, person_pitch_hand_code,</span></span>
+<span id="cb30-130"><a href="#cb30-130" aria-hidden="true" tabindex="-1"></a><span class="co">#                                mlb_played_first, mlb_played_last, high_school, birth_year</span></span>
+<span id="cb30-131"><a href="#cb30-131" aria-hidden="true" tabindex="-1"></a><span class="co">#                                ), 'pitch_draft_subset.csv')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>When analyzing the heatmaps for the four data subsets that we will be analyzing, we see that there are virtually no missing values present given the minimal amount of red cells present in the heatmaps. In fact, missing values are generally sparse and concentrated in specific variable(s) rather than being evenly distributed. In the all four data subsets, the amount of missing data is incredibly minimal, with small gaps appearing in variables relating to a player’s birth or home state that are likely due to inconsistencies in recording older or less-documented player data. This indicates that most essential features in these subsets are complete and ready for analysis and that variables related to biographical or supplementary information notably exhibit more missingness compared to performance metrics. Overall, the data subsets are largely complete, with the missing data unlikely to significantly impact the analysis.</p>
+<section id="missing-value-analysis-of-clean-batting-and-pitching-subsets" class="level4" data-number="2.3.2.1">
+<h4 data-number="2.3.2.1" class="anchored" data-anchor-id="missing-value-analysis-of-clean-batting-and-pitching-subsets"><span class="header-section-number">2.3.2.1</span> Missing Value Analysis of Clean Batting and Pitching Subsets</h4>
+<p>When analyzing the heatmaps for the four data subsets that we will be performing exploratory data analysis on, we see that there are virtually no missing values present given the minimal amount of red cells present in the heatmaps. In fact, missing values are generally sparse and concentrated in specific variable(s) rather than being evenly distributed. In the all four data subsets, the amount of missing data is incredibly minimal, with small gaps appearing in variables relating to a player’s birth or home state that are likely due to inconsistencies in recording older or less-documented player data. This indicates that most essential features in these subsets are complete and ready for analysis and that variables related to biographical or supplementary information notably exhibit more missingness compared to performance metrics. Overall, the data subsets are largely complete, with the missing data unlikely to significantly impact the analysis.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -974,6 +980,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 
 
+</section>
+</section>
 </section>
 
 </main> <!-- /main -->
