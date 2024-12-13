@@ -188,15 +188,21 @@ bat_stats_df1 <- bat_stats_df |>
   mutate(pick_round=as.numeric(pick_round)) |>
   drop_na()
 correlation_matrix <- cor(bat_stats_df1[, c(4,5,7,9,10)]) 
-corrplot(correlation_matrix, method = "color")
-title("Correlation Plot (Batting)", line = 3,adj=0)
+corrplot(correlation_matrix, 
+         method = "color", 
+         col = colorRampPalette(c("white", "lightblue", "blue"))(200),
+         addCoef.col = "black") 
+title("Correlation Plot (Batting)", line = 3, adj = 0)
 
 pitch_stats_df1 <- pitch_stats_df |>
   mutate(pick_round=as.numeric(pick_round)) |>
   drop_na()
 correlation_matrix <- cor(pitch_stats_df1[, c(4,5,7,9,10)]) 
-corrplot(correlation_matrix, method = "color")
-title("Correlation Plot (Pitching)", line = 3,adj=0)
+corrplot(correlation_matrix, 
+         method = "color", 
+         col = colorRampPalette(c("white", "lightblue", "blue"))(200),
+         addCoef.col = "black") 
+title("Correlation Plot (Pitching)", line = 3, adj = 0)
 ```
 
 ## State Frequency Map
