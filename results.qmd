@@ -1,6 +1,6 @@
 # Results
 
-## Relationship Between Drafting High School and College Level Players
+## What Is the Relationship Between a Draftee's Draft Round and Their School Level Status?
 
 We made a stacked bar chart that displayed the percentage of draftees by round, with colors indicating high school status at the time of drafting, in order to examine the relationship between draft round and high school status. This stacked bar chart analysis shows that a much less number of high school athletes are selected as the first ten rounds go.
 
@@ -70,7 +70,7 @@ hs_by_round_plot <-
 hs_by_round_plot
 ```
 
-## How Long to Play First MLB Game
+## How Long Does It Take for a Draftee to Reach Their First MLB Game?
 
 Through using histograms, we determined the number of years between a player's first MLB game and the year of their draft in order to examine the number of years prior to a batting or pitching draftee playing their first MLB game. The number of years it takes for a batting draftee to play in Major League Baseball is comparable to that of a pitching draftee, according to an analysis of these two histograms. The majority of players in both datasets play their first game three to five years after being drafted, making them slightly tilted to the right.
 
@@ -112,7 +112,7 @@ plot2 <- ggplot(pitch_stats_df, aes(x = DifferenceYearsDraftFGPlayed)) +
 grid.arrange(plot1, plot2, nrow = 1)
 ```
 
-## Weight vs Height
+## What Is the Relationship Between a Draftee's Weight and Height?
 
 Additionally, we looked into the correlation between height and weight for both batting and pitching draftees. In addition to mapping the features of each individual, we also plotted the mean weigh and height and carried out a basic linear regression to ascertain the general trend by generating a scatterplot of the two datasets. The mean weight for batting draftees is marginally lower than the mean weight for pitching draftees, as can be seen when comparing these two plots. Similarly, batting draftees' average height is little lower than that of their pitching counterparts. Compared to the average pitching draftee, the average batting draftee should be a little shorter and lighter.
 
@@ -172,7 +172,7 @@ plot2 <- ggplot(pitch_stats_df, aes(x = person_weight, y=person_height)) +
 grid.arrange(plot1, plot2, nrow = 1)
 ```
 
-## Correlation Heatmap
+## What Are the Correlations Between Key Metrics of Draftees?
 
 For both player categories, the following association exists between pick round, year, height, weight, and WAR: As anticipated, a person's height and weight are strongly correlated. There is a slight positive association between a player's height and WAR while they are pitching, but a negative correlation when they are batting. We find that the weight of a batting draftee and WAR do not correlate, but for a pitching draftee, there is a little positive correlation.
 
@@ -205,7 +205,7 @@ corrplot(correlation_matrix,
 title("Correlation Plot (Pitching)", line = 3, adj = 0)
 ```
 
-## State Frequency Map
+## Which States Produce the Most Baseball Draftees?
 
 We create a frequency heatmap to examine which state generates the most number of draftees: The majority of athletes selected come originally from California, with Texas and Florida being the other two main home states, according to our state map. We can blame this tendency on the weather since, in contrast to the East, Midwest, and Northwest, these states often have warmer temperatures and little to no snow, allowing people to play baseball year-round and giving youth leagues more seasonal flexibility. Additionally, these states have sizable populations, which may help to explain why the majority of draftees come from them.
 
@@ -269,7 +269,7 @@ home_heat_map <-
 home_heat_map
 ```
 
-## Relationship between Time Played in MLB vs. WAR
+## How Does Time Played in MLB Relate to WAR?
 
 We create the following boxplots to investigate the relationship between a player's career length and WAR. While the total time a player spends in MLB does not guarantee a high WAR, as shown by the wide range of outliers, there is a noticeable upward trend in the median WAR values as career length increases. This trend aligns with the expectation that players who remain in MLB longer generally have more opportunities to accumulate higher WAR values over time.
 
@@ -365,7 +365,7 @@ pie_chart <-
 pie_chart
 ```
 
-## Best Draft Class Through all the MLB Years
+## What is the Best Draft Class Through all the MLB Years?
 
 We can see from the barplot that the 1965, 1985, and 2002 draft classes are highly successful with each garnering a WAR value of over 900 across the draft class. 1965 includes the likes of Johnny Bench, Nolan Ryan, and Tom Seaver. Meanwhile 1985 includes Barry Bonds, John Smoltz, and Randy Johnson. 2002 includes Zack Greinke, Prince Fielder, and Cole Hamels. The thing these drafts share in common is that they have an abundance of talent, both in terms of Hall of Famers and depth
 
@@ -432,7 +432,7 @@ draft_class_war <-
 draft_class_war
 ```
 
-## Most Successful Positions
+## Which Positions Are the Most Successful in Terms of WAR in a Given Draft Class?
 
 We can observe that outfielders (CF or LF), first basemen (1B), and third basemen (3B) have frequently been the most successful positions when investigating the WAR values of positions in a given draft class. This can be explained by the high level fielding positions of outfield and third base, as well as the game-changing power hitting of first basemen.
 
@@ -480,7 +480,7 @@ pos_class_war <-
 pos_class_war
 ```
 
-## Age vs WAR
+## What Is the Relationship Between Age and WAR?
 
 This scatter plot investigates the connection between a player's career WAR (Wins Above Replacement) and their age at draft time. Younger players (e.g., 18 or 19 years old) who are drafted show a variety of WAR values, including very high accomplishments. On the other hand, athletes who are drafted later in life (e.g., 22 years of age or beyond) typically cluster around lower WAR values, suggesting less variability and a lower chance of reaching high lifetime WAR. This implies that while older draftees typically have more predictable results, picking younger athletes carries more risks but also the potential for bigger rewards.
 
